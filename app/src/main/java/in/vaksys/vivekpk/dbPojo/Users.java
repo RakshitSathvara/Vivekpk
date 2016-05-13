@@ -27,6 +27,8 @@ public class Users extends RealmObject {
 
     private String UpdatedAt;
 
+    private String password;
+
     public String getUserid() {
         return userid;
     }
@@ -97,5 +99,13 @@ public class Users extends RealmObject {
 
     public void setUpdatedAt(String updatedAt) {
         UpdatedAt = updatedAt;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
