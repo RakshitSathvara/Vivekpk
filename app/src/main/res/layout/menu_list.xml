@@ -13,6 +13,7 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/linear_menu_myaccount"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:gravity="left|center"
@@ -44,6 +45,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linear_menu_news"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:gravity="left|center"
@@ -73,6 +75,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linear_menu_invitefriend"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:gravity="left|center"
@@ -102,6 +105,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linear_menu_ratetheapp"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:gravity="left|center"
@@ -161,6 +165,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linear_menu_referralcode"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:gravity="left|center"

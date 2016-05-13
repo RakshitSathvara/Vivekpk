@@ -1,21 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <item
-        android:id="@+id/searchToolbar"
-        android:icon="@drawable/search_nav_menus"
-        android:showAsAction="always"
-        android:title="Search" />
-
+    
     <item
         android:id="@+id/notificationToolbar"
         android:icon="@drawable/notification_nav"
         android:showAsAction="always"
         android:title="Notification" />
 
-    <item
-        android:id="@+id/navToolbar"
-        android:icon="@drawable/side_menu_nav"
-        android:showAsAction="always"
-        android:title="Nav" />
 </menu>

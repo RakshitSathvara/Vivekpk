@@ -43,7 +43,10 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar1);
-
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         /*imageView = (ImageView) findViewById(R.id.img_search);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -186,6 +189,9 @@ public class SearchActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
+            case android.R.id.home:
+                startActivity(new Intent(SearchActivity.this,HomeActivity.class));
+                return true;
             case R.id.navSearchToolbar:
                 // Single menu item is selected do something
                 // Ex: launching new activity/screen or show alert message

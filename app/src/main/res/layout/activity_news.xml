@@ -3,15 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="8dp"
-    android:layout_marginRight="8dp"
     android:orientation="vertical"
     tools:context="in.vaksys.vivekpk.activities.NewsActivity">
+
+    <include layout="@layout/toolbar"
+        android:id="@+id/newsToolbar"/>
 
     <TextView
         android:id="@+id/tv_data"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:text="sauhdjksahdsandsajkdsajk;dbsjkadbnkjsadnsjkladnjklsahndkljjkbhjvbjhvbhjvbjhsandkjlsandjkasndjksandjksabndjksabndjksabndjkakslndfklsandlksandghfyjfjhfjhvfjhcvgcghcgchgcghcgh"
         android:textColor="#000000"
         android:textSize="12sp"
@@ -21,7 +23,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="15dp"
         android:gravity="right"
         android:text="1:30 PM Thursday March 25 2016"
         android:textStyle="bold" />

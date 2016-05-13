@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="#E7E4E2"
+    android:background="@drawable/dialog_shape"
     android:gravity="center"
     android:orientation="vertical">
 
@@ -11,6 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:padding="8dp"
         android:paddingTop="20dp"
         app:layout_widthPercent="100%">
 
@@ -115,18 +116,16 @@
 
         </LinearLayout>
 
-
-        <Button
-            android:id="@+id/btn_done"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/btn_yellow_border_shape"
-            android:text="Done"
-            android:textAllCaps="false"
-            android:textSize="15sp" />
-
-
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_done"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@color/colorPrimary"
+        android:text="Done"
+        android:textAllCaps="false"
+        android:textSize="15sp" />
 
 </in.vaksys.vivekpk.extras.PercentLinearLayout>

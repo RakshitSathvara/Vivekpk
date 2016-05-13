@@ -33,6 +33,10 @@ public class WebViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_web_view);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar1);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setMax(100);
@@ -87,7 +91,7 @@ public class WebViewActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = new MenuInflater(this);
-        menuInflater.inflate(R.menu.main_menu, menu);
+        menuInflater.inflate(R.menu.notification_menu, menu);
         return true;
     }
 
@@ -95,30 +99,11 @@ public class WebViewActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-            case R.id.navToolbar:
-                // Single menu item is selected do something
-                // Ex: launching new activity/screen or show alert message
-                final Dialog dialog = new Dialog(this);
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.getWindow().setGravity(Gravity.TOP | Gravity.END);
-                dialog.setContentView(R.layout.menu_list);
 
-                LinearLayout linearLayout = (LinearLayout) dialog.findViewById(R.id.linear_help_toolbar);
-                linearLayout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                        startActivity(new Intent(WebViewActivity.this, WebViewActivity.class));
-                    }
-                });
-
-
-                dialog.show();
+            case android.R.id.home:
+                startActivity(new Intent(this, HomeActivity.class));
                 return true;
 
-            case R.id.searchToolbar:
-                startActivity(new Intent(WebViewActivity.this, SearchActivity.class));
-                return true;
 
             case R.id.notificationToolbar:
                 startActivity(new Intent(WebViewActivity.this, NotificationActivity.class));

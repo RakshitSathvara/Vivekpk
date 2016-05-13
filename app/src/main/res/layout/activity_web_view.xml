@@ -8,7 +8,7 @@
 
     <include
         android:id="@+id/toolbar1"
-        layout="@layout/custom_toolbar" />
+        layout="@layout/toolbar" />
 
     <ProgressBar
         android:id="@+id/progressBar"
