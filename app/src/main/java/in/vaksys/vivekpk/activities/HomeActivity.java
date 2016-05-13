@@ -57,7 +57,7 @@ public class HomeActivity extends AppCompatActivity {
     private CarFragment carFragment;
     private BikeFragment bikeFragment;
     private SpinnerCallback spinnerCallback;
-
+    LinearLayout linearHelpCenter, linearMenuMyaccount, linearMenuNews, linearMenuinvitefriend, linearRateApp, linearRefferalCode;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -270,6 +270,33 @@ public class HomeActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         dialog.dismiss();
                         startActivity(new Intent(HomeActivity.this, WebViewActivity.class));
+                    }
+                });
+                linearMenuMyaccount = (LinearLayout) dialog.findViewById(R.id.linear_menu_myaccount);
+                linearMenuMyaccount.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        startActivity(new Intent(HomeActivity.this, MyAccountActivity.class));
+                    }
+                });
+
+                linearMenuNews = (LinearLayout) dialog.findViewById(R.id.linear_menu_news);
+                linearMenuNews.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        startActivity(new Intent(HomeActivity.this, NewsActivity.class));
+                    }
+                });
+
+
+                linearRefferalCode = (LinearLayout) dialog.findViewById(R.id.linear_menu_referralcode);
+                linearRefferalCode.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        startActivity(new Intent(HomeActivity.this, RefferalCodeActivity.class));
                     }
                 });
 
