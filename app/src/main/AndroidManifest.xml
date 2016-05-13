@@ -31,6 +31,10 @@
         <activity android:name=".activities.NewsActivity" />
         <activity android:name=".activities.SearchActivity" />
         <activity android:name=".activities.NotificationActivity" />
+        <activity android:name=".activities.WebViewActivity" />
+        <activity android:name=".activities.DiactivateAccountActivity" />
+        <activity android:name=".activities.MyAccountActivity" />
+        <activity android:name=".activities.RefferalCodeActivity" />
 
         <!-- SMS Receiver -->
         <receiver android:name=".extras.SmsReceiver">
