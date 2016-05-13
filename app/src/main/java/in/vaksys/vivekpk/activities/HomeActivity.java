@@ -30,15 +30,14 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import java.util.ArrayList;
 
 import in.vaksys.vivekpk.R;
-import in.vaksys.vivekpk.extras.AdapterCallback;
 import in.vaksys.vivekpk.extras.MyApplication;
 import in.vaksys.vivekpk.extras.SpinnerCallback;
 import in.vaksys.vivekpk.fragments.BikeFragment;
 import in.vaksys.vivekpk.fragments.CarFragment;
+import in.vaksys.vivekpk.fragments.DocumentFragment;
 import in.vaksys.vivekpk.fragments.EmergencyFragment;
 import in.vaksys.vivekpk.fragments.MainTabFragment;
 import in.vaksys.vivekpk.fragments.ReminderTabFragment;
-import in.vaksys.vivekpk.fragments.DocumentFragment;
 
 
 public class HomeActivity extends AppCompatActivity {
@@ -166,48 +165,48 @@ public class HomeActivity extends AppCompatActivity {
 //        bottomNavigation.setColored(true);
 
         bottomNavigation.addItems(bottomNavigationItems);
-        bottomNavigation.setAccentColor(Color.parseColor("#FF000000"));
-        bottomNavigation.setInactiveColor(Color.parseColor("#FFFFFF"));
+        bottomNavigation.setAccentColor(Color.parseColor("#FFFFFF"));
+        bottomNavigation.setInactiveColor(Color.parseColor("#FF000000"));
         bottomNavigation.setNotificationBackgroundColor(Color.parseColor("#F63D2B"));
 
-//        bottomNavigation.setCurrentItem(3);
-
+        bottomNavigation.setCurrentItem(0);
+        currentFragment = MainTabFragment.newInstance(0);
+        reminderTabFragment = ReminderTabFragment.newInstance(1);
+        documentFragment = documentFragment.newInstance(2);
+        emergencyFragment = EmergencyFragment.newInstance(3);
+        fragmentManager.beginTransaction()
+                .add(R.id.fragment_container, currentFragment)
+                .commit();
         bottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
             @Override
             public void onTabSelected(int position, boolean wasSelected) {
                 Toast.makeText(HomeActivity.this, " " + position + " " + wasSelected, Toast.LENGTH_SHORT).show();
                 if (position == 0) {
-                    currentFragment = MainTabFragment.newInstance(0);
                     fragmentManager.beginTransaction()
-                            .replace(R.id.fragment_container, currentFragment,"harsh")
+                            .replace(R.id.fragment_container, currentFragment)
                             .commit();
                 }
-                if (position == 1) {
+                else if (position == 1) {
 //                    bottomNavigation.setNotification(0, 1);
-                    reminderTabFragment = ReminderTabFragment.newInstance(0);
                     fragmentManager.beginTransaction()
                             .replace(R.id.fragment_container, reminderTabFragment)
                             .commit();
                 }
-                if (position == 2) {
-                    documentFragment = documentFragment.newInstance(0);
+                else if (position == 2) {
                     fragmentManager.beginTransaction()
                             .replace(R.id.fragment_container, documentFragment)
                             .commit();
                 }
-                if (position == 3) {
-                    emergencyFragment = EmergencyFragment.newInstance(0);
+                else if (position == 3) {
                     fragmentManager.beginTransaction()
                             .replace(R.id.fragment_container, emergencyFragment)
                             .commit();
                 }
-
-               /* if (!wasSelected) {
-                    currentFragment = MainTabFragment.newInstance(position);
+                else if (!wasSelected) {
                     fragmentManager.beginTransaction()
                             .replace(R.id.fragment_container, currentFragment)
                             .commit();
-                } else if (position > 0) {
+                }/*  else if (position > 0) {
 //                    currentFragment.refresh();
                 }*/
             }
