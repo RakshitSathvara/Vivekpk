@@ -76,7 +76,6 @@ public class HomeActivity extends AppCompatActivity {
 
         spinner_select_value = (Spinner) findViewById(R.id.spinner_select_value);
 
-
         final ArrayAdapter<String> spinAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
         spinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_select_value.setAdapter(spinAdapter);

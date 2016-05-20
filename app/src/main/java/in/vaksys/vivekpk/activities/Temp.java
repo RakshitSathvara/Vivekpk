@@ -4,10 +4,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.iid.InstanceID;
+
 import in.vaksys.vivekpk.R;
-import in.vaksys.vivekpk.dbPojo.Users;
 import io.realm.Realm;
-import io.realm.RealmResults;
 
 public class Temp extends AppCompatActivity {
 
@@ -18,7 +19,8 @@ public class Temp extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_temp);
-        realm = Realm.getDefaultInstance();
+//        startService(new Intent(this, RegistrationIntentService.class));
+       /* realm = Realm.getDefaultInstance();
 
         RealmResults<Users> results = realm.allObjects(Users.class);
         Log.e(TAG, "onCreate: " );
@@ -28,6 +30,17 @@ public class Temp extends AppCompatActivity {
                     , task.getFirstName(), task.getLastName(), task.getEmail(), task.getApiKey(), task.getPhoneNo(),
                     task.getCreatedAt(), task.getUpdatedAt(), task.getStatus(), task.getUserid()));
         }
+*/
+        try {
+            InstanceID instanceID = InstanceID.getInstance(this);
 
+            String token = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
+                    GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+
+            Log.i(TAG, "GCM Registration Token: " + token);
+
+        } catch (Exception e) {
+            Log.d(TAG, "Failed to complete token refresh", e);
+        }
     }
 }

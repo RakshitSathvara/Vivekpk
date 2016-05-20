@@ -73,7 +73,7 @@ public class SignupFragment extends Fragment implements AdapterCallback {
     EditText etContactNo;
     @Bind(R.id.et_password)
     PasswordEditText etPassword;
-    @Bind(R.id.btn_continue)
+    @Bind(R.id.btn_continue_signup)
     Button btnContinue;
     private ProgressDialog pDialog;
     Dialog dialog;
@@ -116,8 +116,8 @@ public class SignupFragment extends Fragment implements AdapterCallback {
             }
         });
 
-        getEmailid();
-        getUsername();
+     /*   getEmailid();
+        getUsername();*/
 
         return rootView;
     }

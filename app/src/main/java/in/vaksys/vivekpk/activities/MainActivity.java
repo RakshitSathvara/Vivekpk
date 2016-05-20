@@ -1,24 +1,25 @@
 package in.vaksys.vivekpk.activities;
 
-import android.os.Build;
+import android.content.DialogInterface;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import in.vaksys.vivekpk.R;
-import in.vaksys.vivekpk.adapter.ViewPagerAdapter;
 import in.vaksys.vivekpk.fragments.SigninFragment;
 import in.vaksys.vivekpk.fragments.SignupFragment;
 
@@ -29,6 +30,9 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     final ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+    private static final String TAG = "MainActivity";
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,16 +56,41 @@ public class MainActivity extends AppCompatActivity {
         linearLayout3.setOnClickListener(this);*/
 
 
-
-
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
+        Log.e(TAG, "onCreate: " + checkPlayServices());
     }
 
+    private boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+//                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST).show();
+
+                new AlertDialog.Builder(this)
+                        .setTitle("Google play Service not Available")
+                        .setMessage("This app won't run without Google Play services, which are missing from your phone.")
+                        .setCancelable(false)
+                        .setPositiveButton("Done",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        finish();
+                                    }
+                                }
+                        ).create().show();
+            } else {
+                Log.i(TAG, "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
     /*@Override
     public void onClick(View v) {
 

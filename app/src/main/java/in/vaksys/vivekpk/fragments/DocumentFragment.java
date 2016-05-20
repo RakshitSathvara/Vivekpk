@@ -95,7 +95,7 @@ public class DocumentFragment extends Fragment {
         linearVehicleDetails = (LinearLayout) rootView.findViewById(R.id.linearVehicleDetails);
         linearVehicleDetailsListRaw = (LinearLayout) rootView.findViewById(R.id.linearVehicleDeatilsListRaw);
 
-        percentEnterCarDetails = (PercentLinearLayout) rootView.findViewById(R.id.percentEnterCarDetails);
+        percentEnterCarDetails = (PercentLinearLayout) rootView.findViewById(R.id.percentEnterCarDetails11);
 
 
         btnRegisterVehicle.setOnClickListener(new View.OnClickListener() {

@@ -7,34 +7,28 @@ import io.realm.RealmObject;
  */
 public class VehicleModels extends RealmObject {
 
-    private String vehicleId;
 
-    private String ManufracturarName;
-
+    private int id;
+    private String manufacturerName;
     private String model;
+    private String type;
+    private String createdAt;
+    private String updatedAt;
 
-    private String modelNo;
-
-    private String modelType;
-
-    private String CreatedAt;
-
-    private String UpdatedAt;
-
-    public String getVehicleId() {
-        return vehicleId;
+    public int getId() {
+        return id;
     }
 
-    public void setVehicleId(String vehicleId) {
-        this.vehicleId = vehicleId;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getManufracturarName() {
-        return ManufracturarName;
+    public String getManufacturerName() {
+        return manufacturerName;
     }
 
-    public void setManufracturarName(String manufracturarName) {
-        ManufracturarName = manufracturarName;
+    public void setManufacturerName(String manufacturerName) {
+        this.manufacturerName = manufacturerName;
     }
 
     public String getModel() {
@@ -45,35 +39,27 @@ public class VehicleModels extends RealmObject {
         this.model = model;
     }
 
-    public String getModelNo() {
-        return modelNo;
+    public String getType() {
+        return type;
     }
 
-    public void setModelNo(String modelNo) {
-        this.modelNo = modelNo;
-    }
-
-    public String getModelType() {
-        return modelType;
-    }
-
-    public void setModelType(String modelType) {
-        this.modelType = modelType;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getCreatedAt() {
-        return CreatedAt;
+        return createdAt;
     }
 
     public void setCreatedAt(String createdAt) {
-        CreatedAt = createdAt;
+        this.createdAt = createdAt;
     }
 
     public String getUpdatedAt() {
-        return UpdatedAt;
+        return updatedAt;
     }
 
     public void setUpdatedAt(String updatedAt) {
-        UpdatedAt = updatedAt;
+        this.updatedAt = updatedAt;
     }
 }

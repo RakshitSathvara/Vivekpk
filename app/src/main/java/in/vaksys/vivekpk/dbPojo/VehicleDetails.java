@@ -7,6 +7,8 @@ import io.realm.RealmObject;
  */
 public class VehicleDetails extends RealmObject {
 
+    private String UserAPiKey;
+
     private String VehicleName;
 
     private String ModelId;
@@ -105,5 +107,13 @@ public class VehicleDetails extends RealmObject {
 
     public void setRcRenewDate(String rcRenewDate) {
         RcRenewDate = rcRenewDate;
+    }
+
+    public String getUserAPiKey() {
+        return UserAPiKey;
+    }
+
+    public void setUserAPiKey(String userAPiKey) {
+        UserAPiKey = userAPiKey;
     }
 }

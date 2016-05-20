@@ -13,12 +13,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.maksim88.passwordedittext.PasswordEditText;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,8 +34,10 @@ import java.util.UUID;
 import in.vaksys.vivekpk.R;
 import in.vaksys.vivekpk.activities.HomeActivity;
 import in.vaksys.vivekpk.dbPojo.Users;
+import in.vaksys.vivekpk.dbPojo.VehicleModels;
 import in.vaksys.vivekpk.extras.AppConfig;
 import in.vaksys.vivekpk.extras.MyApplication;
+import in.vaksys.vivekpk.service.RegistrationIntentService;
 import io.realm.Realm;
 import io.realm.RealmAsyncTask;
 import io.realm.RealmResults;
@@ -50,6 +57,7 @@ public class SigninFragment extends Fragment {
     private Realm realm;
     RealmAsyncTask realmAsyncTask;
     String mContactNo, mPassword;
+    MyApplication myApplication;
 
 
     @Override
@@ -63,12 +71,14 @@ public class SigninFragment extends Fragment {
         tvErrorPassword = (TextView) rootView.findViewById(R.id.tv_errorPassword);
         btnSignIn = (Button) rootView.findViewById(R.id.btn_signin);
 
-        MyApplication.getInstance().createDialog(getActivity(), false);
+        myApplication = MyApplication.getInstance();
+
+        myApplication.createDialog(getActivity(), false);
 
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MyApplication.getInstance().hideKeyboard(getActivity());
+                myApplication.hideKeyboard(getActivity());
                 submitForm();
             }
         });
@@ -99,15 +109,15 @@ public class SigninFragment extends Fragment {
     private void signUp(final String mContactNo, final String mPassword) {
         String tag_string_req = "req_login";
 
-        MyApplication.getInstance().DialogMessage("Loging in...");
-        MyApplication.getInstance().showDialog();
+        myApplication.DialogMessage("Loging in...");
+        myApplication.showDialog();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.URL_SIGNIN, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
-                MyApplication.getInstance().hideDialog();
+                myApplication.hideDialog();
 
                 try {
                     JSONObject jObj = new JSONObject(response);
@@ -153,8 +163,8 @@ public class SigninFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
 //                Log.e(TAG, "Login Error: " + error.getMessage());
-                MyApplication.getInstance().ErrorSnackBar(getActivity());
-                MyApplication.getInstance().hideDialog();
+                myApplication.ErrorSnackBar(getActivity());
+                myApplication.hideDialog();
                 return;
             }
         }) {
@@ -170,14 +180,14 @@ public class SigninFragment extends Fragment {
             }
         };
         // Adding request to request queue
-        MyApplication.getInstance().addToRequestQueue(strReq, tag_string_req);
+        myApplication.addToRequestQueue(strReq, tag_string_req);
 
     }
 
     private void SaveIntoDatabase(final String fname, final String lname, final String email, final String apikey,
                                   final int status, final String phone, final String createdAt, final String updatedAt, final String password) {
-        MyApplication.getInstance().DialogMessage("Setting Up Profile...");
-        MyApplication.getInstance().showDialog();
+        myApplication.DialogMessage("Setting Up Profile...");
+        myApplication.showDialog();
 /*
         realmAsyncTask = realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
@@ -202,30 +212,106 @@ public class SigninFragment extends Fragment {
             @Override
             public void onSuccess() {
                 Log.e(TAG, "execute: Success");
-                MyApplication.getInstance().hideDialog();
+                myApplication.hideDialog();
                 startActivity(new Intent(getActivity(), HomeActivity.class));
             }
         }, new Realm.Transaction.OnError() {
             @Override
             public void onError(Throwable error) {
-                MyApplication.getInstance().hideDialog();
+                myApplication.hideDialog();
                 Log.e(TAG, "execute: Error" + error);
             }
         });
 */
         RealmResults<Users> results = realm.where(Users.class).findAll();
         Log.e(TAG, "SaveIntoDatabase: " + results.size());
-        Toast.makeText(getActivity(), "Setup Complete", Toast.LENGTH_LONG).show();
-        MyApplication.getInstance().hideDialog();
-        startActivity(new Intent(getActivity(), HomeActivity.class));
 
+        getActivity().startService(new Intent(getActivity(), RegistrationIntentService.class));
+
+        Toast.makeText(getActivity(), "Setup Complete", Toast.LENGTH_LONG).show();
+        myApplication.hideDialog();
+        LodingModels();
+
+    }
+
+    private void LodingModels() {
+        myApplication.DialogMessage("Loading Models...");
+        myApplication.showDialog();
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, AppConfig.URL_SPINNER, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+//                setAreaSpinner();
+                try {
+
+                    boolean error = response.getBoolean("error");
+                    if (!error) {
+                        realm.beginTransaction();
+                        // Getting JSON Array node
+                        JSONArray results1 = response.getJSONArray("result");
+                        for (int i = 0; i < results1.length(); i++) {
+
+                            JSONObject jsonObject = results1.getJSONObject(i);
+                            int id = jsonObject.getInt("id");
+                            String manufacturerName = jsonObject.getString("manufacturerName");
+                            String model = jsonObject.getString("model");
+                            String type = jsonObject.getString("type");
+                            String createdAt = jsonObject.getString("createdAt");
+                            String updatedAt = jsonObject.getString("updatedAt");
+
+                            VehicleModels vehicleModels = realm.createObject(VehicleModels.class);
+                            vehicleModels.setId(id);
+                            vehicleModels.setManufacturerName(manufacturerName);
+                            vehicleModels.setModel(model);
+                            vehicleModels.setType(type);
+                            vehicleModels.setCreatedAt(createdAt);
+                            vehicleModels.setUpdatedAt(updatedAt);
+
+                        }
+                        realm.commitTransaction();
+                        myApplication.hideDialog();
+
+                        startActivity(new Intent(getActivity(), HomeActivity.class));
+
+
+                    } else {
+                        String errorMsg = response.getString("message");
+                        Toast.makeText(getActivity(),
+                                "Error :" + errorMsg, Toast.LENGTH_LONG).show();
+                        myApplication.hideDialog();
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    myApplication.hideDialog();
+
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                myApplication.hideDialog();
+                //Toast.makeText(getApplicationContext(), "Responce : " + error, Toast.LENGTH_LONG).show();
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                    myApplication.ErrorSnackBar(getActivity());
+                }
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+                return headers;
+            }
+        };
+        myApplication.addToRequestQueue(request);
     }
 
     @Override
     public void onStop() {
         super.onStop();
         // Remember to close the Realm instance when done with it.
-        realm.close();
+        // TODO: 19-05-2016 handle realm.close();
+        // realm.close();
     }
 
     private boolean validateNumber() {

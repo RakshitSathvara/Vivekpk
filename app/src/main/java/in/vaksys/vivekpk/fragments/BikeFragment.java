@@ -2,21 +2,56 @@ package in.vaksys.vivekpk.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.TimeoutError;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import in.vaksys.vivekpk.R;
+import in.vaksys.vivekpk.adapter.mySpinnerAdapterModel;
+import in.vaksys.vivekpk.dbPojo.VehicleModels;
+import in.vaksys.vivekpk.extras.AppConfig;
+import in.vaksys.vivekpk.extras.MyApplication;
+import in.vaksys.vivekpk.pojo.ModelPojo;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 
 public class BikeFragment extends Fragment {
 
     Spinner spSelectmake, spCarModel;
+    private static final String TAG = "BikeFragment";
+    private Gson gson;
+    ModelPojo modelPojo;
+    private String modelSpinnItem;
+    private Realm realm;
+
+    MyApplication myApplication;
+
 
     public static BikeFragment newInstance(int index) {
         BikeFragment fragment = new BikeFragment();
@@ -31,11 +66,14 @@ public class BikeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_bike, container, false);
+        myApplication = MyApplication.getInstance();
 
         spSelectmake = (Spinner) rootView.findViewById(R.id.sp_selectMake);
         spCarModel = (Spinner) rootView.findViewById(R.id.sp_selectModel);
+        realm = Realm.getDefaultInstance();
+        MyApplication.getInstance().createDialog(getActivity(), false);
 
-        List<String> selectBrand = new ArrayList<String>();
+       /* List<String> selectBrand = new ArrayList<String>();
         selectBrand.add("Select Brand");
         selectBrand.add("Audi");
         selectBrand.add("BMW");
@@ -48,7 +86,7 @@ public class BikeFragment extends Fragment {
 
         // attaching data adapter to spinner
         spSelectmake.setAdapter(dataAdapter1);
-        spSelectmake.setSelection(0);
+        spSelectmake.setSelection(0);*/
 
         List<String> carModel = new ArrayList<String>();
         carModel.add("Select Model");
@@ -63,8 +101,123 @@ public class BikeFragment extends Fragment {
         // attaching data adapter to spinner
         spCarModel.setAdapter(dataAdapter2);
         spCarModel.setSelection(0);
-
+        LodingModels();
         return rootView;
     }
 
+    private void LodingModels() {
+        RealmResults<VehicleModels> results = realm.where(VehicleModels.class).findAll();
+
+        mySpinnerAdapterModel mySpinnerAdapterCity = new mySpinnerAdapterModel(getActivity(), results, "bike");
+        spSelectmake.setAdapter(mySpinnerAdapterCity);
+
+        spSelectmake.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                modelSpinnItem = ((TextView) getActivity().findViewById(R.id.rowText)).getText().toString();
+                String myid = ((TextView) getActivity().findViewById(R.id.rowid)).getText().toString();
+                Toast.makeText(getActivity(), "You have selected " + modelSpinnItem + " " + myid, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                Toast.makeText(getActivity(), "You have selected Nothing ..", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        MyApplication.getInstance().DialogMessage("Loading Models...");
+        myApplication.showDialog();
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, AppConfig.URL_SPINNER, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+//                setAreaSpinner();
+                try {
+
+                    boolean error = response.getBoolean("error");
+                    if (!error) {
+                        realm.beginTransaction();
+                        // Getting JSON Array node
+                        JSONArray results1 = response.getJSONArray("result");
+                        for (int i = 0; i < results1.length(); i++) {
+
+                            JSONObject jsonObject = results1.getJSONObject(i);
+                            int id = jsonObject.getInt("id");
+                            String manufacturerName = jsonObject.getString("manufacturerName");
+                            String model = jsonObject.getString("model");
+                            String type = jsonObject.getString("type");
+                            String createdAt = jsonObject.getString("createdAt");
+                            String updatedAt = jsonObject.getString("updatedAt");
+
+                            VehicleModels vehicleModels = realm.createObject(VehicleModels.class);
+                            vehicleModels.setId(id);
+                            vehicleModels.setManufacturerName(manufacturerName);
+                            vehicleModels.setModel(model);
+                            vehicleModels.setType(type);
+                            vehicleModels.setCreatedAt(createdAt);
+                            vehicleModels.setUpdatedAt(updatedAt);
+
+                        }
+                        realm.commitTransaction();
+                        myApplication.hideDialog();
+
+
+                    } else {
+                        String errorMsg = response.getString("message");
+                        Toast.makeText(getActivity(),
+                                "Error :" + errorMsg, Toast.LENGTH_LONG).show();
+                        myApplication.hideDialog();
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    myApplication.hideDialog();
+
+                }
+
+                Log.e(TAG, "Myresponse : " + response);
+                gson = new Gson();
+                try {
+                    Log.e(TAG, "Myresponse : " + response);
+//                    modelPojo = gson.fromJson(response, ModelPojo.class);
+                } catch (JsonSyntaxException e) {
+                    Log.e(TAG, "onSuccess Error: " + e);
+                }
+//                Log.d(TAG, "doInBackground: " + mcityPojo.getCity().toString());
+                /*mySpinnerAdapterModel mySpinnerAdapterCity = new mySpinnerAdapterModel(getActivity(), modelPojo.getResult(), "bike");
+                spSelectmake.setAdapter(mySpinnerAdapterCity);
+
+                spSelectmake.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        modelSpinnItem = ((TextView) getActivity().findViewById(R.id.rowText)).getText().toString();
+                        String myid = ((TextView) getActivity().findViewById(R.id.rowid)).getText().toString();
+                        Toast.makeText(getActivity(), "You have selected " + modelSpinnItem + " " + myid, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                        Toast.makeText(getActivity(), "You have selected Nothing ..", Toast.LENGTH_SHORT).show();
+                    }
+                });*/
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                myApplication.hideDialog();
+                //Toast.makeText(getApplicationContext(), "Responce : " + error, Toast.LENGTH_LONG).show();
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                    myApplication.ErrorSnackBar(getActivity());
+                }
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+                return headers;
+            }
+        };
+        myApplication.addToRequestQueue(request);
+    }
 }

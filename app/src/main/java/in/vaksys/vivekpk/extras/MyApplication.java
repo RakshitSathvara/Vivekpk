@@ -10,6 +10,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -48,7 +49,7 @@ public class MyApplication extends Application {
 
         RealmConfiguration configuration = new RealmConfiguration.Builder(this)
                 .name("DaddysRoad231.realm")
-                .schemaVersion(1)
+                .schemaVersion(2)
                 .build();
         Realm.setDefaultConfiguration(configuration);
 
@@ -83,6 +84,13 @@ public class MyApplication extends Application {
         if (mRequestQueue != null) {
             mRequestQueue.cancelAll(tag);
         }
+    }
+
+    // for multidex support
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 
     public void ErrorSnackBar(Activity activity) {

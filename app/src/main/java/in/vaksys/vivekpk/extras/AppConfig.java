@@ -12,8 +12,14 @@ public class AppConfig {
 
     public static String URL_SIGNIN = URL_ROOT + "v1/login";
 
+    public static String URL_ADD_USER_VEHICLE = URL_ROOT + "v1/userVehicle";
+
+    public static String URL_ADD_VEHICLE_MODEL = URL_ROOT + "v1/vehicleModel";
+
     public static final String URL_VERIFY_OTP = URL_ROOT + "v1/verify";
 
     public static final String URL_RESEND_OTP = URL_ROOT + "v1/sendotp";
+
+    public static final String URL_SPINNER = URL_ROOT + "v1/vehiclemodels";
 
 }
