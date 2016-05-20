@@ -14,7 +14,7 @@ import io.realm.RealmResults;
 /**
  * Created by Harsh on 18-02-2016.
  */
-public class mySpinnerAdapterModel extends BaseAdapter {
+public class mySpinnerAdapterBrand extends BaseAdapter {
 
     private final Context context;
     //    private final List<ModelPojo.ResultEntity> cityEntityList;
@@ -23,7 +23,7 @@ public class mySpinnerAdapterModel extends BaseAdapter {
     String mType;
     private static final String TAG = "mySpinnerAdapterBrand";
 
-    public mySpinnerAdapterModel(Context context, RealmResults<VehicleModels> vehicleModelses, String type) {
+    public mySpinnerAdapterBrand(Context context, RealmResults<VehicleModels> vehicleModelses, String type) {
         this.context = context;
 //        this.cityEntityList = cityEntityList;
         inflater = (LayoutInflater) context.
@@ -66,7 +66,7 @@ public class mySpinnerAdapterModel extends BaseAdapter {
         }
 //        Log.e(TAG, "getView: " + item.getType());
 
-        holder.mytext.setText(vehicleModels.getModel());
+        holder.mytext.setText(vehicleModels.getManufacturerName());
 
 
         if (mType.equalsIgnoreCase("car") || mType.equalsIgnoreCase("")) {
@@ -74,16 +74,16 @@ public class mySpinnerAdapterModel extends BaseAdapter {
             if (vehicleModels.getType().equalsIgnoreCase("car")) {
 //                Log.e(TAG, "getView:  car 1111 " + item.getType());
 
-                holder.mytext.setText(vehicleModels.getModel());
+                holder.mytext.setText(vehicleModels.getManufacturerName());
                 holder.idtext.setText(String.valueOf(vehicleModels.getId()));
             }
         }
-        if (mType.equalsIgnoreCase("bike")) {
+        if (mType.equalsIgnoreCase("bike") ) {
 //            Log.e(TAG, "getView:  bike" + item.getType());
             if (vehicleModels.getType().equalsIgnoreCase("car")) {      // here i have to change bike when real api comes . // TODO: 18-05-2016
 //                Log.e(TAG, "getView:  bike 1111 " + item.getType());
 
-                holder.mytext.setText(vehicleModels.getModel());
+                holder.mytext.setText(vehicleModels.getManufacturerName());
                 holder.idtext.setText(String.valueOf(vehicleModels.getId()));
             }
         }
