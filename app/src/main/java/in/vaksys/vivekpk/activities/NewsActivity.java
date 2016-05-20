@@ -38,6 +38,18 @@ public class NewsActivity extends AppCompatActivity {
 
         tv = (TextView) findViewById(R.id.tv_data);
         makeTextViewResizable(tv, 3, "View More", true);
+
+        tv = (TextView) findViewById(R.id.tv_data1);
+        makeTextViewResizable(tv, 3, "View More", true);
+
+        tv = (TextView) findViewById(R.id.tv_data2);
+        makeTextViewResizable(tv, 3, "View More", true);
+
+        tv = (TextView) findViewById(R.id.tv_data3);
+        makeTextViewResizable(tv, 3, "View More", true);
+
+        tv = (TextView) findViewById(R.id.tv_data4);
+        makeTextViewResizable(tv, 3, "View More", true);
     }
 
     public static void makeTextViewResizable(final TextView tv, final int maxLine, final String expandText, final boolean viewMore) {
@@ -120,7 +132,7 @@ public class NewsActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case android.R.id.home:
-                startActivity(new Intent(NewsActivity.this,HomeActivity.class));
+                startActivity(new Intent(NewsActivity.this, HomeActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

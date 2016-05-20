@@ -24,10 +24,12 @@ public class NotificationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar1);
+        toolbar = (Toolbar) findViewById(R.id.NotificationToolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
     }
 
     @Override

@@ -3,6 +3,7 @@ package in.vaksys.vivekpk.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
+
+import org.honorato.multistatetogglebutton.MultiStateToggleButton;
+import org.honorato.multistatetogglebutton.ToggleButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +37,8 @@ public class DocumentFragment extends Fragment {
 
     private Spinner spBrand, spVehicleModel;
 
+    //private MultiStateToggleButton multiStateToggleButton;
+
     public static DocumentFragment newInstance(int index) {
         DocumentFragment fragment = new DocumentFragment();
         Bundle b = new Bundle();
@@ -47,6 +54,30 @@ public class DocumentFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_document, container, false);
 
+      /*  multiStateToggleButton = (MultiStateToggleButton) rootView.findViewById(R.id.mstb_vehicleChoice);
+        multiStateToggleButton.enableMultipleChoice(false);
+        multiStateToggleButton.setValue(0);
+        //multiStateToggleButton.setColorRes(R.color.cardview_dark_background, R.color.cardview_dark_background);
+
+        multiStateToggleButton.setOnValueChangedListener(new ToggleButton.OnValueChangedListener() {
+            @Override
+            public void onValueChanged(int value) {
+                Log.e("MSTB", "onValueChanged: " + value);
+                switch (value) {
+                    case 0:
+                        Toast.makeText(getActivity(), "Car Selected..", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 1:
+                        Toast.makeText(getActivity(), "Bike Selected..", Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        Toast.makeText(getActivity(), "Please S" +
+                                "elect any..", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        });
+*/
         btnRegisterVehicle = (Button) rootView.findViewById(R.id.btn_registerVehicle);
 
         spBrand = (Spinner) rootView.findViewById(R.id.sp_selectMake);
@@ -138,5 +169,4 @@ public class DocumentFragment extends Fragment {
         });
         return rootView;
     }
-
 }

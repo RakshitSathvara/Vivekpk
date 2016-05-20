@@ -3,10 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/percentEnterCarDetails11"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_marginTop="8dp"
     android:background="#ECE9E8"
     android:orientation="vertical"
-    android:padding="15dp"
+    android:padding="8dp"
     android:visibility="visible">
 
     <LinearLayout
@@ -84,32 +85,32 @@
                 android:id="@+id/sp_selectMake"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="8dp"
                 android:spinnerMode="dialog" />
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_marginTop="8dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="2dp"
                 android:background="#CCC" />
 
             <Spinner
                 android:id="@+id/sp_selectModel"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="8dp"
                 android:spinnerMode="dialog" />
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_marginTop="8dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="2dp"
                 android:background="#CCC" />
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp">
+                android:layout_marginTop="8dp">
 
                 <in.vaksys.vivekpk.extras.PercentLinearLayout
                     android:layout_width="match_parent"

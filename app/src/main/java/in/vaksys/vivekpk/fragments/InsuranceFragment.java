@@ -17,6 +17,10 @@ import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.honorato.multistatetogglebutton.MultiStateToggleButton;
+import org.honorato.multistatetogglebutton.ToggleButton;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -45,6 +49,8 @@ public class InsuranceFragment extends Fragment {
 
     private Spinner spInsuranceCompany;
 
+   // private MultiStateToggleButton multiStateToggleButton;
+
     private LinearLayout linearAddVehicle, linearVehicleDetails, linearInsurancePolicy, linearInsurancePolicyWithVehicle,
             linearInsuranceDetails;
 
@@ -58,6 +64,31 @@ public class InsuranceFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_insurance, container, false);
+
+
+        /*multiStateToggleButton = (MultiStateToggleButton) rootView.findViewById(R.id.mstb_insurancevehicleChoice);
+        multiStateToggleButton.enableMultipleChoice(false);
+        multiStateToggleButton.setValue(0);
+        //multiStateToggleButton.setColorRes(R.color.cardview_dark_background, R.color.cardview_dark_background);
+
+        multiStateToggleButton.setOnValueChangedListener(new ToggleButton.OnValueChangedListener() {
+            @Override
+            public void onValueChanged(int value) {
+                Log.e("MSTB", "onValueChanged: " + value);
+                switch (value) {
+                    case 0:
+                        Toast.makeText(getActivity(), "Car Selected..", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 1:
+                        Toast.makeText(getActivity(), "Bike Selected..", Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        Toast.makeText(getActivity(), "Please S" +
+                                "elect any..", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        });*/
 
         linearAddVehicle = (LinearLayout) rootView.findViewById(R.id.linearAddVehicle);
         linearVehicleDetails = (LinearLayout) rootView.findViewById(R.id.linearVehicleDetails);
@@ -152,7 +183,7 @@ public class InsuranceFragment extends Fragment {
                         dialog.dismiss();
                     }
                 });
-
+                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                 dialog.show();
             }
         });
@@ -179,7 +210,7 @@ public class InsuranceFragment extends Fragment {
     private void setDateTimeField() {
 
         Calendar newCalendar = Calendar.getInstance();
-        fromDatePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+        fromDatePickerDialog = new DatePickerDialog(getActivity(), R.style.DialogTheme, new DatePickerDialog.OnDateSetListener() {
 
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 Calendar newDate = Calendar.getInstance();

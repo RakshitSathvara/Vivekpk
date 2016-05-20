@@ -10,6 +10,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:mstb="http://schemas.android.com/apk/res-auto"
     tools:context="in.vaksys.vivekpk.fragments.InsuranceFragment">
 
     <LinearLayout
@@ -17,6 +18,15 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+     <!--   <org.honorato.multistatetogglebutton.MultiStateToggleButton
+            android:id="@+id/mstb_insurancevehicleChoice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            mstb:mstbPrimaryColor="@color/cardview_dark_background"
+            mstb:mstbSecondaryColor="@color/colorPrimary"
+            mstb:values="@array/vehicle" />
+-->
         <include layout="@layout/add_vehicle_details" />
 
         <include layout="@layout/vehicle" />

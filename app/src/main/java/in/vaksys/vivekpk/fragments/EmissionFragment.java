@@ -16,6 +16,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.honorato.multistatetogglebutton.MultiStateToggleButton;
+import org.honorato.multistatetogglebutton.ToggleButton;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -39,7 +42,7 @@ public class EmissionFragment extends Fragment {
     private String SelectedDate;
     public static final String TAG = "DATE";
 
-
+    private MultiStateToggleButton multiStateToggleButton;
 
     public EmissionFragment() {
         // Required empty public constructor
@@ -51,6 +54,32 @@ public class EmissionFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_emission, container, false);
+
+
+       /* multiStateToggleButton = (MultiStateToggleButton) rootView.findViewById(R.id.mstb_emissionvehicleChoice);
+        multiStateToggleButton.enableMultipleChoice(false);
+        multiStateToggleButton.setValue(0);
+        //multiStateToggleButton.setColorRes(R.color.cardview_dark_background, R.color.cardview_dark_background);
+
+        multiStateToggleButton.setOnValueChangedListener(new ToggleButton.OnValueChangedListener() {
+            @Override
+            public void onValueChanged(int value) {
+                Log.e("MSTB", "onValueChanged: " + value);
+                switch (value) {
+                    case 0:
+                        Toast.makeText(getActivity(), "Car Selected..", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 1:
+                        Toast.makeText(getActivity(), "Bike Selected..", Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        Toast.makeText(getActivity(), "Please S" +
+                                "elect any..", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        });*/
+
         tvDate = (TextView) rootView.findViewById(R.id.tv_date);
 
         linearVehicle = (LinearLayout) rootView.findViewById(R.id.linearVehicleDetails);
@@ -127,7 +156,7 @@ public class EmissionFragment extends Fragment {
     private void setDateTimeField() {
 
         Calendar newCalendar = Calendar.getInstance();
-        fromDatePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+        fromDatePickerDialog = new DatePickerDialog(getActivity(), R.style.DialogTheme,new DatePickerDialog.OnDateSetListener() {
 
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 Calendar newDate = Calendar.getInstance();

@@ -7,7 +7,7 @@
     tools:context="in.vaksys.vivekpk.activities.NotificationActivity">
 
     <include
-        android:id="@+id/toolbar1"
+        android:id="@+id/NotificationToolbar"
         layout="@layout/custom_toolbar" />
 
     <include layout="@layout/notification" />

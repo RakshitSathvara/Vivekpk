@@ -7,29 +7,47 @@
     android:background="@color/colorPrimary"
     android:elevation="4dp">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/click_logo"/>
-
     <LinearLayout
+        android:gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_name1"
-            android:text="@string/home"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="#000000" />
+    <ImageView
+        android:id="@+id/imageToolBar"
+        android:src="@drawable/logo_nav_landing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
-        <Spinner
-            android:id="@+id/spinner_select_value"
-            android:layout_width="100dp"
-            android:layout_height="30dp"/>
+    <TextView
+        android:layout_marginLeft="5dp"
+        android:id="@+id/toolName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="12sp"
+        android:textStyle="bold" />
 
     </LinearLayout>
+
+    <!-- <LinearLayout
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:orientation="vertical">
+
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:src="@drawable/ic_action_name1"
+             android:text="@string/home"
+             android:textSize="18sp"
+             android:textStyle="bold"
+             android:textColor="#000000" />
+
+         <Spinner
+             android:id="@+id/spinner_select_value"
+             android:layout_width="100dp"
+             android:layout_height="30dp"/>
+
+     </LinearLayout>-->
 </android.support.v7.widget.Toolbar>

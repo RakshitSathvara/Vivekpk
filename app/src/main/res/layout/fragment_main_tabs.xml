@@ -5,13 +5,27 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F8F8F8"
+        android:drawableLeft="@drawable/search_icon"
+        android:drawablePadding="20dp"
+        android:gravity="center_vertical"
+        android:hint="Search Vehicle Number"
+        android:padding="10dp"
+        android:textColor="#000"
+        android:textColorHint="#CCC"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="3dp"
-        android:layout_marginRight="3dp"
-        android:layout_marginTop="5dp"
-        android:background="@color/cardview_dark_background"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/tab_background"
         android:orientation="vertical"
         android:paddingBottom="2dp"
         android:paddingLeft="4dp"
@@ -35,6 +49,5 @@
         android:id="@+id/viewpager1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 </LinearLayout>
