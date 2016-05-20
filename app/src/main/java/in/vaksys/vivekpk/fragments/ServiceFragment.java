@@ -15,10 +15,6 @@ import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.honorato.multistatetogglebutton.MultiStateToggleButton;
-import org.honorato.multistatetogglebutton.ToggleButton;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -41,7 +37,7 @@ public class ServiceFragment extends Fragment {
     public static final String TAG = "DATE";
     private LinearLayout linearVehicle, linearAddVehicle, linearServiceDueDate;
     private Button btn_addVehicle, btn_setAlert;
-    private MultiStateToggleButton multiStateToggleButton;
+
 
     public ServiceFragment() {
         // Required empty public constructor

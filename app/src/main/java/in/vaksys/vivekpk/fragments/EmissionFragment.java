@@ -16,8 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.honorato.multistatetogglebutton.MultiStateToggleButton;
-import org.honorato.multistatetogglebutton.ToggleButton;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -42,7 +40,6 @@ public class EmissionFragment extends Fragment {
     private String SelectedDate;
     public static final String TAG = "DATE";
 
-    private MultiStateToggleButton multiStateToggleButton;
 
     public EmissionFragment() {
         // Required empty public constructor

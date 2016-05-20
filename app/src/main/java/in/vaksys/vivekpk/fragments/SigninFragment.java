@@ -58,7 +58,7 @@ public class SigninFragment extends Fragment {
     RealmAsyncTask realmAsyncTask;
     String mContactNo, mPassword;
     MyApplication myApplication;
-
+    VehicleModels vehicleModels;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -248,6 +248,16 @@ public class SigninFragment extends Fragment {
                         realm.beginTransaction();
                         // Getting JSON Array node
                         JSONArray results1 = response.getJSONArray("result");
+
+                        vehicleModels = realm.createObject(VehicleModels.class);
+
+                        vehicleModels.setId(0);
+                        vehicleModels.setManufacturerName("Select Brand");
+                        vehicleModels.setModel("Select Model");
+                        vehicleModels.setType("");
+                        vehicleModels.setCreatedAt("31131");
+                        vehicleModels.setUpdatedAt("21232");
+
                         for (int i = 0; i < results1.length(); i++) {
 
                             JSONObject jsonObject = results1.getJSONObject(i);
@@ -258,7 +268,8 @@ public class SigninFragment extends Fragment {
                             String createdAt = jsonObject.getString("createdAt");
                             String updatedAt = jsonObject.getString("updatedAt");
 
-                            VehicleModels vehicleModels = realm.createObject(VehicleModels.class);
+                            vehicleModels = realm.createObject(VehicleModels.class);
+
                             vehicleModels.setId(id);
                             vehicleModels.setManufacturerName(manufacturerName);
                             vehicleModels.setModel(model);
@@ -349,7 +360,6 @@ public class SigninFragment extends Fragment {
             getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
-
 
 
 }

@@ -14,8 +14,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import in.vaksys.vivekpk.R;
+import in.vaksys.vivekpk.extras.MyApplication;
 
 /**
  * Created by dell980 on 5/7/2016.
@@ -26,7 +28,7 @@ public class EmergencyFragment extends Fragment {
     private LinearLayout linearLayoutOne, linearContactTwo;
     private ImageView deleteContactOne;
     private TextView contactTvOneName, contactTvTwoNumber;
-    
+
     public static EmergencyFragment newInstance(int index) {
         EmergencyFragment fragment = new EmergencyFragment();
         Bundle b = new Bundle();
@@ -89,27 +91,31 @@ public class EmergencyFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        String phoneNo = null;
-        String displayName = null;
-        Uri uri = data.getData();
-        Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
-        cursor.moveToFirst();
+        MyApplication.getInstance().showLog("respode  ", String.valueOf(resultCode));
+        if (resultCode == -1) {
+            String phoneNo = null;
+            String displayName = null;
+            Uri uri = data.getData();
+            Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
+            cursor.moveToFirst();
 
+            int phoneIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+            phoneNo = cursor.getString(phoneIndex);
+            contactTvTwoNumber.setText(phoneNo);
 
-        int phoneIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-        phoneNo = cursor.getString(phoneIndex);
-        contactTvTwoNumber.setText(phoneNo);
+            int nameIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+            displayName = cursor.getString(nameIndex);
+            contactTvOneName.setText(displayName);
+            //int nameIndex1 = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI);
+            btnContactOne.setVisibility(View.GONE);
+            linearLayoutOne.setVisibility(View.VISIBLE);
 
-        int nameIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
-        displayName = cursor.getString(nameIndex);
-        contactTvOneName.setText(displayName);
-        //int nameIndex1 = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI);
-        btnContactOne.setVisibility(View.GONE);
-        linearLayoutOne.setVisibility(View.VISIBLE);
+            btnContactOne.setVisibility(View.GONE);
+            linearLayoutOne.setVisibility(View.VISIBLE);
 
-        btnContactOne.setVisibility(View.GONE);
-        linearLayoutOne.setVisibility(View.VISIBLE);
-
-        Log.e("Activity", "onClick: " + phoneNo + "And : " + displayName);
+            Log.e("Activity", "onClick: " + phoneNo + "And : " + displayName);
+        } else {
+            Toast.makeText(getActivity(), "You Didn't Select Any Contact", Toast.LENGTH_SHORT).show();
+        }
     }
 }

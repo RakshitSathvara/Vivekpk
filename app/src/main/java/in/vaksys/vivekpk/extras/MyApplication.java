@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.multidex.MultiDex;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -49,7 +50,8 @@ public class MyApplication extends Application {
 
         RealmConfiguration configuration = new RealmConfiguration.Builder(this)
                 .name("DaddysRoad231.realm")
-                .schemaVersion(2)
+                .deleteRealmIfMigrationNeeded()
+                .schemaVersion(6)
                 .build();
         Realm.setDefaultConfiguration(configuration);
 
@@ -136,6 +138,10 @@ public class MyApplication extends Application {
             InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view1.getWindowToken(), 0);
         }
+    }
+
+    public void showLog(String TAG, String msg) {
+        Log.e(TAG, msg);
     }
 
 }
