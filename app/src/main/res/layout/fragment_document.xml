@@ -10,24 +10,20 @@
         android:orientation="vertical"
         tools:context=".fragments.DocumentFragment">
 
-      <!--  <org.honorato.multistatetogglebutton.MultiStateToggleButton
-            android:id="@+id/mstb_vehicleChoice"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dip"
-            mstb:mstbPrimaryColor="@color/cardview_dark_background"
-            mstb:mstbSecondaryColor="@color/colorPrimary"
-            mstb:values="@array/vehicle" />
--->
+        <!--  <org.honorato.multistatetogglebutton.MultiStateToggleButton
+              android:id="@+id/mstb_vehicleChoice"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="10dip"
+              mstb:mstbPrimaryColor="@color/cardview_dark_background"
+              mstb:mstbSecondaryColor="@color/colorPrimary"
+              mstb:values="@array/vehicle" />
+  -->
         <include layout="@layout/add_driving_license" />
 
         <include layout="@layout/your_driving_license" />
 
         <include layout="@layout/register_vehicle" />
-
-        <include layout="@layout/vehicle_details" />
-
-        <include layout="@layout/enter_car_details" />
 
         <include layout="@layout/vehicle_list_raw" />
 

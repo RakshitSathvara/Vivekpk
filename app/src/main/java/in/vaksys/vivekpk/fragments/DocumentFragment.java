@@ -1,37 +1,122 @@
 package in.vaksys.vivekpk.fragments;
 
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.android.volley.AuthFailureError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.TimeoutError;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Random;
 
 import in.vaksys.vivekpk.R;
-import in.vaksys.vivekpk.extras.PercentLinearLayout;
+import in.vaksys.vivekpk.activities.HomeActivity;
+import in.vaksys.vivekpk.adapter.ImageAdapter;
+import in.vaksys.vivekpk.dbPojo.UserImages;
+import in.vaksys.vivekpk.dbPojo.VehicleModels;
+import in.vaksys.vivekpk.extras.AppConfig;
+import in.vaksys.vivekpk.extras.MyApplication;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class DocumentFragment extends Fragment {
+    private static final String TAG = "DocumentFragment";
+    private LinearLayout linearAddDrivingLicense;
+    private LinearLayout linearAddGallery;
+    private ImageView imgAddGallery;
+    private LinearLayout linearAddCamera;
+    private ImageView imgAddCamera;
 
-    private Button btnRegisterVehicle, btnContinue;
-    private LinearLayout linearAddDrivingLicense, linearYourDrivingLicense, linearRegisterVehicle,
-            linearVehicleDetails, linearVehicleDetailsListRaw;
-    private PercentLinearLayout percentEnterCarDetails;
+    private LinearLayout linearYourDrivingLicense;
+    private ImageView imgLicenseImgEdit;
+    private ImageView imgLicenseImgOne;
+    private ImageView imgLicenseImgTwo;
+    private ImageView imgLicenseImThree;
+    private ImageView imgLicenseImgFour;
+    private LinearLayout linearRegisterVehicle;
+    private LinearLayout linearRcBook;
+    private LinearLayout linearInsurance;
+    private LinearLayout linearEmission;
+    private LinearLayout linearRcBills;
+    private LinearLayout linearVehicleDeatilsListRaw;
+    private ImageView imgEdit;
+    private TextView tvDetailVehicelNumber;
+    private TextView tvDetailVehicelBranch;
+    private TextView tvDetailVehicelModel;
+    private LinearLayout linearVehicelDocRcBook;
+    private LinearLayout numberRcBook;
+    private TextView tvRcBookCount;
+    private LinearLayout linearVehicelDocInsurance;
+    private LinearLayout numberInsurance;
+    private TextView tvInssuranceCount;
+    private LinearLayout linearVehicelDocEmission;
+    private LinearLayout numberEmission;
+    private TextView tvEmissionCount;
+    private LinearLayout linearVehicelDocBills;
+    private LinearLayout numberRcBills;
+    private TextView tvBillsCount;
 
-    private ImageView img_addGallery;
+    private Button btnRegisterVehicle;
+    private LinearLayout linearVehicleDetailsListRaw;
 
-    private Spinner spBrand, spVehicleModel;
+    public Uri fileUri;
+    private static final String IMAGE_DIRECTORY_NAME = "EzyRidePhotos";
+    public int PICK_IMAGE_REQUEST = 1;
+    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
+    public static final int MEDIA_TYPE_IMAGE = 1;
+    public static String timeStamp, myImageUrl;
+    Bitmap bitmap;
+    private Uri filePath;
 
+    MyApplication myApplication;
+    private Realm realm;
+    UserImages userImages;
+
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+
+    ImageAdapter imageAdapter;
+    RecyclerView ImageRecyclerview;
+    RealmResults<UserImages> results;
     //private MultiStateToggleButton multiStateToggleButton;
 
     public static DocumentFragment newInstance(int index) {
@@ -47,8 +132,23 @@ public class DocumentFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_document, container, false);
-
+        View view = inflater.inflate(R.layout.fragment_document, container, false);
+        BindViews(view);
+        SetImagesViews();
+        linearAddGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFileChooser();
+            }
+        });
+        linearAddCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                captureImage();
+            }
+        });
+//        linearYourDrivingLicense.setVisibility(View.GONE);
+        myApplication.showLog(TAG, "create" + results.size());
       /*  multiStateToggleButton = (MultiStateToggleButton) rootView.findViewById(R.id.mstb_vehicleChoice);
         multiStateToggleButton.enableMultipleChoice(false);
         multiStateToggleButton.setValue(0);
@@ -73,95 +173,353 @@ public class DocumentFragment extends Fragment {
             }
         });
 */
-        btnRegisterVehicle = (Button) rootView.findViewById(R.id.btn_registerVehicle);
-
-        spBrand = (Spinner) rootView.findViewById(R.id.sp_selectMake);
-
-        List<String> CompanyName = new ArrayList<String>();
-        CompanyName.add("Select Brand");
-        CompanyName.add("BMD");
-        CompanyName.add("Audi");
-        CompanyName.add("Jaguar");
-        CompanyName.add("Maruti Suzuki");
-
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, CompanyName);
-
-        // Drop down layout style - list view with radio button
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // attaching data adapter to spinner
-        spBrand.setAdapter(dataAdapter);
-        spBrand.setSelection(0);
-
-        spVehicleModel = (Spinner) rootView.findViewById(R.id.sp_selectModel);
-
-        List<String> CompanyName1 = new ArrayList<String>();
-        CompanyName1.add("Select Model");
-        CompanyName1.add("BMD");
-        CompanyName1.add("Audi R8");
-        CompanyName1.add("Jaguar");
-        CompanyName1.add("Swift");
-
-        ArrayAdapter<String> dataAdapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, CompanyName1);
-
-        // Drop down layout style - list view with radio button
-        dataAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // attaching data adapter to spinner
-        spVehicleModel.setAdapter(dataAdapter);
-        spVehicleModel.setSelection(0);
-
-        btnContinue = (Button) rootView.findViewById(R.id.btn_continue);
-
-        img_addGallery = (ImageView) rootView.findViewById(R.id.img_addGallery);
-
-        linearAddDrivingLicense = (LinearLayout) rootView.findViewById(R.id.linearAddDrivingLicense);
-        linearYourDrivingLicense = (LinearLayout) rootView.findViewById(R.id.linearYourDrivingLicense);
-        linearRegisterVehicle = (LinearLayout) rootView.findViewById(R.id.linearRegisterVehicle);
-        linearVehicleDetails = (LinearLayout) rootView.findViewById(R.id.linearVehicleDetails);
-        linearVehicleDetailsListRaw = (LinearLayout) rootView.findViewById(R.id.linearVehicleDeatilsListRaw);
-
-        percentEnterCarDetails = (PercentLinearLayout) rootView.findViewById(R.id.percentEnterCarDetails11);
 
 
-        btnRegisterVehicle.setOnClickListener(new View.OnClickListener() {
+       /* btnRegisterVehicle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 linearAddDrivingLicense.setVisibility(View.GONE);
                 linearYourDrivingLicense.setVisibility(View.GONE);
                 linearRegisterVehicle.setVisibility(View.GONE);
-                linearVehicleDetails.setVisibility(View.GONE);
                 linearVehicleDetailsListRaw.setVisibility(View.GONE);
 
-                percentEnterCarDetails.setVisibility(View.VISIBLE);
             }
         });
 
-        btnContinue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                linearAddDrivingLicense.setVisibility(View.VISIBLE);
-                linearYourDrivingLicense.setVisibility(View.GONE);
-                linearRegisterVehicle.setVisibility(View.GONE);
-                linearVehicleDetails.setVisibility(View.VISIBLE);
-                linearVehicleDetailsListRaw.setVisibility(View.GONE);
-
-                percentEnterCarDetails.setVisibility(View.GONE);
-            }
-        });
-
-        img_addGallery.setOnClickListener(new View.OnClickListener() {
+        imgAddGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 linearAddDrivingLicense.setVisibility(View.GONE);
                 linearYourDrivingLicense.setVisibility(View.VISIBLE);
                 linearRegisterVehicle.setVisibility(View.GONE);
-                linearVehicleDetails.setVisibility(View.GONE);
                 linearVehicleDetailsListRaw.setVisibility(View.VISIBLE);
 
-                percentEnterCarDetails.setVisibility(View.GONE);
             }
-        });
-        return rootView;
+        });*/
+        return view;
+    }
+
+    private void SetImagesViews() {
+        myApplication.showLog(TAG, "innerview");
+
+        ImageRecyclerview.setHasFixedSize(true);
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        ImageRecyclerview.setLayoutManager(manager);
+        results = realm.where(UserImages.class).findAll();
+        myApplication.showLog(TAG, "inside viwe" + results.size());
+        if (results.size() > -1) {
+            myApplication.showLog(TAG, "innerview11111");
+            linearYourDrivingLicense.setVisibility(View.VISIBLE);
+            imageAdapter = new ImageAdapter(getActivity(), results);
+            ImageRecyclerview.setAdapter(imageAdapter);
+        } else {
+            myApplication.showLog(TAG, "innerview222222");
+            linearYourDrivingLicense.setVisibility(View.GONE);
+        }
+    }
+
+    private void BindViews(View view) {
+        linearAddDrivingLicense = (LinearLayout) view.findViewById(R.id.linearAddDrivingLicense);
+        linearAddGallery = (LinearLayout) view.findViewById(R.id.linear_addGallery);
+        imgAddGallery = (ImageView) view.findViewById(R.id.img_addGallery);
+        linearAddCamera = (LinearLayout) view.findViewById(R.id.linear_addCamera);
+        imgAddCamera = (ImageView) view.findViewById(R.id.img_addCamera);
+        linearYourDrivingLicense = (LinearLayout) view.findViewById(R.id.linearYourDrivingLicense);
+        imgLicenseImgEdit = (ImageView) view.findViewById(R.id.img_licenseImgEdit);
+       /* imgLicenseImgOne = (ImageView) view.findViewById(R.id.img_licenseImgOne);
+        imgLicenseImgTwo = (ImageView) view.findViewById(R.id.img_licenseImgTwo);
+        imgLicenseImThree = (ImageView) view.findViewById(R.id.img_licenseImThree);
+        imgLicenseImgFour = (ImageView) view.findViewById(R.id.img_licenseImgFour);*/
+
+        linearRegisterVehicle = (LinearLayout) view.findViewById(R.id.linearRegisterVehicle);
+        linearRcBook = (LinearLayout) view.findViewById(R.id.linear_rcBook);
+        linearInsurance = (LinearLayout) view.findViewById(R.id.linear_insurance);
+        linearEmission = (LinearLayout) view.findViewById(R.id.linear_emission);
+        linearRcBills = (LinearLayout) view.findViewById(R.id.linear_rcBills);
+        linearVehicleDeatilsListRaw = (LinearLayout) view.findViewById(R.id.linearVehicleDeatilsListRaw);
+        imgEdit = (ImageView) view.findViewById(R.id.img_edit);
+        tvDetailVehicelNumber = (TextView) view.findViewById(R.id.tv_detailVehicelNumber);
+        tvDetailVehicelBranch = (TextView) view.findViewById(R.id.tv_detailVehicelBranch);
+        tvDetailVehicelModel = (TextView) view.findViewById(R.id.tv_detailVehicelModel);
+        linearVehicelDocRcBook = (LinearLayout) view.findViewById(R.id.linear_vehicelDocRcBook);
+        numberRcBook = (LinearLayout) view.findViewById(R.id.number_rc_book);
+        tvRcBookCount = (TextView) view.findViewById(R.id.tv_rcBookCount);
+        linearVehicelDocInsurance = (LinearLayout) view.findViewById(R.id.linear_vehicelDocInsurance);
+        numberInsurance = (LinearLayout) view.findViewById(R.id.number_insurance);
+        tvInssuranceCount = (TextView) view.findViewById(R.id.tv_inssuranceCount);
+        linearVehicelDocEmission = (LinearLayout) view.findViewById(R.id.linear_vehicelDocEmission);
+        numberEmission = (LinearLayout) view.findViewById(R.id.number_emission);
+        tvEmissionCount = (TextView) view.findViewById(R.id.tv_emissionCount);
+        linearVehicelDocBills = (LinearLayout) view.findViewById(R.id.linear_vehicelDocBills);
+        numberRcBills = (LinearLayout) view.findViewById(R.id.number_rc_bills);
+        tvBillsCount = (TextView) view.findViewById(R.id.tv_billsCount);
+
+        btnRegisterVehicle = (Button) view.findViewById(R.id.btn_registerVehicle);
+
+        ImageRecyclerview = (RecyclerView) view.findViewById(R.id.ImagesRecyclerView);
+
+        myApplication = MyApplication.getInstance();
+        realm = Realm.getDefaultInstance();
+
+    }
+
+    private void showFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
+
+    private void captureImage() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+
+        // start the image capture Intent
+        startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+    }
+
+    public Uri getOutputMediaFileUri(int type) {
+        return Uri.fromFile(getOutputMediaFile(type));
+    }
+
+    private static File getOutputMediaFile(int type) {
+
+        // External sdcard location
+        File mediaStorageDir = new File(
+                Environment
+                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                IMAGE_DIRECTORY_NAME);
+
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                MyApplication.getInstance().showLog(TAG, "Oops! Failed create " + IMAGE_DIRECTORY_NAME + " directory");
+                return null;
+            }
+        }
+// Create a media file name
+        timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
+                Locale.getDefault()).format(new Date());
+        File mediaFile;
+        if (type == MEDIA_TYPE_IMAGE) {
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator
+                    + "IMG_" + timeStamp + ".jpg");
+        } else {
+            return null;
+        }
+        return mediaFile;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // save file url in bundle as it will be null on scren orientation
+        // changes
+        outState.putParcelable("file_uri", fileUri);
+    }
+
+   /* @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        // get the file url
+        fileUri = savedInstanceState.getParcelable("file_uri");
+    }*/
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // if the result is capturing Image
+        myApplication.showLog(TAG, " " + resultCode + " " + requestCode + " " + data.toString());
+        if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
+            if (resultCode == -1) {
+                // successfully captured the image
+                // display it in image view
+                previewCapturedImage();
+            } else if (resultCode == 0) {
+                // user cancelled Image capture
+                Toast.makeText(getActivity(),
+                        "You cancelled image capture", Toast.LENGTH_SHORT)
+                        .show();
+            } else {
+                // failed to capture image
+                Toast.makeText(getActivity(),
+                        "Sorry! Failed to capture image", Toast.LENGTH_SHORT)
+                        .show();
+            }
+        }
+        if (requestCode == PICK_IMAGE_REQUEST && data != null && data.getData() != null) {
+            if (resultCode == -1) {
+                filePath = data.getData();
+                try {
+                    results = realm.where(UserImages.class).findAll();
+                    if (results.size() < 5) {
+                        bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), filePath);
+                        Send(bitmap);
+                        /*String encoded = BitmapToString(bitmap);
+
+                        SendToServer(encoded);
+                        imageAdapter.saveImageToDatabase(encoded);
+//                        myApplication.showLog(TAG, "preview " + results.size());
+//                        myApplication.showLog(TAG, "pick");
+                        if (results.size() == 1) {
+                            SetImagesViews();
+                        }*/
+                    } else {
+                        Toast.makeText(getActivity(),
+                                "Sorry! You can't add more then 4 Driving Licences.", Toast.LENGTH_SHORT)
+                                .show();
+                    }
+                } catch (IOException e) {
+                    Toast.makeText(getActivity(),
+                            "Sorry! Failed to Select image", Toast.LENGTH_SHORT)
+                            .show();
+                }
+            } else if (resultCode == 0) {
+                Toast.makeText(getActivity(),
+                        "You cancelled image Selcetion", Toast.LENGTH_SHORT)
+                        .show();
+            }
+        }
+    }
+
+    private void SendToServer(String bitmap, String rnd) {
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, AppConfig.URL_SPINNER, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+//                setAreaSpinner();
+                try {
+
+                    boolean error = response.getBoolean("error");
+                    if (!error) {
+                        realm.beginTransaction();
+                        // Getting JSON Array node
+                        JSONArray results1 = response.getJSONArray("result");
+
+                        vehicleModels = realm.createObject(VehicleModels.class);
+
+                        vehicleModels.setId(0);
+                        vehicleModels.setManufacturerName("Select Brand");
+                        vehicleModels.setModel("Select Model");
+                        vehicleModels.setType("");
+                        vehicleModels.setCreatedAt("31131");
+                        vehicleModels.setUpdatedAt("21232");
+
+                        for (int i = 0; i < results1.length(); i++) {
+
+                            JSONObject jsonObject = results1.getJSONObject(i);
+                            int id = jsonObject.getInt("id");
+                            String manufacturerName = jsonObject.getString("manufacturerName");
+                            String model = jsonObject.getString("model");
+                            String type = jsonObject.getString("type");
+                            String createdAt = jsonObject.getString("createdAt");
+                            String updatedAt = jsonObject.getString("updatedAt");
+
+                            vehicleModels = realm.createObject(VehicleModels.class);
+
+                            vehicleModels.setId(id);
+                            vehicleModels.setManufacturerName(manufacturerName);
+                            vehicleModels.setModel(model);
+                            vehicleModels.setType(type);
+                            vehicleModels.setCreatedAt(createdAt);
+                            vehicleModels.setUpdatedAt(updatedAt);
+
+                        }
+                        realm.commitTransaction();
+                        myApplication.hideDialog();
+
+                        startActivity(new Intent(getActivity(), HomeActivity.class));
+
+
+                    } else {
+                        String errorMsg = response.getString("message");
+                        Toast.makeText(getActivity(),
+                                "Error :" + errorMsg, Toast.LENGTH_LONG).show();
+                        myApplication.hideDialog();
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    myApplication.hideDialog();
+
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                myApplication.hideDialog();
+                //Toast.makeText(getApplicationContext(), "Responce : " + error, Toast.LENGTH_LONG).show();
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                    myApplication.ErrorSnackBar(getActivity());
+                }
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("password", mPassword);
+                params.put("phone", mContactNo);
+
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+                return headers;
+            }
+        };
+        myApplication.addToRequestQueue(request);
+    }
+
+    private String BitmapToString(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] b = baos.toByteArray();
+        return Base64.encodeToString(b, Base64.DEFAULT);
+    }
+
+    private void previewCapturedImage() {
+        results = realm.where(UserImages.class).findAll();
+        if (results.size() < 5) {
+            try {
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 8;
+                bitmap = BitmapFactory.decodeFile(fileUri.getPath(),
+                        options);
+                Send(bitmap);
+
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Toast.makeText(getActivity(),
+                    "Sorry! You can't add more then 4 Driving Licences.", Toast.LENGTH_SHORT)
+                    .show();
+        }
+    }
+
+    private void Send(Bitmap bitmap) {
+        String encoded = BitmapToString(bitmap);
+        String rnd = "Licence" + GenerteRandomNumber();
+        SendToServer(encoded, rnd);
+
+
+        imageAdapter.saveImageToDatabase(BitmapToString(bitmap), rnd);
+        results = realm.where(UserImages.class).findAll();
+        /*myApplication.showLog(TAG, "preview " + results.size());
+        myApplication.showLog(TAG, "capture");*/
+        if (results.size() == 1) {
+            SetImagesViews();
+        }
+    }
+
+    private int GenerteRandomNumber() {
+        Random r = new Random();
+        return r.nextInt(9999 - 1000) + 1000;
     }
 }

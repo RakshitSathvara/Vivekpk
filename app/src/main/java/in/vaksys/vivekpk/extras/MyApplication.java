@@ -51,7 +51,7 @@ public class MyApplication extends Application {
         RealmConfiguration configuration = new RealmConfiguration.Builder(this)
                 .name("DaddysRoad231.realm")
                 .deleteRealmIfMigrationNeeded()
-                .schemaVersion(6)
+                .schemaVersion(7)
                 .build();
         Realm.setDefaultConfiguration(configuration);
 
