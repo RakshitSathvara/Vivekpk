@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,6 +37,7 @@ public class SearchActivity extends AppCompatActivity {
     LinearLayout linear_contactSearch, linearVehicleDetails, linear_reasonContact, linear_searchInvite,
             linear_trafficSignal, linear_towAway, linear_reportAccident;
     ImageView imageView;
+    Spinner spinner_select_value;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,11 @@ public class SearchActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+
+        spinner_select_value = (Spinner) findViewById(R.id.spinner_select_value);
+        spinner_select_value.setVisibility(View.GONE);
+
         /*imageView = (ImageView) findViewById(R.id.img_search);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,7 +197,7 @@ public class SearchActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case android.R.id.home:
-                startActivity(new Intent(SearchActivity.this,HomeActivity.class));
+                startActivity(new Intent(SearchActivity.this, HomeActivity.class));
                 return true;
             case R.id.navSearchToolbar:
                 // Single menu item is selected do something

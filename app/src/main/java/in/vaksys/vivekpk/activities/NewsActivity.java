@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
 
@@ -35,7 +36,6 @@ public class NewsActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
         tv = (TextView) findViewById(R.id.tv_data);
         makeTextViewResizable(tv, 3, "View More", true);
 

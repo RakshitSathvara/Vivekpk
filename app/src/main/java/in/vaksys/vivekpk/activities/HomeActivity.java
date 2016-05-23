@@ -140,7 +140,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
 
-        notification = (ImageView) findViewById(R.id.notification11);
+        /*notification = (ImageView) findViewById(R.id.notification11);
         notification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,7 +154,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 startActivity(new Intent(HomeActivity.this, SearchActivity.class));
             }
-        });
+        });*/
 
         initUI();
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -205,6 +205,7 @@ public class HomeActivity extends AppCompatActivity {
                     toolbar.setLogo(R.drawable.logo_nav_landing);
                     //toolbar.setTitle("");
                     toolName.setText("");
+                    spinner_select_value.setVisibility(View.GONE);
                     i = 0;
                     //menuItem.setVisible(false);
                 } else if (position == 1) {
@@ -216,6 +217,7 @@ public class HomeActivity extends AppCompatActivity {
                     //toolbar.setTitle("Reminder");
                     toolName.setText("Reminder");
                     imageToolBar.setVisibility(View.GONE);
+                    spinner_select_value.setVisibility(View.VISIBLE);
                     i = 1;
                     //menuItem.setVisible(false);
                 } else if (position == 2) {
@@ -226,6 +228,7 @@ public class HomeActivity extends AppCompatActivity {
                     //toolbar.setTitle("Documents");
                     toolName.setText("Documents");
                     imageToolBar.setVisibility(View.GONE);
+                    spinner_select_value.setVisibility(View.VISIBLE);
                     i = 1;
                 } else if (position == 3) {
                     fragmentManager.beginTransaction()
@@ -235,6 +238,7 @@ public class HomeActivity extends AppCompatActivity {
                     //toolbar.setTitle("Emergency");
                     toolName.setText("Emergency");
                     imageToolBar.setVisibility(View.GONE);
+                    spinner_select_value.setVisibility(View.VISIBLE);
                     i = 1;
                 } else if (!wasSelected) {
                     fragmentManager.beginTransaction()
@@ -352,5 +356,5 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-  
+
 }
