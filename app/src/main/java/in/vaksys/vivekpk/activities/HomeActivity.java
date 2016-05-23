@@ -5,9 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -28,7 +26,6 @@ import android.widget.Toast;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
-import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
@@ -88,7 +85,7 @@ public class HomeActivity extends AppCompatActivity {
 
         toolName = (TextView) findViewById(R.id.toolName);
         imageToolBar = (ImageView) findViewById(R.id.imageToolBar);
-        /*ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<String>();
         list.add("Car");
         list.add("Bike");
 
@@ -114,23 +111,23 @@ public class HomeActivity extends AppCompatActivity {
                 SharedPreferences.Editor edit = sharedPreferences.edit();
 
                 if (position == 0) {
-                  *//*  edit.putInt("type", 0);
+                   /* edit.putInt("type", 0);
                     edit.apply();
-                    spinnerCallback.onSpinnerCallBack();*//*
+                    spinnerCallback.onSpinnerCallBack();
 //                    MyApplication.getInstance().setValue(0);
                     Fragment fm =fragmentManager.findFragmentByTag("harsh");
-
+*/
                     Log.e(TAG, "onItemSelected: called");
                 }
                 if (position == 1) {
-*//*
-                    edit.putInt("type", 1);
+
+                   /* edit.putInt("type", 1);
                     edit.apply();
                     spinnerCallback.onSpinnerCallBack();
-*//*
+
 //                    MyApplication.getInstance().setValue(1);
                     MainTabFragment.newInstance(0).onRefresh1();
-                    Log.e(TAG, "onItemSelected: called");
+                    Log.e(TAG, "onItemSelected: called");*/
 
                 }
             }
@@ -140,10 +137,10 @@ public class HomeActivity extends AppCompatActivity {
                 // TODO Auto-generated method stub
 
             }
-        });*/
+        });
 
 
-       /* notification = (ImageView) findViewById(R.id.notification);
+        notification = (ImageView) findViewById(R.id.notification11);
         notification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -157,7 +154,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 startActivity(new Intent(HomeActivity.this, SearchActivity.class));
             }
-        });*/
+        });
 
         initUI();
         // ATTENTION: This was auto-generated to implement the App Indexing API.

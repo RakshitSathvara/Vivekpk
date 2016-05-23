@@ -24,7 +24,7 @@
         <item>Bike</item>
     </string-array>
 
-    <string name="troubleshooting_one">Please check the following if you're having trouble signing up:\n\n
+    <string name="troubleshooting_one">Please check the following if you\'re having trouble signing up:\n\n
 - Please make sure you are connected to the internet.\n
 - If your email ID or mobile number is already registered on DaddysRoad, please Sign-In instead of Sign-Up.\n
 - If you do not remember your password, you can tap Forgot Password? link on the Sign-In page.\n
@@ -34,7 +34,7 @@ If you are still unable to sign up, please tell us about it:\n</string>
 
     <string name="troubleshooting_two">If you are having trouble verifying your mobile number, please check the following:
 \n\n
-- Make sure that you have the latest DaddysRoad app installed from your phone's app store.\n
+- Make sure that you have the latest DaddysRoad app installed from your phone\'s app store.\n
 - Check that the mobile number that you have entered is correct.\n
 - The mobile number is active and is receiving SMS messages from other numbers.
 \n\n
@@ -73,7 +73,7 @@ Your account might get temporarily blocked if you send wrong notifications to ot
 \n\n
 Your account might be permanently blocked if:\n
 - We suspect that your DaddysRoad account is being misused.\n
-- There has been a violation of DaddysRoad's Terms of Service.\n\n
+- There has been a violation of DaddysRoad\'s Terms of Service.\n\n
 
 If you think that your account has been incorrectly blocked, please tell us about it:</string>
 
@@ -89,7 +89,7 @@ If the problem persists, please tell us about it:
     <string name="troubleshooting_nine">
 All DaddysRoad accounts must have an email address and verified mobile number associated with the account to use this app.\n\n
 
-If you're trying to change your email ID from MyAccount but receiving an error, It could be because you have entered an invalid Email format.\n\n
+If you\'re trying to change your email ID from MyAccount but receiving an error, It could be because you have entered an invalid Email format.\n\n
 
 If the problem persists, please tell us about it:
     </string>
@@ -122,14 +122,14 @@ Your vehicle Make and Model can be selected from the lists. This has to be slect
     </string>
 
      <string name="reg_veh_two">
-         While adding a vehicle to your account if your getting the error message that 'This vehicle is already registered';\n\n
+         While adding a vehicle to your account if your getting the error message that \'This vehicle is already registered\';\n\n
 
 It is because another user has already registered this vehicle in DaddysRoad App. \n
 If you are the true owner and the vehicle belongs to you, then you can Claim This Vehicle and we will look into this issue within 48 hours.
     </string>
 
     <string name="reg_veh_three">
-         While adding a vehicle in your account if you are getting the error message that 'This vehicle is already registered', it is because another user has registered this vehicle in DaddysRoad App. \n\n
+         While adding a vehicle in your account if you are getting the error message that \'This vehicle is already registered\', it is because another user has registered this vehicle in DaddysRoad App. \n\n
 
 If you are the true owner and the vehicle belongs to you, then you can Claim This Vehicle and we will look into this issue within 48 hours. \n\n
 
