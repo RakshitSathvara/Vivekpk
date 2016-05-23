@@ -127,6 +127,8 @@ public class MyApplication extends Application {
     }
 
     public void hideDialog() {
+        //// TODO: 23-05-2016  errorr second time open
+
         if (pDialog.isShowing())
             pDialog.dismiss();
     }

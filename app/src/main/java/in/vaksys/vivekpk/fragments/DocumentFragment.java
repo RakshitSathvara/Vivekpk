@@ -22,35 +22,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NoConnectionError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.TimeoutError;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Random;
 
 import in.vaksys.vivekpk.R;
-import in.vaksys.vivekpk.activities.HomeActivity;
 import in.vaksys.vivekpk.adapter.ImageAdapter;
 import in.vaksys.vivekpk.dbPojo.UserImages;
-import in.vaksys.vivekpk.dbPojo.VehicleModels;
-import in.vaksys.vivekpk.extras.AppConfig;
 import in.vaksys.vivekpk.extras.MyApplication;
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -264,21 +246,38 @@ public class DocumentFragment extends Fragment {
     }
 
     private void showFileChooser() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+        results = realm.where(UserImages.class).findAll();
+        if (results.size() < 5) {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+        } else {
+            Toast.makeText(getActivity(),
+                    "Sorry! You can't add more then 4 Driving Licences.", Toast.LENGTH_SHORT)
+                    .show();
+        }
     }
 
+
     private void captureImage() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        results = realm.where(UserImages.class).findAll();
+        if (results.size() < 5) {
+            {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-        fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+                fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
 
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
 
-        // start the image capture Intent
-        startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+                // start the image capture Intent
+                startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+            }
+        } else {
+            Toast.makeText(getActivity(),
+                    "Sorry! You can't add more then 4 Driving Licences.", Toast.LENGTH_SHORT)
+                    .show();
+        }
     }
 
     public Uri getOutputMediaFileUri(int type) {
@@ -354,10 +353,8 @@ public class DocumentFragment extends Fragment {
             if (resultCode == -1) {
                 filePath = data.getData();
                 try {
-                    results = realm.where(UserImages.class).findAll();
-                    if (results.size() < 5) {
-                        bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), filePath);
-                        Send(bitmap);
+                    bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), filePath);
+                    Send(bitmap);
                         /*String encoded = BitmapToString(bitmap);
 
                         SendToServer(encoded);
@@ -367,11 +364,7 @@ public class DocumentFragment extends Fragment {
                         if (results.size() == 1) {
                             SetImagesViews();
                         }*/
-                    } else {
-                        Toast.makeText(getActivity(),
-                                "Sorry! You can't add more then 4 Driving Licences.", Toast.LENGTH_SHORT)
-                                .show();
-                    }
+
                 } catch (IOException e) {
                     Toast.makeText(getActivity(),
                             "Sorry! Failed to Select image", Toast.LENGTH_SHORT)
@@ -385,96 +378,96 @@ public class DocumentFragment extends Fragment {
         }
     }
 
-    private void SendToServer(String bitmap, String rnd) {
-        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, AppConfig.URL_SPINNER, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-//                setAreaSpinner();
-                try {
+    /* private void SendToServer(String bitmap, String rnd) {
+         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, AppConfig.URL_SPINNER, new Response.Listener<JSONObject>() {
+             @Override
+             public void onResponse(JSONObject response) {
+ //                setAreaSpinner();
+                 try {
 
-                    boolean error = response.getBoolean("error");
-                    if (!error) {
-                        realm.beginTransaction();
-                        // Getting JSON Array node
-                        JSONArray results1 = response.getJSONArray("result");
+                     boolean error = response.getBoolean("error");
+                     if (!error) {
+                         realm.beginTransaction();
+                         // Getting JSON Array node
+                         JSONArray results1 = response.getJSONArray("result");
 
-                        vehicleModels = realm.createObject(VehicleModels.class);
+                         vehicleModels = realm.createObject(VehicleModels.class);
 
-                        vehicleModels.setId(0);
-                        vehicleModels.setManufacturerName("Select Brand");
-                        vehicleModels.setModel("Select Model");
-                        vehicleModels.setType("");
-                        vehicleModels.setCreatedAt("31131");
-                        vehicleModels.setUpdatedAt("21232");
+                         vehicleModels.setId(0);
+                         vehicleModels.setManufacturerName("Select Brand");
+                         vehicleModels.setModel("Select Model");
+                         vehicleModels.setType("");
+                         vehicleModels.setCreatedAt("31131");
+                         vehicleModels.setUpdatedAt("21232");
 
-                        for (int i = 0; i < results1.length(); i++) {
+                         for (int i = 0; i < results1.length(); i++) {
 
-                            JSONObject jsonObject = results1.getJSONObject(i);
-                            int id = jsonObject.getInt("id");
-                            String manufacturerName = jsonObject.getString("manufacturerName");
-                            String model = jsonObject.getString("model");
-                            String type = jsonObject.getString("type");
-                            String createdAt = jsonObject.getString("createdAt");
-                            String updatedAt = jsonObject.getString("updatedAt");
+                             JSONObject jsonObject = results1.getJSONObject(i);
+                             int id = jsonObject.getInt("id");
+                             String manufacturerName = jsonObject.getString("manufacturerName");
+                             String model = jsonObject.getString("model");
+                             String type = jsonObject.getString("type");
+                             String createdAt = jsonObject.getString("createdAt");
+                             String updatedAt = jsonObject.getString("updatedAt");
 
-                            vehicleModels = realm.createObject(VehicleModels.class);
+                             vehicleModels = realm.createObject(VehicleModels.class);
 
-                            vehicleModels.setId(id);
-                            vehicleModels.setManufacturerName(manufacturerName);
-                            vehicleModels.setModel(model);
-                            vehicleModels.setType(type);
-                            vehicleModels.setCreatedAt(createdAt);
-                            vehicleModels.setUpdatedAt(updatedAt);
+                             vehicleModels.setId(id);
+                             vehicleModels.setManufacturerName(manufacturerName);
+                             vehicleModels.setModel(model);
+                             vehicleModels.setType(type);
+                             vehicleModels.setCreatedAt(createdAt);
+                             vehicleModels.setUpdatedAt(updatedAt);
 
-                        }
-                        realm.commitTransaction();
-                        myApplication.hideDialog();
+                         }
+                         realm.commitTransaction();
+                         myApplication.hideDialog();
 
-                        startActivity(new Intent(getActivity(), HomeActivity.class));
+                         startActivity(new Intent(getActivity(), HomeActivity.class));
 
 
-                    } else {
-                        String errorMsg = response.getString("message");
-                        Toast.makeText(getActivity(),
-                                "Error :" + errorMsg, Toast.LENGTH_LONG).show();
-                        myApplication.hideDialog();
+                     } else {
+                         String errorMsg = response.getString("message");
+                         Toast.makeText(getActivity(),
+                                 "Error :" + errorMsg, Toast.LENGTH_LONG).show();
+                         myApplication.hideDialog();
 
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    myApplication.hideDialog();
+                     }
+                 } catch (JSONException e) {
+                     e.printStackTrace();
+                     myApplication.hideDialog();
 
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                myApplication.hideDialog();
-                //Toast.makeText(getApplicationContext(), "Responce : " + error, Toast.LENGTH_LONG).show();
-                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
-                    myApplication.ErrorSnackBar(getActivity());
-                }
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                // Posting parameters to login url
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("password", mPassword);
-                params.put("phone", mContactNo);
+                 }
+             }
+         }, new Response.ErrorListener() {
+             @Override
+             public void onErrorResponse(VolleyError error) {
+                 myApplication.hideDialog();
+                 //Toast.makeText(getApplicationContext(), "Responce : " + error, Toast.LENGTH_LONG).show();
+                 if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                     myApplication.ErrorSnackBar(getActivity());
+                 }
+             }
+         }) {
+             @Override
+             protected Map<String, String> getParams() {
+                 // Posting parameters to login url
+                 Map<String, String> params = new HashMap<String, String>();
+                 params.put("password", mPassword);
+                 params.put("phone", mContactNo);
 
-                return params;
-            }
+                 return params;
+             }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
-                return headers;
-            }
-        };
-        myApplication.addToRequestQueue(request);
-    }
+             @Override
+             public Map<String, String> getHeaders() throws AuthFailureError {
+                 HashMap<String, String> headers = new HashMap<String, String>();
+                 headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+                 return headers;
+             }
+         };
+         myApplication.addToRequestQueue(request);
+     }*/
 
     private String BitmapToString(Bitmap bitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -506,16 +499,18 @@ public class DocumentFragment extends Fragment {
     private void Send(Bitmap bitmap) {
         String encoded = BitmapToString(bitmap);
         String rnd = "Licence" + GenerteRandomNumber();
-        SendToServer(encoded, rnd);
+        System.out.println(encoded);
+        myApplication.showLog(TAG, encoded);
+//        SendToServer(encoded, rnd);
 
 
-        imageAdapter.saveImageToDatabase(BitmapToString(bitmap), rnd);
+        /*imageAdapter.saveImageToDatabase(BitmapToString(bitmap), rnd);
         results = realm.where(UserImages.class).findAll();
-        /*myApplication.showLog(TAG, "preview " + results.size());
-        myApplication.showLog(TAG, "capture");*/
+        *//*myApplication.showLog(TAG, "preview " + results.size());
+        myApplication.showLog(TAG, "capture");*//*
         if (results.size() == 1) {
             SetImagesViews();
-        }
+        }*/
     }
 
     private int GenerteRandomNumber() {
