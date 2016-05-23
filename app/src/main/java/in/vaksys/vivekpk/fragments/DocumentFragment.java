@@ -385,98 +385,96 @@ public class DocumentFragment extends Fragment {
         }
     }
 
-    //// TODO: 5/21/2016  hide some
+    private void SendToServer(String bitmap, String rnd) {
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, AppConfig.URL_SPINNER, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+//                setAreaSpinner();
+                try {
 
-//    private void SendToServer(String bitmap, String rnd) {
-//        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, AppConfig.URL_SPINNER, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-////                setAreaSpinner();
-//                try {
-//
-//                    boolean error = response.getBoolean("error");
-//                    if (!error) {
-//                        realm.beginTransaction();
-//                        // Getting JSON Array node
-//                        JSONArray results1 = response.getJSONArray("result");
-//
-//                        vehicleModels = realm.createObject(VehicleModels.class);
-//
-//                        vehicleModels.setId(0);
-//                        vehicleModels.setManufacturerName("Select Brand");
-//                        vehicleModels.setModel("Select Model");
-//                        vehicleModels.setType("");
-//                        vehicleModels.setCreatedAt("31131");
-//                        vehicleModels.setUpdatedAt("21232");
-//
-//                        for (int i = 0; i < results1.length(); i++) {
-//
-//                            JSONObject jsonObject = results1.getJSONObject(i);
-//                            int id = jsonObject.getInt("id");
-//                            String manufacturerName = jsonObject.getString("manufacturerName");
-//                            String model = jsonObject.getString("model");
-//                            String type = jsonObject.getString("type");
-//                            String createdAt = jsonObject.getString("createdAt");
-//                            String updatedAt = jsonObject.getString("updatedAt");
-//
-//                            vehicleModels = realm.createObject(VehicleModels.class);
-//
-//                            vehicleModels.setId(id);
-//                            vehicleModels.setManufacturerName(manufacturerName);
-//                            vehicleModels.setModel(model);
-//                            vehicleModels.setType(type);
-//                            vehicleModels.setCreatedAt(createdAt);
-//                            vehicleModels.setUpdatedAt(updatedAt);
-//
-//                        }
-//                        realm.commitTransaction();
-//                        myApplication.hideDialog();
-//
-//                        startActivity(new Intent(getActivity(), HomeActivity.class));
-//
-//
-//                    } else {
-//                        String errorMsg = response.getString("message");
-//                        Toast.makeText(getActivity(),
-//                                "Error :" + errorMsg, Toast.LENGTH_LONG).show();
-//                        myApplication.hideDialog();
-//
-//                    }
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                    myApplication.hideDialog();
-//
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                myApplication.hideDialog();
-//                //Toast.makeText(getApplicationContext(), "Responce : " + error, Toast.LENGTH_LONG).show();
-//                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
-//                    myApplication.ErrorSnackBar(getActivity());
-//                }
-//            }
-//        }) {
-//            @Override
-//            protected Map<String, String> getParams() {
-//                // Posting parameters to login url
-//                Map<String, String> params = new HashMap<String, String>();
-//                params.put("password", mPassword);
-//                params.put("phone", mContactNo);
-//
-//                return params;
-//            }
-//
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                HashMap<String, String> headers = new HashMap<String, String>();
-//                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
-//                return headers;
-//            }
-//        };
-//        myApplication.addToRequestQueue(request);
-//    }
+                    boolean error = response.getBoolean("error");
+                    if (!error) {
+                        realm.beginTransaction();
+                        // Getting JSON Array node
+                        JSONArray results1 = response.getJSONArray("result");
+
+                        vehicleModels = realm.createObject(VehicleModels.class);
+
+                        vehicleModels.setId(0);
+                        vehicleModels.setManufacturerName("Select Brand");
+                        vehicleModels.setModel("Select Model");
+                        vehicleModels.setType("");
+                        vehicleModels.setCreatedAt("31131");
+                        vehicleModels.setUpdatedAt("21232");
+
+                        for (int i = 0; i < results1.length(); i++) {
+
+                            JSONObject jsonObject = results1.getJSONObject(i);
+                            int id = jsonObject.getInt("id");
+                            String manufacturerName = jsonObject.getString("manufacturerName");
+                            String model = jsonObject.getString("model");
+                            String type = jsonObject.getString("type");
+                            String createdAt = jsonObject.getString("createdAt");
+                            String updatedAt = jsonObject.getString("updatedAt");
+
+                            vehicleModels = realm.createObject(VehicleModels.class);
+
+                            vehicleModels.setId(id);
+                            vehicleModels.setManufacturerName(manufacturerName);
+                            vehicleModels.setModel(model);
+                            vehicleModels.setType(type);
+                            vehicleModels.setCreatedAt(createdAt);
+                            vehicleModels.setUpdatedAt(updatedAt);
+
+                        }
+                        realm.commitTransaction();
+                        myApplication.hideDialog();
+
+                        startActivity(new Intent(getActivity(), HomeActivity.class));
+
+
+                    } else {
+                        String errorMsg = response.getString("message");
+                        Toast.makeText(getActivity(),
+                                "Error :" + errorMsg, Toast.LENGTH_LONG).show();
+                        myApplication.hideDialog();
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    myApplication.hideDialog();
+
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                myApplication.hideDialog();
+                //Toast.makeText(getApplicationContext(), "Responce : " + error, Toast.LENGTH_LONG).show();
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                    myApplication.ErrorSnackBar(getActivity());
+                }
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("password", mPassword);
+                params.put("phone", mContactNo);
+
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+                return headers;
+            }
+        };
+        myApplication.addToRequestQueue(request);
+    }
 
     private String BitmapToString(Bitmap bitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -508,7 +506,7 @@ public class DocumentFragment extends Fragment {
     private void Send(Bitmap bitmap) {
         String encoded = BitmapToString(bitmap);
         String rnd = "Licence" + GenerteRandomNumber();
-       // SendToServer(encoded, rnd);
+        SendToServer(encoded, rnd);
 
 
         imageAdapter.saveImageToDatabase(BitmapToString(bitmap), rnd);

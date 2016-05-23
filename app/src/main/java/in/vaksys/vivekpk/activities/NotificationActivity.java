@@ -12,12 +12,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 
 import in.vaksys.vivekpk.R;
 
 public class NotificationActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
+    Spinner spinner_select_value;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +31,9 @@ public class NotificationActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        spinner_select_value = (Spinner) findViewById(R.id.spinner_select_value);
+        spinner_select_value.setVisibility(View.GONE);
 
     }
 

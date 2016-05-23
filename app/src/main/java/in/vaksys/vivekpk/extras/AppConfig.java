@@ -22,4 +22,6 @@ public class AppConfig {
 
     public static final String URL_SPINNER = URL_ROOT + "v1/vehiclemodels";
 
+    public static final String URL_UPLOAD_DOC = URL_ROOT + "v1/upload";
+
 }

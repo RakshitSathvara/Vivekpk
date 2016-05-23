@@ -24,4 +24,420 @@
         <item>Bike</item>
     </string-array>
 
+    <string name="troubleshooting_one">Please check the following if you\'re having trouble signing up:\n\n
+- Please make sure you are connected to the internet.\n
+- If your email ID or mobile number is already registered on DaddysRoad, please Sign-In instead of Sign-Up.\n
+- If you do not remember your password, you can tap Forgot Password? link on the Sign-In page.\n
+- You cannot have multiple DaddysRoad accounts with the same email ID or mobile number.\n
+If you are still unable to sign up, please tell us about it:\n</string>
+
+
+    <string name="troubleshooting_two">If you are having trouble verifying your mobile number, please check the following:
+\n\n
+- Make sure that you have the latest DaddysRoad app installed from your phone\'s app store.\n
+- Check that the mobile number that you have entered is correct.\n
+- The mobile number is active and is receiving SMS messages from other numbers.
+\n\n
+If you are still not able to verify your mobile number, please tell us about it:</string>
+
+     <string name="troubleshooting_three">If you are trying to login with your email ID and you are unable to login, you can now try to login with your registered mobile number.\n\n
+
+If you have forgotten your password, please tap Forgot Password? link on the login screen.You will need to enter your registered mobile number on which you will receive an OTP SMS to verify the mobile number.\n\n
+
+Verify by entering the OTP sent to your mobile number. Once verified, you can proceed to Reset Your Password by creating the new password on your app. You can then login with this new password.\n\n
+
+While trying to login, please make sure your phone is connected to the internet.\n\n
+
+If you are still unable to login, please tell us about it:</string>
+
+    <string name="troubleshooting_four">One Time Password (OTP) to help you reset your password would be sent instantly on your mobile number. If you do not receive the OTP, please check the mobile number entered is registered with your DaddysRoad account. You can retry by entering your mobile number once again and requesting for a new OTP.\n\n
+
+If the registered mobile number is correct, then the delay in receiving SMS with OTP details could be due to some technical issues.</string>
+
+    <string name="troubleshooting_five">- If you are receiving an error message saying mobile number already registered, it could be because there is an existing account with this mobile number. You can Sign-In with new number and proceed with Forgot Password? option.\n\n
+
+- If you have never used your mobile number to create DaddysRoad account, please let us know.\n
+
+Please mention:\n
+- Your email address and current mobile number associated with your DaddysRoad account.\n
+- Your new mobile number (the mobile number you would like to register).\n
+- The error message you see on the screen when you try to change the mobile number.</string>
+
+    <string name="troubleshooting_six">SMS messages are sent to your registered mobile number.
+        Please make sure that your mobile number is active and is receiving SMS messages from other numbers.\n\n
+
+If you are still not receiving SMS messages, please tell us about it:</string>
+
+    <string name="troubleshooting_seven">If your account is blocked, You will not be able to use DaddysRoad app.
+Your account might get temporarily blocked if you send wrong notifications to other vehicle contacts. However, in this case, your account will be unblocked after 24 hours and you will be able to use the app.
+\n\n
+Your account might be permanently blocked if:\n
+- We suspect that your DaddysRoad account is being misused.\n
+- There has been a violation of DaddysRoad\'s Terms of Service.\n\n
+
+If you think that your account has been incorrectly blocked, please tell us about it:</string>
+
+    <string name="troubleshooting_eight">
+While trying to sign up for a new DaddysRoad account ,
+        if you are receiving an error message saying mobile number already registered,
+        it could be because there is an existing account with this mobile number.
+        You can Sign-In with new number and proceed with Forgot Password? option.\n\n
+
+If the problem persists, please tell us about it:
+    </string>
+
+    <string name="troubleshooting_nine">
+All DaddysRoad accounts must have an email address and verified mobile number associated with the account to use this app.\n\n
+
+If you\'re trying to change your email ID from MyAccount but receiving an error, It could be because you have entered an invalid Email format.\n\n
+
+If the problem persists, please tell us about it:
+    </string>
+
+    <string name="troubleshooting_ten">
+If you suspect that someone has accessed or is using your DaddysRoad account without authorization, your account may be compromised.\n
+Indications of a compromised account include:\n
+- New and Unknown vehicle registrations.\n
+- New and unknown reminders set.\n
+- Unknown documents uploaded.\n
+- unrecoganised emergency contacts added.\n
+- your account information being changed without your knowledge.\n
+- being unable to log into your account.\n
+If you are able to login to your account, please change your password from My Account under the Menu on the right top. Please be sure that your password is new and unique.\n
+If you are unable to login to your account, please let us know at support@DaddysRoad.com and provide the following information, so that we may investigate and assist further:\n
+- First name\n
+- Last name\n
+- Email ID\n
+- Mobile number\n
+- Description: why do you think someone has access to your account? What information has changed? Please include as many details as possible.
+    </string>
+
+     <string name="reg_veh_one">
+You can add your vehicle details by entering the vehicle Registration number/Licence plate number,
+         Make and Model. All these are mandatory fields to add vehicle into your DaddysRoad account.\n\n
+
+Registration number filed should not contain any special characters. (eg: KA03MW2446)\n\n
+
+Your vehicle Make and Model can be selected from the lists. This has to be slected correct to avoid mismatch / wrong registration.
+    </string>
+
+     <string name="reg_veh_two">
+         While adding a vehicle to your account if your getting the error message that \'This vehicle is already registered\';\n\n
+
+It is because another user has already registered this vehicle in DaddysRoad App. \n
+If you are the true owner and the vehicle belongs to you, then you can Claim This Vehicle and we will look into this issue within 48 hours.
+    </string>
+
+    <string name="reg_veh_three">
+         While adding a vehicle in your account if you are getting the error message that \'This vehicle is already registered\', it is because another user has registered this vehicle in DaddysRoad App. \n\n
+
+If you are the true owner and the vehicle belongs to you, then you can Claim This Vehicle and we will look into this issue within 48 hours. \n\n
+
+For verification purpose, we may request the document copy of the vehicle ownership.
+    </string>
+
+    <string name="reg_veh_four">
+        Choose the Car or Bike vehicle category.\n\n
+
+From the listed vehicles, click on the edit button which is on the right side of the vehicle number row From next scree you can DELETE the vehicle Deleting a vehicle will result in all other related documnents which are uploaded under that particular vehicle as well the set reminders.
+    </string>
+
+    <string name="emergency_one">
+       During an accident/emergency situation, others can inform the same to the persons saved under your emergency
+        contacts. [You can assign upto 2 mobile numbers as emergency contacts].\n\n
+
+A witness can search your vehicle number on DaddysRoad and tap on report accident.\n
+The mobile numbers you assign under emergency contacts will receive a help request through SMS along with the senders contact number.
+One could then call the sender of the accident/emergency report and know the where abouts.
+    </string>
+
+     <string name="emergency_two">
+       To Add contacts, tap on the EMERGENCY CONTACT and from next page tap on ADD CONTACT to select and assign contact.\n\n
+
+You cannot Edit, but only Delete and add a new contact To Delete a contact you have added, tap on the EMERGENCY CONTACT and from next page tap on the Delete ICON on the right side of the contact.
+    </string>
+
+    <string name="emergency_three">
+      Please check the following:\n\n
+The assigned contact do have a valid mobile number under active service.\n
+The mobile number you have added do receive SMS from other numbers. \n
+The mobile is in ON position. If the mobile is switched Off, then the SMS will get delivered when it is switched back On.\n
+check the mobile number you have assigned is the correct number of the desired person.\n
+
+If the problem still persisit, please tell us about it:
+    </string>
+
+    <string name="insurance_one">
+    Register your vehicle first to set Insurance Reminder.\n
+If you have already registered vehicles;\n
+Tap on the SET REMINDER\n
+Subsequent default screen is Insurance category\n
+Select the TYPE of vehicle (Car/Bike) from header\n
+Select the vehicle from the list if you have multiple vehicles registered\n
+Select the correct Insurance company name and add Expiry date\n
+Tap on SET REMINDER.\n
+In the next screen, select the reminder period of 25, 15 or 5 days\n
+Tap SAVE\n
+
+You are all set to receive the reminder on the selected date.
+    </string>
+
+    <string name="insurance_two">
+    There is no need of internet connectivity to receive a reminder./n/n
+
+It works even offline. /n/n
+
+You only need to have the DaddysRoad app installed and signed-in The registered number should be active to receive the reminder notification.
+    </string>
+
+    <string name="insurance_three">
+   To EDIT\n\n
+
+Tap on the Set Reminder and select the reminder you want to edit from the Insurance category\n
+Tap on Edit ICON on the right side\n
+Do the needful editing\n
+Tap SET ALERT to update it.\n\n
+
+To DELETE\n\n
+
+Tap on the Set Reminder and select the reminder you want to edit from the Insurance category\n
+Tap on Edit ICON on the right side\n
+Tap DISMISS to delete the reminder.\n
+    </string>
+
+    <string name="insurance_four">
+ Insurance company name list is constantly updated by us.\n\n
+
+If a company name is missing, please tell us about it. We will update the list."
+    </string>
+
+    <string name="insurance_five">
+ If you have not registered your vechile details with Daddys Road then you cannot set reminders.\n\n
+
+First Add your vehicle details to Set Reminders.\n\n
+
+Select the Insurance Company Name and add Expiry Date. (Both fields are mandatory.)\n\n
+
+Tap Set Reminder\n\n
+
+If the issue still persist, please tell us about it:
+    </string>
+
+    <string name="insurance_six">
+The reminder notification will be triggered based on the selected interval of 25 days, 15 days or 5 days before the Expiry date.
+    </string>
+
+     <string name="emission_one">
+Register your vehicle first to set Emission Reminder.\n\n
+
+If you have already registered vehicles;\n
+Tap on the SET REMINDER\n
+From next screen select Emission category\n
+Select the TYPE of vehicle (Car/Bike) from header\n
+Select the vehicle from the list if you have multiple vehicles registered \n
+Add Expiry date\n
+Tap on SET REMINDER.\n
+In the next screen, select the reminder period of 25, 15 or 5 days\n
+Tap SAVE\n\n
+
+You are all set to receive the reminder on the selected date.
+    </string>
+
+    <string name="emission_two">
+There is no need of internet connectivity to receive a reminder.\n\n
+It works even offline.
+
+You only need to have the DaddysRoad app installed and signed-in The registered number should be active to receive the reminder notification.
+    </string>
+
+    <string name="emission_three">
+    To EDIT\n\n
+
+    Tap on the Set Reminder and select Emission category\n
+    Select the reminder you want to Edit\n
+    Tap on Edit ICON on the right side\n
+    Do the needful editing\n
+    Tap SET ALERT to update it.\n\n
+
+    To DELETE\n\n
+
+    Tap on the Set Reminder and select the reminder you want to edit from the Emission category\n
+    Tap on Edit ICON on the right side\n
+    Tap DISMISS to delete the reminder.
+</string>
+
+    <string name="emission_four">
+    If you have not registered your vechile details with Daddys Road then you cannot set reminders.\n
+First Add your vehicle details to Set Reminders. \n
+Add an Expiry Date. \n
+Tap Set Reminder\n\n
+
+If the issue still persist, please tell us about it:
+</string>
+
+    <string name="emission_five">
+The reminder notification will be triggered based on the selected interval of 25 days, 15 days or 5 days before the Expiry date.
+</string>
+
+
+    <string name="service_one">
+Register your vehicle first to set Emission Reminder.\n\n
+
+If you have already registered vehicles;\n
+Tap on the SET REMINDER\n
+From next screen select Emission category\n
+Select the TYPE of vehicle (Car/Bike) from header\n
+Select the vehicle from the list if you have multiple vehicles registered \n
+Add Expiry date\n
+Tap on SET REMINDER.\n
+In the next screen, select the reminder period of 25, 15 or 5 days\n
+Tap SAVE\n\n
+
+You are all set to receive the reminder on the selected date.
+    </string>
+
+    <string name="service_two">
+There is no need of internet connectivity to receive a reminder.\n\n
+It works even offline.
+
+You only need to have the DaddysRoad app installed and signed-in The registered number should be active to receive the reminder notification.
+    </string>
+
+    <string name="service_three">
+    To EDIT\n\n
+
+    Tap on the Set Reminder and select Emission category\n
+    Select the reminder you want to Edit\n
+    Tap on Edit ICON on the right side\n
+    Do the needful editing\n
+    Tap SET ALERT to update it.\n\n
+
+    To DELETE\n\n
+
+    Tap on the Set Reminder and select the reminder you want to edit from the Emission category\n
+    Tap on Edit ICON on the right side\n
+    Tap DISMISS to delete the reminder.
+</string>
+
+    <string name="service_four">
+    If you have not registered your vechile details with Daddys Road then you cannot set reminders.\n
+First Add your vehicle details to Set Reminders. \n
+Add an Expiry Date. \n
+Tap Set Reminder\n\n
+
+If the issue still persist, please tell us about it:
+</string>
+
+    <string name="service_five">
+The reminder notification will be triggered based on the selected interval of 25 days, 15 days or 5 days before the Expiry date.
+</string>
+
+    <string name="service_six">This is an opional field which can be used to enter any comments or things to be reminded for your upcoming vehicle service.
+</string>
+
+    <string name="document_list_one">
+To add a Driving Licence;\n\n
+
+Tap on the DOCUMENT LISTS icon
+On the next screen in the Add Driving License section, select your mode to upload the driving licence to the app.\n
+Choose to Add from phone gallery or phone camera\n
+You can add upto 5 images of driving license. \n
+The invidual file size you are uploading should not exceed 5MB\n
+You can view your driving licence copy from the app anytime even if not connected to internet.
+    </string>
+
+    <string name="document_list_two">
+Make sure you are connected to internet.\n\n
+
+Please check that the invidual file size you are uploading is not exceeding 5MB\n\n
+
+Under DL, only 5 images can be uploaded. \n\n
+
+If the issue still persist, please tell us about it:
+    </string>
+
+    <string name="document_list_three">
+   You are allowed to add upto 5 images of driving license.
+</string>
+
+    <string name="document_list_four">
+   Tap on DOCUMENT LISTS icon.\n\n
+
+In the Driving Licence section, tap the EDIT icon From DL gallery;\n
+To delete, tap on DELETE icon under the respective image\n
+To replace, tap on REPLACE icon under the respective image.
+</string>
+
+    <string name="document_list_five">
+        Make sure you are connected to internet.\n\n
+
+Please check that the invidual file size you are uploading is not exceeding 5MB\n\n
+
+Under DL, only 5 images can be uploaded. \n\n
+
+If the issue still persist, please tell us about it:
+</string>
+
+    <string name="document_list_six">
+        You dont need to be online to view the driving licence. It can be viewd even without an internet conncetion.\n\n
+
+However, if you have accidentally deleted the DL image from the DaddysRoad image folder of your phone, then you need to be online to view the image.
+</string>
+
+    <string name="rc_list_one">
+RC (Registration Certificate) can be added in the app only after adding/registering a vehicle\n\n
+
+To add an RC;\n
+Tap on the DOCUMENT LISTS icon \n
+Select your desired vehicle category (car/bike) from the drop down on left top of header\n
+Below the vehicle numbers are 4 icons, where the first one is RC\n
+On click of the icon RC, you get the option to upload your vehicle RC images. \n
+Choose to Add from phone gallery or phone camera.\n
+You can add upto 5 images of RC. \n
+The invidual file size you are uploading should not exceed 5MB\n
+You can view your RC copy from the app anytime even if not connected to internet.
+    </string>
+
+    <string name="rc_list_two">
+Make sure you are connected to internet.\n\n
+
+Please check that the invidual file size you are uploading is not exceeding 5MB\n\n
+
+Under DL, only 5 images can be uploaded. \n\n
+
+If the issue still persist, please tell us about it:
+    </string>
+
+    <string name="rc_list_three">
+   You are allowed to add upto 5 images of driving license.
+</string>
+
+    <string name="rc_list_four">
+  Tap on the DOCUMENT LISTS icon \n\n
+
+Select your desired vehicle category (car/bike) from the drop down on left top of header\n
+Below the vehicle numbers are 4 icons, where the first one is RC\n
+On click of the icon RC under the desired vehicle, you get a gallery screen with the RC images with Replace/Edit option.\n
+To delete, tap on DELETE icon under the respective image.\n
+To replace, tap on REPLACE icon under the respective image.
+</string>
+
+    <string name="rc_list_five">
+Make sure you are connected to internet.\n\n
+
+Please check that the invidual file size you are uploading is not exceeding 5MB\n\n
+
+Under RC, only 5 images can be uploaded. \n\n
+
+If the issue still persist, please tell us about it:
+</string>
+
+    <string name="rc_list_six">
+       You dont need to be online to view the RC images.\n\n
+
+It can be viewd even without an internet conncetion.\n\n
+
+However, if you have accidentally deleted the RC image from the DaddysRoad image folder of your phone, then you need to be online to view the image.
+</string>
+
 </resources>
