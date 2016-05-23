@@ -1,6 +1,7 @@
 package in.vaksys.vivekpk.fragments;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -12,7 +13,9 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,17 +25,32 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.TimeoutError;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 
 import in.vaksys.vivekpk.R;
 import in.vaksys.vivekpk.adapter.ImageAdapter;
 import in.vaksys.vivekpk.dbPojo.UserImages;
+import in.vaksys.vivekpk.extras.AppConfig;
 import in.vaksys.vivekpk.extras.MyApplication;
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -376,17 +394,25 @@ public class DocumentFragment extends Fragment {
                         .show();
             }
         }
+        
     }
 
-    /* private void SendToServer(String bitmap, String rnd) {
-         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, AppConfig.URL_SPINNER, new Response.Listener<JSONObject>() {
-             @Override
-             public void onResponse(JSONObject response) {
- //                setAreaSpinner();
-                 try {
+    private void SendToServer(final String bitmap, String rnd) {
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, AppConfig.URL_UPLOAD_DOC, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                //                setAreaSpinner();
+                Toast.makeText(getActivity(),
+                        "responce :" + response, Toast.LENGTH_LONG).show();
 
-                     boolean error = response.getBoolean("error");
-                     if (!error) {
+                myApplication.showLog(TAG, String.valueOf(response));
+                try {
+
+                    boolean error = response.getBoolean("error");
+                    if (!error) {
+                        myApplication.hideDialog();
+
+/*
                          realm.beginTransaction();
                          // Getting JSON Array node
                          JSONArray results1 = response.getJSONArray("result");
@@ -424,50 +450,51 @@ public class DocumentFragment extends Fragment {
                          myApplication.hideDialog();
 
                          startActivity(new Intent(getActivity(), HomeActivity.class));
+*/
 
 
-                     } else {
-                         String errorMsg = response.getString("message");
-                         Toast.makeText(getActivity(),
-                                 "Error :" + errorMsg, Toast.LENGTH_LONG).show();
-                         myApplication.hideDialog();
+                    } else {
+                        String errorMsg = response.getString("message");
+                        Toast.makeText(getActivity(),
+                                "Error :" + errorMsg, Toast.LENGTH_LONG).show();
+                        myApplication.hideDialog();
 
-                     }
-                 } catch (JSONException e) {
-                     e.printStackTrace();
-                     myApplication.hideDialog();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    myApplication.hideDialog();
 
-                 }
-             }
-         }, new Response.ErrorListener() {
-             @Override
-             public void onErrorResponse(VolleyError error) {
-                 myApplication.hideDialog();
-                 //Toast.makeText(getApplicationContext(), "Responce : " + error, Toast.LENGTH_LONG).show();
-                 if (error instanceof TimeoutError || error instanceof NoConnectionError) {
-                     myApplication.ErrorSnackBar(getActivity());
-                 }
-             }
-         }) {
-             @Override
-             protected Map<String, String> getParams() {
-                 // Posting parameters to login url
-                 Map<String, String> params = new HashMap<String, String>();
-                 params.put("password", mPassword);
-                 params.put("phone", mContactNo);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                myApplication.hideDialog();
+                //Toast.makeText(getApplicationContext(), "Responce : " + error, Toast.LENGTH_LONG).show();
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                    myApplication.ErrorSnackBar(getActivity());
+                }
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("key", bitmap);
+//                 params.put("phone", mContactNo);
 
-                 return params;
-             }
+                return params;
+            }
 
-             @Override
-             public Map<String, String> getHeaders() throws AuthFailureError {
-                 HashMap<String, String> headers = new HashMap<String, String>();
-                 headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
-                 return headers;
-             }
-         };
-         myApplication.addToRequestQueue(request);
-     }*/
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+                return headers;
+            }
+        };
+        myApplication.addToRequestQueue(request);
+    }
 
     private String BitmapToString(Bitmap bitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -499,9 +526,10 @@ public class DocumentFragment extends Fragment {
     private void Send(Bitmap bitmap) {
         String encoded = BitmapToString(bitmap);
         String rnd = "Licence" + GenerteRandomNumber();
-        System.out.println(encoded);
-        myApplication.showLog(TAG, encoded);
-//        SendToServer(encoded, rnd);
+        generateNoteOnSD(getActivity(), "encodeed", encoded);
+//        System.out.println(encoded);
+//        myApplication.showLog(TAG, encoded);
+        SendToServer(encoded, rnd);
 
 
         /*imageAdapter.saveImageToDatabase(BitmapToString(bitmap), rnd);
@@ -511,6 +539,31 @@ public class DocumentFragment extends Fragment {
         if (results.size() == 1) {
             SetImagesViews();
         }*/
+    }
+
+    public void generateNoteOnSD(Context context, String sFileName, String sBody) {
+        File root = new File(Environment.getExternalStorageDirectory(), "Notes");
+        // if external memory exists and folder with name Notes
+        if (!root.exists()) {
+            root.mkdirs(); // this will create folder.
+        }
+        String fname = DateFormat.format("MM-dd-yyyyy-h-mmssaa", System.currentTimeMillis()).toString() + "abc.txt";
+        File filepath = new File(root, fname);  // file path to save
+        try {
+            FileWriter writer = new FileWriter(filepath);
+            writer.append(sBody);
+            writer.flush();
+            writer.close();
+            Intent sendEmail = new Intent(Intent.ACTION_SEND);
+            sendEmail.setType("rar/image");
+            sendEmail.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(filepath));
+            Log.e(TAG, "onResponse: " + filepath);
+            startActivity(Intent.createChooser(sendEmail, "Email:"));
+
+            Toast.makeText(context, "Saved ", Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private int GenerteRandomNumber() {

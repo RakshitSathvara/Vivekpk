@@ -86,6 +86,7 @@ public class HomeActivity extends AppCompatActivity {
         toolName = (TextView) findViewById(R.id.toolName);
         imageToolBar = (ImageView) findViewById(R.id.imageToolBar);
         ArrayList<String> list = new ArrayList<String>();
+
         list.add("Car");
         list.add("Bike");
 
