@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ECE9E8"
     tools:context="in.vaksys.vivekpk.fragments.CarFragment">
 
     <LinearLayout
@@ -9,6 +10,37 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/enter_car_details" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/carDetailRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible" />
+
+        <include
+            android:id="@+id/add_car_detail"
+            layout="@layout/enter_car_details" />
+
+        <LinearLayout
+            android:id="@+id/AddVehicleBtnLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="#FFFFFF"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btn_addVVehicle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@null"
+                android:drawableLeft="@drawable/add_button_gallery"
+                android:drawablePadding="15dp"
+                android:gravity="center"
+                android:text="Add Vehicle"
+                android:textAllCaps="false" />
+        </LinearLayout>
+
     </LinearLayout>
 </ScrollView>

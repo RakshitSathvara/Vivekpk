@@ -34,9 +34,14 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import in.vaksys.vivekpk.R;
+import in.vaksys.vivekpk.adapter.mySpinnerAdapterBrand;
+import in.vaksys.vivekpk.adapter.mySpinnerAdapterModel;
+import in.vaksys.vivekpk.dbPojo.VehicleModels;
 import in.vaksys.vivekpk.extras.AppConfig;
 import in.vaksys.vivekpk.extras.MyApplication;
 import in.vaksys.vivekpk.extras.PercentLinearLayout;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,6 +59,9 @@ public class CarFragment extends Fragment {
     Button btnAddVVehicle;
     @Bind(R.id.AddVehicleBtnLayout)
     LinearLayout AddVehicleBtnLayout;
+    private Realm realm;
+    MyApplication myApplication;
+    private String modelSpinnItem;
 
     boolean btnvisible = true, detailLayout = false, recyclerview = false;
     private String CarSpinnItem;
@@ -78,26 +86,32 @@ public class CarFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_car, container, false);
         ButterKnife.bind(this, rootView);
 
+        myApplication = MyApplication.getInstance();
+
+
         spSelectmake = (Spinner) rootView.findViewById(R.id.sp_selectMake);
         spCarModel = (Spinner) rootView.findViewById(R.id.sp_selectModel);
         etCarDetails = (EditText) rootView.findViewById(R.id.et_carDetails);
         btnContinue = (Button) rootView.findViewById(R.id.btn_continue);
         percentEnterCarDetails = (PercentLinearLayout) rootView.findViewById(R.id.percentEnterCarDetails11);
 
-        List<String> selectBrand = new ArrayList<String>();
-        selectBrand.add("Select Brand");
-        selectBrand.add("Audi");
-        selectBrand.add("BMW");
-        selectBrand.add("Jaguar");
+        realm = Realm.getDefaultInstance();
+        MyApplication.getInstance().createDialog(getActivity(), false);
 
-        ArrayAdapter<String> dataAdapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, selectBrand);
-
-        // Drop down layout style - list view with radio button
-        dataAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // attaching data adapter to spinner
-        spSelectmake.setAdapter(dataAdapter1);
-        spSelectmake.setSelection(0);
+//        List<String> selectBrand = new ArrayList<String>();
+//        selectBrand.add("Select Brand");
+//        selectBrand.add("Audi");
+//        selectBrand.add("BMW");
+//        selectBrand.add("Jaguar");
+//
+//        ArrayAdapter<String> dataAdapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, selectBrand);
+//
+//        // Drop down layout style - list view with radio button
+//        dataAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//
+//        // attaching data adapter to spinner
+//        spSelectmake.setAdapter(dataAdapter1);
+//        spSelectmake.setSelection(0);
 
         spSelectmake.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -156,7 +170,54 @@ public class CarFragment extends Fragment {
         });
 
 
+        LodingBrand();
+        LodingModel();
         return rootView;
+    }
+
+    private void LodingModel() {
+
+        // // TODO: 5/20/2016  add vishal
+        RealmResults<VehicleModels> results = realm.where(VehicleModels.class).findAll();
+
+        mySpinnerAdapterModel mySpinnerAdapterCity = new mySpinnerAdapterModel(getActivity(), results, "bike");
+        spCarModel.setAdapter(mySpinnerAdapterCity);
+
+        spCarModel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                modelSpinnItem = ((TextView) getActivity().findViewById(R.id.rowText)).getText().toString();
+                String myid = ((TextView) getActivity().findViewById(R.id.rowid)).getText().toString();
+                Toast.makeText(getActivity(), "You have selected " + modelSpinnItem + " " + myid, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                Toast.makeText(getActivity(), "You have selected Nothing ..", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void LodingBrand() {
+
+        RealmResults<VehicleModels> results = realm.where(VehicleModels.class).findAll();
+
+        mySpinnerAdapterBrand mySpinnerAdapterCity = new mySpinnerAdapterBrand(getActivity(), results, "car");
+        spSelectmake.setAdapter(mySpinnerAdapterCity);
+
+        spSelectmake.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                modelSpinnItem = ((TextView) getActivity().findViewById(R.id.rowText)).getText().toString();
+                String myid = ((TextView) getActivity().findViewById(R.id.rowid)).getText().toString();
+                Toast.makeText(getActivity(), "You have selected " + modelSpinnItem + " " + myid, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                Toast.makeText(getActivity(), "You have selected Nothing ..", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void submitForm() {

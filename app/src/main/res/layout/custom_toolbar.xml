@@ -30,7 +30,7 @@
 
     </LinearLayout>
 
-    <!-- <LinearLayout
+     <LinearLayout
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
          android:orientation="vertical">
@@ -49,5 +49,5 @@
              android:layout_width="100dp"
              android:layout_height="30dp"/>
 
-     </LinearLayout>-->
+     </LinearLayout>
 </android.support.v7.widget.Toolbar>
