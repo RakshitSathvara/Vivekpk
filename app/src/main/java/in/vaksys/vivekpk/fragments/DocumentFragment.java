@@ -14,8 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import org.honorato.multistatetogglebutton.MultiStateToggleButton;
-import org.honorato.multistatetogglebutton.ToggleButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +35,6 @@ public class DocumentFragment extends Fragment {
 
     private Spinner spBrand, spVehicleModel;
 
-    //private MultiStateToggleButton multiStateToggleButton;
 
     public static DocumentFragment newInstance(int index) {
         DocumentFragment fragment = new DocumentFragment();
