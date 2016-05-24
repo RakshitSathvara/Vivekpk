@@ -37,6 +37,7 @@ import in.vaksys.vivekpk.dbPojo.Users;
 import in.vaksys.vivekpk.dbPojo.VehicleModels;
 import in.vaksys.vivekpk.extras.AppConfig;
 import in.vaksys.vivekpk.extras.MyApplication;
+import in.vaksys.vivekpk.extras.PreferenceHelper;
 import in.vaksys.vivekpk.service.RegistrationIntentService;
 import io.realm.Realm;
 import io.realm.RealmAsyncTask;
@@ -60,6 +61,7 @@ public class SigninFragment extends Fragment {
     MyApplication myApplication;
     VehicleModels vehicleModels;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -73,6 +75,8 @@ public class SigninFragment extends Fragment {
 
         myApplication = MyApplication.getInstance();
 
+// TODO: 5/23/2016 solve erroor by this line..
+        realm = Realm.getDefaultInstance();
         myApplication.createDialog(getActivity(), false);
 
         btnSignIn.setOnClickListener(new View.OnClickListener() {
@@ -282,6 +286,8 @@ public class SigninFragment extends Fragment {
                         myApplication.hideDialog();
 
                         startActivity(new Intent(getActivity(), HomeActivity.class));
+// todo addd line by one time login
+                        getActivity().finish();
 
 
                     } else {
@@ -322,8 +328,14 @@ public class SigninFragment extends Fragment {
         super.onStop();
         // Remember to close the Realm instance when done with it.
         // TODO: 19-05-2016 handle realm.close();
-        // realm.close();
+        realm.close();
     }
+
+//    @Override
+//    public void onDestroy() {
+//
+//
+//    }
 
     private boolean validateNumber() {
         if (etPhoneNo.getText().toString().trim().isEmpty()) {
