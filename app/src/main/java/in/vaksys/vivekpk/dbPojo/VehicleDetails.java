@@ -9,9 +9,15 @@ public class VehicleDetails extends RealmObject {
 
     private String UserAPiKey;
 
-    private String VehicleName;
+    private int VehicleId;
 
-    private String ModelId;
+    private String NotificationDate;
+
+    private String ReminderTpe;
+
+    private String VehicleBrandName;
+
+    private int VehicleModelID;
 
     private String VehicleNo;
 
@@ -27,22 +33,26 @@ public class VehicleDetails extends RealmObject {
 
     private String PollutionExpireDate;
 
+    private String ServiceExpireDate;
+
     private String RcRenewDate;
 
-    public String getVehicleName() {
-        return VehicleName;
+    private String mDate;
+
+    public String getVehicleBrandName() {
+        return VehicleBrandName;
     }
 
-    public void setVehicleName(String vehicleName) {
-        VehicleName = vehicleName;
+    public void setVehicleBrandName(String vehicleBrandName) {
+        VehicleBrandName = vehicleBrandName;
     }
 
-    public String getModelId() {
-        return ModelId;
+    public int getVehicleModelID() {
+        return VehicleModelID;
     }
 
-    public void setModelId(String modelId) {
-        ModelId = modelId;
+    public void setVehicleModelID(int vehicleModelID) {
+        VehicleModelID = vehicleModelID;
     }
 
     public String getVehicleNo() {
@@ -115,5 +125,45 @@ public class VehicleDetails extends RealmObject {
 
     public void setUserAPiKey(String userAPiKey) {
         UserAPiKey = userAPiKey;
+    }
+
+    public String getNotificationDate() {
+        return NotificationDate;
+    }
+
+    public void setNotificationDate(String notificationDate) {
+        NotificationDate = notificationDate;
+    }
+
+    public int getVehicleId() {
+        return VehicleId;
+    }
+
+    public void setVehicleId(int vehicleId) {
+        VehicleId = vehicleId;
+    }
+
+    public String getReminderTpe() {
+        return ReminderTpe;
+    }
+
+    public void setReminderTpe(String reminderTpe) {
+        ReminderTpe = reminderTpe;
+    }
+
+    public String getServiceExpireDate() {
+        return ServiceExpireDate;
+    }
+
+    public void setServiceExpireDate(String serviceExpireDate) {
+        ServiceExpireDate = serviceExpireDate;
+    }
+
+    public String getmDate() {
+        return mDate;
+    }
+
+    public void setmDate(String mDate) {
+        this.mDate = mDate;
     }
 }

@@ -33,7 +33,9 @@ import java.util.UUID;
 
 import in.vaksys.vivekpk.R;
 import in.vaksys.vivekpk.activities.HomeActivity;
+import in.vaksys.vivekpk.dbPojo.InsuranceCompanies;
 import in.vaksys.vivekpk.dbPojo.Users;
+import in.vaksys.vivekpk.dbPojo.VehicleDetails;
 import in.vaksys.vivekpk.dbPojo.VehicleModels;
 import in.vaksys.vivekpk.extras.AppConfig;
 import in.vaksys.vivekpk.extras.MyApplication;
@@ -59,6 +61,8 @@ public class SigninFragment extends Fragment {
     String mContactNo, mPassword;
     MyApplication myApplication;
     VehicleModels vehicleModels;
+    InsuranceCompanies insuranceCompanies;
+    VehicleDetails vehicleDetails;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -117,7 +121,7 @@ public class SigninFragment extends Fragment {
 
             @Override
             public void onResponse(String response) {
-                myApplication.hideDialog();
+//                myApplication.hideDialog();
 
                 try {
                     JSONObject jObj = new JSONObject(response);
@@ -147,12 +151,15 @@ public class SigninFragment extends Fragment {
 
                     } else {
                         // Error in login. Get the error message
+                        myApplication.hideDialog();
+
                         String errorMsg = jObj.getString("message");
                         Toast.makeText(getActivity(),
                                 "Error :" + errorMsg, Toast.LENGTH_LONG).show();
                         return;
                     }
                 } catch (JSONException e) {
+                    myApplication.hideDialog();
                     // JSON error
                     e.printStackTrace();
                     Toast.makeText(getActivity(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
@@ -187,7 +194,7 @@ public class SigninFragment extends Fragment {
     private void SaveIntoDatabase(final String fname, final String lname, final String email, final String apikey,
                                   final int status, final String phone, final String createdAt, final String updatedAt, final String password) {
         myApplication.DialogMessage("Setting Up Profile...");
-        myApplication.showDialog();
+//        myApplication.showDialog();
 /*
         realmAsyncTask = realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
@@ -229,15 +236,15 @@ public class SigninFragment extends Fragment {
         getActivity().startService(new Intent(getActivity(), RegistrationIntentService.class));
 
         Toast.makeText(getActivity(), "Setup Complete", Toast.LENGTH_LONG).show();
-        myApplication.hideDialog();
+//        myApplication.hideDialog();
         LodingModels();
 
     }
 
     private void LodingModels() {
         myApplication.DialogMessage("Loading Models...");
-        myApplication.showDialog();
-        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, AppConfig.URL_SPINNER, new Response.Listener<JSONObject>() {
+//        myApplication.showDialog();
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, AppConfig.URL_SPINNER_VEHICLE_MODELS, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
 //                setAreaSpinner();
@@ -279,10 +286,8 @@ public class SigninFragment extends Fragment {
 
                         }
                         realm.commitTransaction();
-                        myApplication.hideDialog();
 
-                        startActivity(new Intent(getActivity(), HomeActivity.class));
-
+                        LoadingInsuranceCompanies();
 
                     } else {
                         String errorMsg = response.getString("message");
@@ -298,6 +303,166 @@ public class SigninFragment extends Fragment {
                 }
             }
         }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                myApplication.hideDialog();
+                //Toast.makeText(getApplicationContext(), "Responce : " + error, Toast.LENGTH_LONG).show();
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                    myApplication.ErrorSnackBar(getActivity());
+                }
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+                return headers;
+            }
+        };
+        myApplication.addToRequestQueue(request);
+    }
+
+    private void LoadingInsuranceCompanies() {
+        myApplication.DialogMessage("Loading Insurance Companies...");
+//        myApplication.showDialog();
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, AppConfig.URL_GET_INSURANCE_COMPANY,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+//                setAreaSpinner();
+                        try {
+
+                            boolean error = response.getBoolean("error");
+                            if (!error) {
+                                realm.beginTransaction();
+                                // Getting JSON Array node
+                                JSONArray results1 = response.getJSONArray("result");
+
+                                insuranceCompanies = realm.createObject(InsuranceCompanies.class);
+
+                                insuranceCompanies.setInsuranceId(0);
+                                insuranceCompanies.setInsuranceName("Select Company");
+                                insuranceCompanies.setInsuranceCreatedAt("31131");
+                                insuranceCompanies.setInsuranceUpdatedAt("21232");
+
+                                for (int i = 0; i < results1.length(); i++) {
+
+                                    JSONObject jsonObject = results1.getJSONObject(i);
+                                    int id = jsonObject.getInt("id");
+                                    String InsuranceName = jsonObject.getString("name");
+                                    String createdAt = jsonObject.getString("createdAt");
+                                    String updatedAt = jsonObject.getString("updatedAt");
+
+                                    insuranceCompanies = realm.createObject(InsuranceCompanies.class);
+
+                                    insuranceCompanies.setInsuranceId(id);
+                                    insuranceCompanies.setInsuranceName(InsuranceName);
+                                    insuranceCompanies.setInsuranceCreatedAt(createdAt);
+                                    insuranceCompanies.setInsuranceUpdatedAt(updatedAt);
+
+                                }
+                                realm.commitTransaction();
+//                                myApplication.hideDialog();
+
+                                LoadingUserVehicles();
+
+
+                            } else {
+                                String errorMsg = response.getString("message");
+                                Toast.makeText(getActivity(),
+                                        "Error :" + errorMsg, Toast.LENGTH_LONG).show();
+                                myApplication.hideDialog();
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            myApplication.hideDialog();
+
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                myApplication.hideDialog();
+                //Toast.makeText(getApplicationContext(), "Responce : " + error, Toast.LENGTH_LONG).show();
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                    myApplication.ErrorSnackBar(getActivity());
+                }
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+                return headers;
+            }
+        };
+        myApplication.addToRequestQueue(request);
+    }
+
+    private void LoadingUserVehicles() {
+        myApplication.DialogMessage("Loading User Vehicles...");
+//        myApplication.showDialog();
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, AppConfig.URL_GET_USER_VEHICLE,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+//                setAreaSpinner();
+                        try {
+
+                            boolean error = response.getBoolean("error");
+                            if (!error) {
+                                realm.beginTransaction();
+                                // Getting JSON Array node
+                                JSONArray results1 = response.getJSONArray("result");
+
+                                for (int i = 0; i < results1.length(); i++) {
+
+                                    JSONObject jsonObject = results1.getJSONObject(i);
+                                    int id = jsonObject.getInt("id");
+                                    String VehicleName = jsonObject.getString("name");
+                                    int modelId = jsonObject.getInt("modelId");
+                                    String vehicleNo = jsonObject.getString("vehicleNo");
+                                    String insuranceCompany = jsonObject.getString("insuranceCompany");
+                                    String insuranceExpDate = jsonObject.getString("insuranceExpDate");
+                                    String pollutionExpDate = jsonObject.getString("pollutionExpDate");
+                                    String service_exp_date = jsonObject.getString("service_exp_date");
+//                                    String createdAt = jsonObject.getString("createdAt");
+//                                    String updatedAt = jsonObject.getString("updatedAt");
+
+                                    vehicleDetails = realm.createObject(VehicleDetails.class);
+
+                                    vehicleDetails.setVehicleId(id);
+                                    vehicleDetails.setVehicleBrandName(VehicleName);
+                                    vehicleDetails.setVehicleModelID(modelId);
+                                    vehicleDetails.setVehicleNo(vehicleNo);
+                                    vehicleDetails.setInsuranceCompany(insuranceCompany);
+                                    vehicleDetails.setInsuranceExpireDate(insuranceExpDate);
+                                    vehicleDetails.setPollutionExpireDate(pollutionExpDate);
+                                    vehicleDetails.setServiceExpireDate(service_exp_date);
+
+
+                                }
+                                realm.commitTransaction();
+                                myApplication.hideDialog();
+
+                                startActivity(new Intent(getActivity(), HomeActivity.class));
+
+
+                            } else {
+                                String errorMsg = response.getString("message");
+                                Toast.makeText(getActivity(),
+                                        "Error :" + errorMsg, Toast.LENGTH_LONG).show();
+                                myApplication.hideDialog();
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            myApplication.hideDialog();
+
+                        }
+                    }
+                }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 myApplication.hideDialog();

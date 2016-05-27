@@ -5,6 +5,8 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +28,11 @@ import java.util.List;
 import java.util.Locale;
 
 import in.vaksys.vivekpk.R;
+import in.vaksys.vivekpk.adapter.RecyclerViewAdapter;
+import in.vaksys.vivekpk.dbPojo.VehicleDetails;
+import in.vaksys.vivekpk.extras.MyApplication;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,7 +51,13 @@ public class InsuranceFragment extends Fragment {
 
     private Spinner spInsuranceCompany;
 
-   // private MultiStateToggleButton multiStateToggleButton;
+    RecyclerViewAdapter imageAdapter;
+    RecyclerView InsuranceRecyclerview;
+    RealmResults<VehicleDetails> results;
+    private MyApplication myApplication;
+    private Realm realm;
+
+    // private MultiStateToggleButton multiStateToggleButton;
 
     private LinearLayout linearAddVehicle, linearVehicleDetails, linearInsurancePolicy, linearInsurancePolicyWithVehicle,
             linearInsuranceDetails;
@@ -93,7 +106,9 @@ public class InsuranceFragment extends Fragment {
 
         tvDate = (TextView) rootView.findViewById(R.id.tv_date);
 
-
+        InsuranceRecyclerview = (RecyclerView) rootView.findViewById(R.id.InsuranceRecyclerView);
+        myApplication = MyApplication.getInstance();
+        realm = Realm.getDefaultInstance();
         spInsuranceCompany = (Spinner) rootView.findViewById(R.id.sp_insuranceCompany);
 
         List<String> insuranse = new ArrayList<String>();
@@ -183,7 +198,7 @@ public class InsuranceFragment extends Fragment {
             }
         });
 
-
+        SetInsurance();
         return rootView;
     }
 
@@ -191,7 +206,8 @@ public class InsuranceFragment extends Fragment {
     Calendar c = Calendar.getInstance();
 
     private void SelectfromDate() {
-        String formattedDate = sdf.format(c.getTime()); // current date
+        c.add(Calendar.DAY_OF_MONTH, 26);  // number of days to add, can also use Calendar.DAY_OF_MONTH in place of Calendar.DATE
+        String formattedDate = sdf.format(c.getTime());
         Date d = null;
         try {
             d = sdf.parse(formattedDate);
@@ -217,4 +233,19 @@ public class InsuranceFragment extends Fragment {
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
     }
 
+    private void SetInsurance() {
+        myApplication.showLog(TAG, "innerview");
+
+        InsuranceRecyclerview.setHasFixedSize(true);
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        InsuranceRecyclerview.setLayoutManager(manager);
+        results = realm.where(VehicleDetails.class).findAll();
+        myApplication.showLog(TAG, "inside viwe" + results.size());
+        if (results.size() > -1) {
+            imageAdapter = new RecyclerViewAdapter(getActivity(), results);
+            InsuranceRecyclerview.setAdapter(imageAdapter);
+        } else {
+            myApplication.showLog(TAG, "innerview222222");
+        }
+    }
 }

@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -24,6 +24,11 @@ import java.util.Date;
 import java.util.Locale;
 
 import in.vaksys.vivekpk.R;
+import in.vaksys.vivekpk.adapter.RecyclerViewAdapter;
+import in.vaksys.vivekpk.dbPojo.VehicleDetails;
+import in.vaksys.vivekpk.extras.MyApplication;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,6 +44,7 @@ public class EmissionFragment extends Fragment {
     private SimpleDateFormat dateFormatter;
     private String SelectedDate;
     public static final String TAG = "DATE";
+
 
 
     public EmissionFragment() {
@@ -82,6 +88,7 @@ public class EmissionFragment extends Fragment {
         linearVehicle = (LinearLayout) rootView.findViewById(R.id.linearVehicleDetails);
         linearExpiryDate = (LinearLayout) rootView.findViewById(R.id.linearExpiryDate);
         linearAddVehicle = (LinearLayout) rootView.findViewById(R.id.linearAddVehicle);
+
         setDateTimeField();
 
         dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
@@ -139,6 +146,7 @@ public class EmissionFragment extends Fragment {
     Calendar c = Calendar.getInstance();
 
     private void SelectfromDate() {
+        c.add(Calendar.DAY_OF_MONTH, 26);  // number of days to add, can also use Calendar.DAY_OF_MONTH in place of Calendar.DATE
         String formattedDate = sdf.format(c.getTime()); // current date
         Date d = null;
         try {
@@ -153,7 +161,7 @@ public class EmissionFragment extends Fragment {
     private void setDateTimeField() {
 
         Calendar newCalendar = Calendar.getInstance();
-        fromDatePickerDialog = new DatePickerDialog(getActivity(), R.style.DialogTheme,new DatePickerDialog.OnDateSetListener() {
+        fromDatePickerDialog = new DatePickerDialog(getActivity(), R.style.DialogTheme, new DatePickerDialog.OnDateSetListener() {
 
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 Calendar newDate = Calendar.getInstance();
@@ -164,5 +172,6 @@ public class EmissionFragment extends Fragment {
 
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
     }
+
 
 }

@@ -208,8 +208,8 @@ public class CarFragment extends Fragment {
         spSelectmake.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                modelSpinnItem = ((TextView) getActivity().findViewById(R.id.rowText)).getText().toString();
-                String myid = ((TextView) getActivity().findViewById(R.id.rowid)).getText().toString();
+                modelSpinnItem = ((TextView) view.findViewById(R.id.rowText)).getText().toString();
+                String myid = ((TextView) view.findViewById(R.id.rowid)).getText().toString();
                 Toast.makeText(getActivity(), "You have selected " + modelSpinnItem + " " + myid, Toast.LENGTH_SHORT).show();
             }
 
@@ -246,7 +246,7 @@ public class CarFragment extends Fragment {
         MyApplication.getInstance().showDialog();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_ADD_VEHICLE_MODEL, new Response.Listener<String>() {
+                AppConfig.URL_ADD_USER_VEHICLE, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {

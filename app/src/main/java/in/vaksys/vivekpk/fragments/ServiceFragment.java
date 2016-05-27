@@ -138,6 +138,7 @@ public class ServiceFragment extends Fragment {
     Calendar c = Calendar.getInstance();
 
     private void SelectfromDate() {
+        c.add(Calendar.DAY_OF_MONTH, 26);  // number of days to add, can also use Calendar.DAY_OF_MONTH in place of Calendar.DATE
         String formattedDate = sdf.format(c.getTime()); // current date
         Date d = null;
         try {

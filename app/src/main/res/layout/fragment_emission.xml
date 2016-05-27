@@ -12,14 +12,16 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-       <!-- <org.honorato.multistatetogglebutton.MultiStateToggleButton
-            android:id="@+id/mstb_emissionvehicleChoice"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dip"
-            mstb:mstbPrimaryColor="@color/cardview_dark_background"
-            mstb:mstbSecondaryColor="@color/colorPrimary"
-            mstb:values="@array/vehicle" />-->
+
+
+        <!-- <org.honorato.multistatetogglebutton.MultiStateToggleButton
+             android:id="@+id/mstb_emissionvehicleChoice"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_marginTop="10dip"
+             mstb:mstbPrimaryColor="@color/cardview_dark_background"
+             mstb:mstbSecondaryColor="@color/colorPrimary"
+             mstb:values="@array/vehicle" />-->
 
         <include layout="@layout/add_vehicle_details" />
 
