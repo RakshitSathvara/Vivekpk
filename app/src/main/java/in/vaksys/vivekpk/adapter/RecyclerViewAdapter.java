@@ -165,9 +165,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Spinner mSpinner;
         @Bind(R.id.tv_date_en)
         TextView date;
-        @Bind(R.id.btn_cancel)
+        @Bind(R.id.btn_insurance_details_expiry_cancel)
         Button btnCancel;
-        @Bind(R.id.btn_setAlertDetail)
+        @Bind(R.id.btn_insurance_details_expiry_setAlertDetail)
         Button btnConfirm;
         @Bind(R.id.select_expiry_date_insurance)
         LinearLayout SelectDate;

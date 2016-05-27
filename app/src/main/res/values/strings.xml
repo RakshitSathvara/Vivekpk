@@ -440,4 +440,105 @@ It can be viewd even without an internet conncetion.\n\n
 However, if you have accidentally deleted the RC image from the DaddysRoad image folder of your phone, then you need to be online to view the image.
 </string>
 
+
+
+
+
+
+
+    <string name="doc_insurance_one">
+Insurance can be added in the app only after adding/registering a vehicle\n\n
+
+To add an Insurance;\n
+Tap on the DOCUMENT LISTS icon \n
+Select your desired vehicle category (car/bike) from the drop down on left top of header\n
+Below the vehicle numbers are 4 icons, where the second one is Insurance\n
+On click of the icon Insurance, you get the option to upload your vehicle Insurance images.\n
+Choose to Add from phone gallery or phone camera.\n
+You can add upto 5 images of Insurance. \n
+The invidual file size you are uploading should not exceed 5MB\nl
+You can view your Insurance copy from the app anytime even if not connected to internet.
+    </string>
+
+    <string name="doc_insurance_two">
+Make sure you are connected to internet.\n\n
+
+Please check that the invidual file size you are uploading is not exceeding 5MB\n
+Under Insurance, only 5 images can be uploaded.\n
+If the issue still persist, please tell us about it:
+    </string>
+
+    <string name="doc_insurance_three">
+You are allowed to add upto 5 images of Insurance.
+</string>
+
+    <string name="doc_insurance_four">
+  Tap on the DOCUMENT LISTS icon \n\n
+
+Select your desired vehicle category (car/bike) from the drop down on left top of header\n
+Below the vehicle numbers are 4 icons, where the first one is RC\n
+On click of the icon RC under the desired vehicle, you get a gallery screen with the RC images with Replace/Edit option.\n
+To delete, tap on DELETE icon under the respective image.\n
+To replace, tap on REPLACE icon under the respective image.
+</string>
+
+    <string name="doc_insurance_five">
+Make sure you are connected to internet.\n\n
+
+Please check that the invidual file size you are uploading is not exceeding 5MB\n\n
+
+Under RC, only 5 images can be uploaded. \n\n
+
+If the issue still persist, please tell us about it:
+</string>
+
+    <string name="doc_insurance_six">
+      You dont need to be online to view the Insurance images. It can be viewd even without an internet conncetion.\n\n
+
+However, if you have accidentally deleted the Insurance image from the DaddysRoad image folder of your phone, then you need to be online to view the image.
+</string>
+
+
+    <string name="document_one">
+If you want to change your First name or Last name you can do it from the app.\n\n
+
+Go to MY ACCOUNT under app menu \n
+- Tap Name field to edit.\n
+- Tap Save after editing and your name will be updated.
+    </string>
+
+    <string name="document_two">
+- If you have forgotten your password, tap on the Forgot Password? link on the Login screen.\n
+- Enter your registered mobile number to which One Time Password (OTP) will be sent.\n
+- On Verify Mobile screen, enter the OTP/Verification Code. \n
+- Verify your mobile number and proceed to create a new Password.\n
+- Remember that your password should be minimum of six characters and a mix of alphabets &amp; numbers.
+    </string>
+
+    <string name="document_three">
+- Go to MY ACCOUNT under app menu.\n
+- Tap PASSWORD field. \n
+- In Change Password screen enter your corrent password and the new password.\n
+- Tap Save and your password will be updated.
+</string>
+
+    <string name="document_four">
+  Go to MY ACCOUNT under app menu.\n
+- Tap Email ID field to edit.\n
+- Tap Save after editing and your Email ID will be updated.
+</string>
+
+    <string name="document_five">
+Go to MY account under app menu.\n
+- Tap Deactivate Accout and then on the next screen Enter your Login password to confirm deactivation.\n
+-Upon deactivation, all personal and vehicle details registered with the app will be deleted.
+</string>
+
+    <string name="document_six">
+     Go to MY ACCOUNT under app menu.\n
+- Tap MOBILE NUMBER field and enter your new number.\n
+- Tap Save. You will be asked to verify your new mobile number with a One Time Password (OTP) which we will SMS to the new number.\n
+- Once you provide the OTP in the app, your mobile number will be updated.
+</string>
+
 </resources>

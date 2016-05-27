@@ -3,14 +3,8 @@ package in.vaksys.vivekpk.fragments;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -33,7 +26,6 @@ import java.util.Date;
 import java.util.Locale;
 
 import in.vaksys.vivekpk.R;
-import in.vaksys.vivekpk.extras.MyApplication;
 import in.vaksys.vivekpk.model.Message;
 
 /**
@@ -88,7 +80,7 @@ public class ServiceFragment extends Fragment {
         linearAddVehicle = (LinearLayout) rootView.findViewById(R.id.linearAddVehicle);
 
         btn_addVehicle = (Button) rootView.findViewById(R.id.btn_addVehicle);
-        btn_setAlert = (Button) rootView.findViewById(R.id.btn_setAlert);
+        btn_setAlert = (Button) rootView.findViewById(R.id.btn_service_due_date_setAlert);
 
         btn_addVehicle.setOnClickListener(new View.OnClickListener() {
             @Override

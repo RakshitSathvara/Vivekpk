@@ -128,8 +128,8 @@ public class SignupFragment extends Fragment implements AdapterCallback {
         confirm.requestWindowFeature(Window.FEATURE_NO_TITLE);
         confirm.setContentView(R.layout.confirm_dialog);
 
-        Button btnEdit = (Button) confirm.findViewById(R.id.et_edit);
-        Button btnSend = (Button) confirm.findViewById(R.id.btn_send);
+        Button btnEdit = (Button) confirm.findViewById(R.id.et_context_edit);
+        Button btnSend = (Button) confirm.findViewById(R.id.et_context_send);
 
         btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override

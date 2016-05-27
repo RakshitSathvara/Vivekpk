@@ -106,6 +106,7 @@ public class SigninFragment extends Fragment {
         mContactNo = etPhoneNo.getText().toString();
         mPassword = etPassword.getText().toString();
 
+
         signUp(mContactNo, mPassword);
 
     }

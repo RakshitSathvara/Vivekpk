@@ -101,7 +101,7 @@ public class EmissionFragment extends Fragment {
 */
         });
         btn_addVehicle = (Button) rootView.findViewById(R.id.btn_addVehicle);
-        btn_setAlert = (Button) rootView.findViewById(R.id.btn_setAlert);
+        btn_setAlert = (Button) rootView.findViewById(R.id.btn_expiry_date_setAlert);
 
         btn_addVehicle.setOnClickListener(new View.OnClickListener() {
             @Override

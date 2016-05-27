@@ -148,8 +148,8 @@ public class InsuranceFragment extends Fragment {
         });
 
         btn_addVehicle = (Button) rootView.findViewById(R.id.btn_addVehicle);
-        btn_setAlert = (Button) rootView.findViewById(R.id.btn_setAlert);
-        btn_setAlertDetail = (Button) rootView.findViewById(R.id.btn_setAlertDetail);
+        btn_setAlert = (Button) rootView.findViewById(R.id.btn_insurance_expiry_setAlert);
+        btn_setAlertDetail = (Button) rootView.findViewById(R.id.btn_insurance_details_expiry_setAlertDetail);
 
         btn_addVehicle.setOnClickListener(new View.OnClickListener() {
             @Override
