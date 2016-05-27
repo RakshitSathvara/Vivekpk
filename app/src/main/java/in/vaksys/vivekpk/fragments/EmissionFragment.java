@@ -16,6 +16,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,6 +26,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import in.vaksys.vivekpk.R;
+import in.vaksys.vivekpk.model.Message;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -154,7 +157,7 @@ public class EmissionFragment extends Fragment {
     private void setDateTimeField() {
 
         Calendar newCalendar = Calendar.getInstance();
-        fromDatePickerDialog = new DatePickerDialog(getActivity(), R.style.DialogTheme,new DatePickerDialog.OnDateSetListener() {
+        fromDatePickerDialog = new DatePickerDialog(getActivity(), R.style.DialogTheme, new DatePickerDialog.OnDateSetListener() {
 
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 Calendar newDate = Calendar.getInstance();
@@ -165,9 +168,10 @@ public class EmissionFragment extends Fragment {
 
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
     }
+
     @Subscribe
-    public void onEvent(Message messageCar){
-        Log.e("car datata",messageCar.getMsg());
+    public void onEvent(Message messageCar) {
+        Log.e("car datata", messageCar.getMsg());
         Toast.makeText(getActivity(), messageCar.getMsg(), Toast.LENGTH_SHORT).show();
     }
 

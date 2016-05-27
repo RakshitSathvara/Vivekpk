@@ -51,7 +51,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     AdapterHolder viewHolder;
 
     //    Calendar newDate;
-    Calendar c;
 
     public RecyclerViewAdapter(Context context, RealmResults<VehicleDetails> detailses) {
 
@@ -61,7 +60,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         this.detailses = detailses;
         myApplication.createDialog((Activity) context, false);
         sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
-        c = Calendar.getInstance();
 //        setDateTimeField();
 
         dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
@@ -131,17 +129,27 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     private void SetData(final AdapterHolder holder) {
+        Date d = null;
+        final Calendar newCalendar = Calendar.getInstance();
 
-        Calendar newCalendar = Calendar.getInstance();
+        newCalendar.add(Calendar.DAY_OF_MONTH, 26);  // number of days to add, can also use Calendar.DAY_OF_MONTH in place of Calendar.DATE
+        String formattedDate = sdf.format(newCalendar.getTime());
+        try {
+            d = sdf.parse(formattedDate);
+        } catch (ParseException e) {
+            Log.e(TAG, "SelectfromDate: " + e);
+        }
         fromDatePickerDialog = new DatePickerDialog(context, R.style.DialogTheme, new DatePickerDialog.OnDateSetListener() {
 
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Calendar newDate = Calendar.getInstance();
-                newDate.set(year, monthOfYear, dayOfMonth);
-                holder.date.setText(dateFormatter.format(newDate.getTime()));
+//                Calendar newDate = Calendar.getInstance();
+                newCalendar.set(year, monthOfYear, dayOfMonth);
+                holder.date.setText(dateFormatter.format(newCalendar.getTime()));
             }
 
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+
+        fromDatePickerDialog.getDatePicker().setMinDate(d.getTime());
 
         fromDatePickerDialog.show();
     }
@@ -178,7 +186,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
     }
 
-    private void SelectfromDate() {
+   /* private void SelectfromDate() {
 
 
         c.add(Calendar.DAY_OF_MONTH, 26);  // number of days to add, can also use Calendar.DAY_OF_MONTH in place of Calendar.DATE
@@ -208,6 +216,5 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
 
         }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
-    }
-
+    }*/
 }
