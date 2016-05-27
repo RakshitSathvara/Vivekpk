@@ -108,7 +108,7 @@ public class MyApplication extends Application {
                         startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
                     }
                 })
-                .duration(Snackbar.SnackbarDuration.LENGTH_INDEFINITE)
+                .duration(Snackbar.SnackbarDuration.LENGTH_LONG)
                 .swipeToDismiss(false)
                 .show(activity);
     }
@@ -128,11 +128,14 @@ public class MyApplication extends Application {
     }
 
     public void hideDialog() {
-        //// TODO: 23-05-2016  errorr second time open
+        //// TODO: 23-05-2016  errorr solve
 
-        if (pDialog.isShowing())
-            pDialog.dismiss();
+            //show dialog
+            if (pDialog.isShowing())
+                pDialog.dismiss();
+
     }
+
 
     public void hideKeyboard(Activity context) {
         // Check if no view has focus:

@@ -1,6 +1,7 @@
 package in.vaksys.vivekpk.activities;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import in.vaksys.vivekpk.R;
+import in.vaksys.vivekpk.extras.PreferenceHelper;
 import in.vaksys.vivekpk.fragments.SigninFragment;
 import in.vaksys.vivekpk.fragments.SignupFragment;
 
@@ -32,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     final ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
     private static final String TAG = "MainActivity";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-
+    PreferenceHelper prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,16 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
+        prefs = new PreferenceHelper(MainActivity.this);
+
+        if (prefs.isConfigure()) {
+
+            Intent i = new Intent(MainActivity.this, HomeActivity.class);
+            startActivity(i);
+            finish();
+
+       }
+
         /*linearLayout1 = (LinearLayout) findViewById(R.id.linerFiveDay);
         linearLayout2 = (LinearLayout) findViewById(R.id.linerOneFiveDay);
         linearLayout3 = (LinearLayout) findViewById(R.id.linerTwoFiveDay);
@@ -54,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
         linearLayout1.setOnClickListener(this);
         linearLayout2.setOnClickListener(this);
         linearLayout3.setOnClickListener(this);*/
+
+
 
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);

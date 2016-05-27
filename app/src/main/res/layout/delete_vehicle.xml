@@ -60,7 +60,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/et_cancel"
+            android:id="@+id/btn_vehicle_cancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -75,7 +75,7 @@
             android:background="#E7E4E2" />
 
         <Button
-            android:id="@+id/btn_delete"
+            android:id="@+id/btn_vehicle_delete"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

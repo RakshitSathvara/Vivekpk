@@ -29,7 +29,7 @@
 
 
             <LinearLayout
-                android:id="@+id/linear_reminder_insurance"
+                android:id="@+id/emission_one"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -63,7 +63,7 @@
                 android:background="#CCC" />
 
             <LinearLayout
-                android:id="@+id/linear_reminder_emission"
+                android:id="@+id/emission_two"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -97,7 +97,7 @@
                 android:background="#CCC" />
 
             <LinearLayout
-                android:id="@+id/linear_reminder_service"
+                android:id="@+id/emission_three"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -131,6 +131,7 @@
                 android:background="#CCC" />
 
             <LinearLayout
+                android:id="@+id/emission_four"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -164,7 +165,7 @@
                 android:background="#CCC" />
 
             <LinearLayout
-
+                android:id="@+id/emission_five"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
