@@ -28,7 +28,7 @@
             android:paddingLeft="10dp">
 
             <LinearLayout
-                android:id="@+id/linear_myAccount_updateName"
+                android:id="@+id/document_one"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -62,7 +62,7 @@
                 android:background="#CCC" />
 
             <LinearLayout
-                android:id="@+id/linear_myAccount_forgotPassword"
+                android:id="@+id/document_two"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -96,7 +96,7 @@
                 android:background="#CCC" />
 
             <LinearLayout
-                android:id="@+id/linear_myAccount_changingPassword"
+                android:id="@+id/document_three"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -130,7 +130,7 @@
                 android:background="#CCC" />
 
             <LinearLayout
-                android:id="@+id/linear_myAccount_changingEmail"
+                android:id="@+id/document_four"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -164,7 +164,7 @@
                 android:background="#CCC" />
 
             <LinearLayout
-                android:id="@+id/liner_myAccount_deactivateAccount"
+                android:id="@+id/document_five"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -198,7 +198,7 @@
                 android:background="#CCC" />
 
             <LinearLayout
-                android:id="@+id/linear_myAccount_changingNumber"
+                android:id="@+id/document_six"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"

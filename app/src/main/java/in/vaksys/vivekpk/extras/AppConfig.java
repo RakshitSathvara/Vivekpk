@@ -16,11 +16,15 @@ public class AppConfig {
 
     public static String URL_ADD_VEHICLE_MODEL = URL_ROOT + "v1/vehicleModel";
 
+    public static String URL_GET_USER_VEHICLE= URL_ROOT + "v1/userVehicles";
+
+    public static String URL_GET_INSURANCE_COMPANY = URL_ROOT + "v1/insurancecompanies";
+
     public static final String URL_VERIFY_OTP = URL_ROOT + "v1/verify";
 
     public static final String URL_RESEND_OTP = URL_ROOT + "v1/sendotp";
 
-    public static final String URL_SPINNER = URL_ROOT + "v1/vehiclemodels";
+    public static final String URL_SPINNER_VEHICLE_MODELS = URL_ROOT + "v1/vehiclemodels";
 
     public static final String URL_UPLOAD_DOC = URL_ROOT + "v1/upload";
 

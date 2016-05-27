@@ -60,7 +60,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/et_cancel"
+            android:id="@+id/btn_signal_jumping_cancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -76,7 +76,7 @@
             android:background="#929091" />
 
         <Button
-            android:id="@+id/btn_send"
+            android:id="@+id/btn_signal_jumping_send"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

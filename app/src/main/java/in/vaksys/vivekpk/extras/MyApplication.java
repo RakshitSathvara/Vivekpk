@@ -42,6 +42,7 @@ public class MyApplication extends Application {
     }
 
     int value;
+    private String mDate;
 
     @Override
     public void onCreate() {
@@ -51,7 +52,7 @@ public class MyApplication extends Application {
         RealmConfiguration configuration = new RealmConfiguration.Builder(this)
                 .name("DaddysRoad231.realm")
                 .deleteRealmIfMigrationNeeded()
-                .schemaVersion(7)
+                .schemaVersion(9)
                 .build();
         Realm.setDefaultConfiguration(configuration);
 
@@ -150,4 +151,11 @@ public class MyApplication extends Application {
         Log.e(TAG, msg);
     }
 
+    public String getmDate() {
+        return mDate;
+    }
+
+    public void setmDate(String mDate) {
+        this.mDate = mDate;
+    }
 }
