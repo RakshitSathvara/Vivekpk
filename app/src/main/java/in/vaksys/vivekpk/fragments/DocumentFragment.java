@@ -1,7 +1,10 @@
 package in.vaksys.vivekpk.fragments;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -13,9 +16,11 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +39,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -121,6 +127,7 @@ public class DocumentFragment extends Fragment {
     RecyclerView ImageRecyclerview;
     RealmResults<UserImages> results;
     //private MultiStateToggleButton multiStateToggleButton;
+    private EventBus bus = EventBus.getDefault();
 
     public static DocumentFragment newInstance(int index) {
         DocumentFragment fragment = new DocumentFragment();
@@ -136,6 +143,7 @@ public class DocumentFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_document, container, false);
+
         BindViews(view);
         SetImagesViews();
         linearAddGallery.setOnClickListener(new View.OnClickListener() {
@@ -201,6 +209,7 @@ public class DocumentFragment extends Fragment {
         });*/
         return view;
     }
+
 
     private void SetImagesViews() {
         myApplication.showLog(TAG, "innerview");
@@ -582,4 +591,6 @@ public class DocumentFragment extends Fragment {
         Random r = new Random();
         return r.nextInt(9999 - 1000) + 1000;
     }
+
+
 }

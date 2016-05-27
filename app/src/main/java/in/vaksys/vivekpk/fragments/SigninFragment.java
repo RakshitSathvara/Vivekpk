@@ -286,7 +286,7 @@ public class SigninFragment extends Fragment {
                         myApplication.hideDialog();
 
                         startActivity(new Intent(getActivity(), HomeActivity.class));
-// todo addd line by one time login
+
                         getActivity().finish();
 
 

@@ -40,7 +40,8 @@
             android:id="@+id/spinner_select_value"
             android:layout_width="100dp"
             android:layout_height="30dp"
-            android:visibility="gone" />
+            android:visibility="gone"
+             />
 
     </LinearLayout>
 </android.support.v7.widget.Toolbar>

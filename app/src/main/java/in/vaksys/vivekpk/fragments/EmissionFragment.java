@@ -1,10 +1,17 @@
 package in.vaksys.vivekpk.fragments;
 
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +24,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -24,6 +35,8 @@ import java.util.Date;
 import java.util.Locale;
 
 import in.vaksys.vivekpk.R;
+import in.vaksys.vivekpk.extras.MyApplication;
+import in.vaksys.vivekpk.model.Message;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,10 +53,11 @@ public class EmissionFragment extends Fragment {
     private String SelectedDate;
     public static final String TAG = "DATE";
 
-
     public EmissionFragment() {
         // Required empty public constructor
     }
+
+
 
 
     @Override
@@ -52,30 +66,6 @@ public class EmissionFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_emission, container, false);
 
-
-       /* multiStateToggleButton = (MultiStateToggleButton) rootView.findViewById(R.id.mstb_emissionvehicleChoice);
-        multiStateToggleButton.enableMultipleChoice(false);
-        multiStateToggleButton.setValue(0);
-        //multiStateToggleButton.setColorRes(R.color.cardview_dark_background, R.color.cardview_dark_background);
-
-        multiStateToggleButton.setOnValueChangedListener(new ToggleButton.OnValueChangedListener() {
-            @Override
-            public void onValueChanged(int value) {
-                Log.e("MSTB", "onValueChanged: " + value);
-                switch (value) {
-                    case 0:
-                        Toast.makeText(getActivity(), "Car Selected..", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 1:
-                        Toast.makeText(getActivity(), "Bike Selected..", Toast.LENGTH_SHORT).show();
-                        break;
-                    default:
-                        Toast.makeText(getActivity(), "Please S" +
-                                "elect any..", Toast.LENGTH_SHORT).show();
-                        break;
-                }
-            }
-        });*/
 
         tvDate = (TextView) rootView.findViewById(R.id.tv_date);
 
@@ -164,5 +154,36 @@ public class EmissionFragment extends Fragment {
 
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
     }
+
+    @Subscribe
+    public void onEvent(Message messageCar){
+        Log.e("car datata",messageCar.getMsg());
+        Toast.makeText(getActivity(), messageCar.getMsg(), Toast.LENGTH_SHORT).show();
+    }
+
+
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//        bus.unregister(this);
+//    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        bus.register(this);
+//    }
 
 }

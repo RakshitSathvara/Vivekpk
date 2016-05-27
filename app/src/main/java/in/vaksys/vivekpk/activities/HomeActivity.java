@@ -29,6 +29,8 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 
 import in.vaksys.vivekpk.R;
@@ -41,6 +43,7 @@ import in.vaksys.vivekpk.fragments.DocumentFragment;
 import in.vaksys.vivekpk.fragments.EmergencyFragment;
 import in.vaksys.vivekpk.fragments.MainTabFragment;
 import in.vaksys.vivekpk.fragments.ReminderTabFragment;
+import in.vaksys.vivekpk.model.Message;
 
 
 public class HomeActivity extends AppCompatActivity {
@@ -68,11 +71,13 @@ public class HomeActivity extends AppCompatActivity {
     ImageView imageToolBar;
     PreferenceHelper prefs;
 
+    private EventBus bus = EventBus.getDefault();
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
+    private String item;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +90,8 @@ public class HomeActivity extends AppCompatActivity {
         } catch (ClassCastException e) {
             throw new ClassCastException(e.getMessage());
         }*/
+
+
         prefs = new PreferenceHelper(HomeActivity.this);
         prefs.setConfigure(true);
 
@@ -100,14 +107,14 @@ public class HomeActivity extends AppCompatActivity {
         final ArrayAdapter<String> spinAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
         spinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_select_value.setAdapter(spinAdapter);
-//        spinner_select_value.setSelection(0);
+        spinner_select_value.setSelection(0);
         spinner_select_value.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> adapter, View v,
                                        int position, long id) {
                 // On selecting a spinner item
-                String item = adapter.getItemAtPosition(position).toString();
+                item = adapter.getItemAtPosition(position).toString();
 
                 // Showing selected spinner item
                 Toast.makeText(getApplicationContext(), "Selected  : " + item,
@@ -117,16 +124,23 @@ public class HomeActivity extends AppCompatActivity {
                 SharedPreferences.Editor edit = sharedPreferences.edit();
 
                 if (position == 0) {
+
+
+                    bus.post(new Message(item));
+
                    /* edit.putInt("type", 0);
                     edit.apply();
                     spinnerCallback.onSpinnerCallBack();
 //                    MyApplication.getInstance().setValue(0);
                     Fragment fm =fragmentManager.findFragmentByTag("harsh");
 */
+
+
                     Log.e(TAG, "onItemSelected: called");
                 }
                 if (position == 1) {
 
+                    bus.post(new Message(item));
                    /* edit.putInt("type", 1);
                     edit.apply();
                     spinnerCallback.onSpinnerCallBack();
@@ -134,6 +148,7 @@ public class HomeActivity extends AppCompatActivity {
 //                    MyApplication.getInstance().setValue(1);
                     MainTabFragment.newInstance(0).onRefresh1();
                     Log.e(TAG, "onItemSelected: called");*/
+
 
                 }
             }
@@ -163,9 +178,14 @@ public class HomeActivity extends AppCompatActivity {
         });*/
 
         initUI();
+        getMyData();
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+
+    public String getMyData() {
+        return item;
     }
 
     private void initUI() {
@@ -175,12 +195,12 @@ public class HomeActivity extends AppCompatActivity {
         bottomNavigation = (AHBottomNavigation) findViewById(R.id.bottom_navigation);
 //        floatingActionButton = (FloatingActionButton) findViewById(R.id.floating_action_button);
         bottomNavigation.setDefaultBackgroundColor(Color.parseColor("#F6B332"));
-        AHBottomNavigationItem item = new AHBottomNavigationItem(R.string.home, R.drawable.ic_action_home, R.color.color_tab_1);
+        final AHBottomNavigationItem item0 = new AHBottomNavigationItem(R.string.home, R.drawable.ic_action_home, R.color.color_tab_1);
         AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.reminder, R.drawable.reminder_can_we_help, R.color.color_tab_1);
         AHBottomNavigationItem item2 = new AHBottomNavigationItem(R.string.documents, R.drawable.settings_documents, R.color.color_tab_1);
         AHBottomNavigationItem item3 = new AHBottomNavigationItem(R.string.emergency_contact, R.drawable.emergency_contac_activet_tab, R.color.color_tab_1);
 
-        bottomNavigationItems.add(item);
+        bottomNavigationItems.add(item0);
         bottomNavigationItems.add(item1);
         bottomNavigationItems.add(item2);
         bottomNavigationItems.add(item3);
@@ -212,10 +232,41 @@ public class HomeActivity extends AppCompatActivity {
                     //toolbar.setTitle("");
                     toolName.setText("");
                     spinner_select_value.setVisibility(View.GONE);
-                    i = 0;
+                  //  i = 0;
                     //menuItem.setVisible(false);
                 } else if (position == 1) {
 //                    bottomNavigation.setNotification(0, 1);
+
+                    //   MyApplication.getInstance().showLog("spinnnner valewe",item);
+                    spinner_select_value.setVisibility(View.VISIBLE);
+
+                  ///  Bundle bundle = new Bundle();
+                  //  String myMessage = item;
+                  int v =  spinner_select_value.getVisibility();
+                    MyApplication.getInstance().showLog("spinnnner visibility :::::",""+ v);
+
+                    if (v == 0){
+                        // Invisible
+
+                        bus.post(new Message("car"));
+
+                    }else {
+                        //visible
+
+                        bus.post(new Message(item));
+                    }
+
+
+//                    if (spinner_select_value.isActivated()) {
+//                        MyApplication.getInstance().showLog("spinnnner valewe :::::", myMessage);
+//                        bundle.putString("message", myMessage);
+//                    } else {
+//                        MyApplication.getInstance().showLog("spinnnner valewe", "car");
+//                        bundle.putString("message", "car");
+//                    }
+                  //  reminderTabFragment.setArguments(bundle);
+
+
                     fragmentManager.beginTransaction()
                             .replace(R.id.fragment_container, reminderTabFragment)
                             .commit();
@@ -223,10 +274,14 @@ public class HomeActivity extends AppCompatActivity {
                     //toolbar.setTitle("Reminder");
                     toolName.setText("Reminder");
                     imageToolBar.setVisibility(View.GONE);
-                    spinner_select_value.setVisibility(View.VISIBLE);
-                    i = 1;
+
+                  //  i = 1;
                     //menuItem.setVisible(false);
+
+
                 } else if (position == 2) {
+
+
                     fragmentManager.beginTransaction()
                             .replace(R.id.fragment_container, documentFragment)
                             .commit();
@@ -235,7 +290,9 @@ public class HomeActivity extends AppCompatActivity {
                     toolName.setText("Documents");
                     imageToolBar.setVisibility(View.GONE);
                     spinner_select_value.setVisibility(View.VISIBLE);
-                    i = 1;
+
+
+                //    i = 1;
                 } else if (position == 3) {
                     fragmentManager.beginTransaction()
                             .replace(R.id.fragment_container, emergencyFragment)
@@ -245,12 +302,12 @@ public class HomeActivity extends AppCompatActivity {
                     toolName.setText("Emergency");
                     imageToolBar.setVisibility(View.GONE);
                     spinner_select_value.setVisibility(View.VISIBLE);
-                    i = 1;
+                 //   i = 1;
                 } else if (!wasSelected) {
                     fragmentManager.beginTransaction()
                             .replace(R.id.fragment_container, currentFragment)
                             .commit();
-                    i = 1;
+                  //  i = 1;
 
                 }/*  else if (position > 0) {
 //                    currentFragment.refresh();
