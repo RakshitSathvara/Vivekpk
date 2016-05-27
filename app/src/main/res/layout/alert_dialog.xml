@@ -48,7 +48,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/et_cancel"
+            android:id="@+id/et_alert_cancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -63,7 +63,7 @@
             android:background="#929091" />
 
         <Button
-            android:id="@+id/btn_skip"
+            android:id="@+id/btn_alert_skip"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

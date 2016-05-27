@@ -59,7 +59,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/et_cancel"
+            android:id="@+id/et_report_cancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
