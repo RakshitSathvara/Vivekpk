@@ -33,6 +33,7 @@ import java.util.ArrayList;
 
 import in.vaksys.vivekpk.R;
 import in.vaksys.vivekpk.extras.MyApplication;
+import in.vaksys.vivekpk.extras.PreferenceHelper;
 import in.vaksys.vivekpk.extras.SpinnerCallback;
 import in.vaksys.vivekpk.fragments.BikeFragment;
 import in.vaksys.vivekpk.fragments.CarFragment;
@@ -65,6 +66,8 @@ public class HomeActivity extends AppCompatActivity {
     Menu menu;
     TextView toolName;
     ImageView imageToolBar;
+    PreferenceHelper prefs;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -82,10 +85,13 @@ public class HomeActivity extends AppCompatActivity {
         } catch (ClassCastException e) {
             throw new ClassCastException(e.getMessage());
         }*/
+        prefs = new PreferenceHelper(HomeActivity.this);
+        prefs.setConfigure(true);
 
         toolName = (TextView) findViewById(R.id.toolName);
         imageToolBar = (ImageView) findViewById(R.id.imageToolBar);
         ArrayList<String> list = new ArrayList<String>();
+
         list.add("Car");
         list.add("Bike");
 

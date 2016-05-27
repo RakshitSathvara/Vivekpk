@@ -3,7 +3,6 @@ package in.vaksys.vivekpk.fragments;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -17,8 +16,6 @@ import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import com.google.android.gms.common.api.Api;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -47,7 +44,7 @@ public class InsuranceFragment extends Fragment {
 
     private Spinner spInsuranceCompany;
 
-    // private MultiStateToggleButton multiStateToggleButton;
+   // private MultiStateToggleButton multiStateToggleButton;
 
     private LinearLayout linearAddVehicle, linearVehicleDetails, linearInsurancePolicy, linearInsurancePolicyWithVehicle,
             linearInsuranceDetails;
@@ -62,7 +59,31 @@ public class InsuranceFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_insurance, container, false);
-        
+
+
+        /*multiStateToggleButton = (MultiStateToggleButton) rootView.findViewById(R.id.mstb_insurancevehicleChoice);
+        multiStateToggleButton.enableMultipleChoice(false);
+        multiStateToggleButton.setValue(0);
+        //multiStateToggleButton.setColorRes(R.color.cardview_dark_background, R.color.cardview_dark_background);
+
+        multiStateToggleButton.setOnValueChangedListener(new ToggleButton.OnValueChangedListener() {
+            @Override
+            public void onValueChanged(int value) {
+                Log.e("MSTB", "onValueChanged: " + value);
+                switch (value) {
+                    case 0:
+                        Toast.makeText(getActivity(), "Car Selected..", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 1:
+                        Toast.makeText(getActivity(), "Bike Selected..", Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        Toast.makeText(getActivity(), "Please S" +
+                                "elect any..", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        });*/
 
         linearAddVehicle = (LinearLayout) rootView.findViewById(R.id.linearAddVehicle);
         linearVehicleDetails = (LinearLayout) rootView.findViewById(R.id.linearVehicleDetails);
@@ -184,33 +205,16 @@ public class InsuranceFragment extends Fragment {
     private void setDateTimeField() {
 
         Calendar newCalendar = Calendar.getInstance();
+        fromDatePickerDialog = new DatePickerDialog(getActivity(), R.style.DialogTheme, new DatePickerDialog.OnDateSetListener() {
 
-        int currentapiVersion = android.os.Build.VERSION.SDK_INT;
-        if (currentapiVersion <= Build.VERSION_CODES.KITKAT) {
-            fromDatePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, monthOfYear, dayOfMonth);
+                SelectedDate = dateFormatter.format(newDate.getTime());
+                tvDate.setText(SelectedDate);
+            }
 
-                public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                    Calendar newDate = Calendar.getInstance();
-                    newDate.set(year, monthOfYear, dayOfMonth);
-                    SelectedDate = dateFormatter.format(newDate.getTime());
-                    tvDate.setText(SelectedDate);
-                }
-
-            }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-        } else {
-            fromDatePickerDialog = new DatePickerDialog(getActivity(), R.style.MyDialogTheme, new DatePickerDialog.OnDateSetListener() {
-
-                public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                    Calendar newDate = Calendar.getInstance();
-                    newDate.set(year, monthOfYear, dayOfMonth);
-                    SelectedDate = dateFormatter.format(newDate.getTime());
-                    tvDate.setText(SelectedDate);
-                }
-
-            }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-        }
-
-
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
     }
 
 }
