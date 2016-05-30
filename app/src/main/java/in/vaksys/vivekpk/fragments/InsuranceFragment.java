@@ -65,30 +65,6 @@ public class InsuranceFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_insurance, container, false);
 
 
-        /*multiStateToggleButton = (MultiStateToggleButton) rootView.findViewById(R.id.mstb_insurancevehicleChoice);
-        multiStateToggleButton.enableMultipleChoice(false);
-        multiStateToggleButton.setValue(0);
-        //multiStateToggleButton.setColorRes(R.color.cardview_dark_background, R.color.cardview_dark_background);
-
-        multiStateToggleButton.setOnValueChangedListener(new ToggleButton.OnValueChangedListener() {
-            @Override
-            public void onValueChanged(int value) {
-                Log.e("MSTB", "onValueChanged: " + value);
-                switch (value) {
-                    case 0:
-                        Toast.makeText(getActivity(), "Car Selected..", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 1:
-                        Toast.makeText(getActivity(), "Bike Selected..", Toast.LENGTH_SHORT).show();
-                        break;
-                    default:
-                        Toast.makeText(getActivity(), "Please S" +
-                                "elect any..", Toast.LENGTH_SHORT).show();
-                        break;
-                }
-            }
-        });*/
-
         linearAddVehicle = (LinearLayout) rootView.findViewById(R.id.linearAddVehicle);
         linearVehicleDetails = (LinearLayout) rootView.findViewById(R.id.linearVehicleDetails);
         linearInsurancePolicy = (LinearLayout) rootView.findViewById(R.id.linearInsurancePolicy);

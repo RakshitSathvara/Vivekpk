@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(i);
             finish();
 
-       }
+        }
 
         /*linearLayout1 = (LinearLayout) findViewById(R.id.linerFiveDay);
         linearLayout2 = (LinearLayout) findViewById(R.id.linerOneFiveDay);
@@ -68,8 +68,6 @@ public class MainActivity extends AppCompatActivity {
         linearLayout1.setOnClickListener(this);
         linearLayout2.setOnClickListener(this);
         linearLayout3.setOnClickListener(this);*/
-
-
 
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);

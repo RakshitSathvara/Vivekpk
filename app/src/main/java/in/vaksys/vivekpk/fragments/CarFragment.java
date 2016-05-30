@@ -127,44 +127,44 @@ public class CarFragment extends Fragment {
             }
         });
 
-        List<String> carModel = new ArrayList<String>();
-        carModel.add("Select Model");
-        carModel.add("A7");
-        carModel.add("X4");
-        carModel.add("A2");
-        ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, carModel);
-
-        // Drop down layout style - list view with radio button
-        dataAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // attaching data adapter to spinner
-        spCarModel.setAdapter(dataAdapter2);
-        spCarModel.setSelection(0);
-
-        spCarModel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                TextView CarModelSpi = (TextView) view;
-                CarSpinnItem = CarModelSpi.getText().toString();
-                carPosi = position;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+//        List<String> carModel = new ArrayList<String>();
+//        carModel.add("Select Model");
+//        carModel.add("A7");
+//        carModel.add("X4");
+//        carModel.add("A2");
+//        ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, carModel);
+//
+//        // Drop down layout style - list view with radio button
+//        dataAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//
+//        // attaching data adapter to spinner
+//        spCarModel.setAdapter(dataAdapter2);
+//        spCarModel.setSelection(0);
+//
+//        spCarModel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                TextView CarModelSpi = (TextView) view;
+//                CarSpinnItem = CarModelSpi.getText().toString();
+//                carPosi = position;
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
 
       /*  btnAddVVehicle.setVisibility(View.VISIBLE);
         carDetailRecyclerView.setVisibility(View.VISIBLE);
         percentEnterCarDetails.setVisibility(View.INVISIBLE);
 */
 
-        btnAddVVehicle.setOnClickListener(new View.OnClickListener() {
+        btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 submitForm();
-                SwitchUI();
+//                SwitchUI();
 
             }
         });
@@ -186,8 +186,10 @@ public class CarFragment extends Fragment {
         spCarModel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                modelSpinnItem = ((TextView) getActivity().findViewById(R.id.rowText)).getText().toString();
-                String myid = ((TextView) getActivity().findViewById(R.id.rowid)).getText().toString();
+
+                modelSpinnItem = ((TextView) view.findViewById(R.id.rowText)).getText().toString();
+                makePosi= position;
+                String myid = ((TextView) view.findViewById(R.id.rowid)).getText().toString();
                 Toast.makeText(getActivity(), "You have selected " + modelSpinnItem + " " + myid, Toast.LENGTH_SHORT).show();
             }
 
@@ -208,6 +210,7 @@ public class CarFragment extends Fragment {
         spSelectmake.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                carPosi = position;
                 modelSpinnItem = ((TextView) view.findViewById(R.id.rowText)).getText().toString();
                 String myid = ((TextView) view.findViewById(R.id.rowid)).getText().toString();
                 Toast.makeText(getActivity(), "You have selected " + modelSpinnItem + " " + myid, Toast.LENGTH_SHORT).show();
@@ -236,10 +239,10 @@ public class CarFragment extends Fragment {
 
     private void getData() {
         mCarDetail = etCarDetails.getText().toString();
-        RegisterVehicle(CarSpinnItem, MakeSpinnItem);
+        RegisterVehicle(mCarDetail, CarSpinnItem, MakeSpinnItem);
     }
 
-    private void RegisterVehicle(final String carSpinnItem, final String makeSpinnItem) {
+    private void RegisterVehicle(String mCarDetail, final String carSpinnItem, final String makeSpinnItem) {
         String tag_string_req = "req_add_model";
 
         MyApplication.getInstance().DialogMessage("Adding Model...");
@@ -320,15 +323,17 @@ public class CarFragment extends Fragment {
     private boolean validateCarSpinner() {
         if (carPosi == 0) {
             return false;
-        } else
+        } else {
             return true;
+        }
     }
 
     private boolean validateMakeSpinner() {
         if (makePosi == 0) {
             return false;
-        } else
+        } else {
             return true;
+        }
     }
 
     private boolean validateRegNumber() {

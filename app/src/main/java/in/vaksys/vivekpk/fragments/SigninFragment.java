@@ -488,7 +488,7 @@ public class SigninFragment extends Fragment {
         super.onStop();
         // Remember to close the Realm instance when done with it.
         // TODO: 19-05-2016 handle realm.close();
-        // realm.close();
+         realm.close();
     }
 
     private boolean validateNumber() {
@@ -526,6 +526,8 @@ public class SigninFragment extends Fragment {
             getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
+
+
 
 
 }

@@ -13,8 +13,13 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -53,7 +58,7 @@ public class EmissionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_emission, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_emission, container, false);
 
 
        /* multiStateToggleButton = (MultiStateToggleButton) rootView.findViewById(R.id.mstb_emissionvehicleChoice);
@@ -121,6 +126,39 @@ public class EmissionFragment extends Fragment {
                 final Dialog dialog = new Dialog(getActivity());
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.remind_me);
+
+//                public void callbackMethod(final View view){
+//                    Toast.makeText(this,((RadioButton) view).getText(), Toast.LENGTH_SHORT).show();
+//                }
+
+                //  callbackMethod(v);
+
+                RadioGroup radioGroup;
+                RadioButton sound, vibration, silent;
+                radioGroup = (RadioGroup) dialog.findViewById(R.id.myRadioGroup);
+
+                sound = (RadioButton) dialog.findViewById(R.id.radio1);
+                vibration = (RadioButton) dialog.findViewById(R.id.radio2);
+                silent = (RadioButton) dialog.findViewById(R.id.radio3);
+
+                radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+
+                    @Override
+                    public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+                        if(checkedId == R.id.radio1) {
+                            Toast.makeText(getActivity(), "radio1",
+                                    Toast.LENGTH_SHORT).show();
+                        } else if(checkedId == R.id.radio2) {
+                            Toast.makeText(getActivity(), "radio2",
+                                    Toast.LENGTH_SHORT).show();
+                        } else if(checkedId == R.id.radio3){
+                            Toast.makeText(getActivity(), "radio3",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
 
                 Button btn_done = (Button) dialog.findViewById(R.id.btn_done);
                 btn_done.setOnClickListener(new View.OnClickListener() {
@@ -199,4 +237,11 @@ public class EmissionFragment extends Fragment {
 //        super.onResume();
 //        bus.register(this);
 //    }
+
+
+    public void callbackMethod(View v) {
+//        Toast.makeText(getActivity(),((RadioButton) v).getText(), Toast.LENGTH_SHORT).show();
+
+        Log.e("fdhgyud", "edfhuf");
+    }
 }
