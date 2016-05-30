@@ -7,25 +7,16 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 
 import in.vaksys.vivekpk.R;
 import in.vaksys.vivekpk.adapter.RecyclerViewAdapter;
@@ -111,7 +102,7 @@ public class InsuranceFragment extends Fragment {
         realm = Realm.getDefaultInstance();
         spInsuranceCompany = (Spinner) rootView.findViewById(R.id.sp_insuranceCompany);
 
-        List<String> insuranse = new ArrayList<String>();
+      /*  List<String> insuranse = new ArrayList<String>();
         insuranse.add("Select Company");
         insuranse.add("Business Services");
         insuranse.add("Computers");
@@ -128,15 +119,15 @@ public class InsuranceFragment extends Fragment {
         spInsuranceCompany.setAdapter(dataAdapter);
         spInsuranceCompany.setSelection(0);
 
-        setDateTimeField();
+//        setDateTimeField();
 
         dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
-
+*/
 
         tvDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SelectfromDate();
+//                SelectfromDate();
             }
 
             /*@Override
@@ -199,13 +190,14 @@ public class InsuranceFragment extends Fragment {
         });
 
         SetInsurance();
+
         return rootView;
     }
-
+ /*
     SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
     Calendar c = Calendar.getInstance();
 
-    private void SelectfromDate() {
+   private void SelectfromDate() {
         c.add(Calendar.DAY_OF_MONTH, 26);  // number of days to add, can also use Calendar.DAY_OF_MONTH in place of Calendar.DATE
         String formattedDate = sdf.format(c.getTime());
         Date d = null;
@@ -231,7 +223,7 @@ public class InsuranceFragment extends Fragment {
             }
 
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-    }
+    }*/
 
     private void SetInsurance() {
         myApplication.showLog(TAG, "innerview");
