@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/linearVehicleDetails"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:layout_margin="8dp"
     android:orientation="vertical"
     android:visibility="visible">
@@ -60,9 +60,9 @@
                     android:padding="3dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
+                        android:gravity="center"
                         android:text="Number"
                         android:textColor="#C6C4C5"
                         android:textSize="12sp"
@@ -70,12 +70,13 @@
 
                     <TextView
                         android:id="@+id/tv_detailvehicleNumber"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
                         android:layout_marginTop="8dp"
+                        android:gravity="center"
                         android:text="KA05j95959"
-                        android:textColor="#83837F" />
+                        android:textColor="#83837F"
+                        android:textSize="12sp" />
 
                 </LinearLayout>
 
@@ -93,9 +94,9 @@
                     android:padding="3dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
+                        android:gravity="center"
                         android:text="Make"
                         android:textColor="#C6C4C5"
                         android:textSize="12sp"
@@ -103,12 +104,13 @@
 
                     <TextView
                         android:id="@+id/tv_detailvehicleBrand"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
                         android:layout_marginTop="8dp"
+                        android:gravity="center"
                         android:text="Jaguar"
-                        android:textColor="#83837F" />
+                        android:textColor="#83837F"
+                        android:textSize="12sp" />
 
                 </LinearLayout>
 
@@ -126,9 +128,9 @@
                     android:padding="3dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
+                        android:gravity="center"
                         android:text="Model"
                         android:textColor="#C6C4C5"
                         android:textSize="12sp"
@@ -136,12 +138,13 @@
 
                     <TextView
                         android:id="@+id/tv_detailvehicleNumberModel"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
                         android:layout_marginTop="8dp"
+                        android:gravity="center"
                         android:text="Sedan"
-                        android:textColor="#83837F" />
+                        android:textColor="#83837F"
+                        android:textSize="12sp" />
 
                 </LinearLayout>
 
