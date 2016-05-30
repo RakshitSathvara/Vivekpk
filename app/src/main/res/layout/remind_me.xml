@@ -1,38 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <in.vaksys.vivekpk.extras.PercentLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/dialog_shape"
     android:gravity="center"
     android:orientation="vertical">
 
-    <LinearLayout
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Remind Me"
+        android:textColor="#797979"
+        android:textSize="20sp"
+        android:padding="5dp"
+        android:textStyle="bold" />
+
+
+    <in.vaksys.vivekpk.extras.PercentLinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="8dp"
-        android:paddingTop="20dp"
+        android:orientation="horizontal"
+        android:weightSum="2"
         app:layout_widthPercent="100%">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Remind Me"
-            android:textColor="#797979"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:layout_height="100dp"
+            android:orientation="vertical"
+            android:paddingLeft="8dp"
+            app:layout_widthPercent="90%">
 
-        <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:id="@+id/linerFiveDay"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
                 android:orientation="horizontal"
-                android:padding="4dp">
+                android:weightSum="5">
 
                 <TextView
                     android:layout_width="0dp"
@@ -51,19 +58,17 @@
                     android:textColor="#A19E98"
                     android:textSize="14sp" />
 
-                <android.support.v7.widget.AppCompatRadioButton
-                    android:id="@+id/radio1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/linerOneFiveDay"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
                 android:orientation="horizontal"
-                android:padding="4dp">
+                android:weightSum="5">
 
                 <TextView
                     android:layout_width="0dp"
@@ -82,19 +87,17 @@
                     android:textColor="#A19E98"
                     android:textSize="14sp" />
 
-                <android.support.v7.widget.AppCompatRadioButton
-                    android:id="@+id/radio2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/linerTwoFiveDay"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
                 android:orientation="horizontal"
-                android:padding="4dp">
+                android:weightSum="5">
 
                 <TextView
                     android:layout_width="0dp"
@@ -113,14 +116,47 @@
                     android:textColor="#A19E98"
                     android:textSize="14sp" />
 
-                <android.support.v7.widget.AppCompatRadioButton
-                    android:id="@+id/radio3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
 
             </LinearLayout>
-        </RadioGroup>
-    </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_widthPercent="10%">
+
+            <RadioGroup
+                android:id="@+id/myRadioGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp">
+
+                <RadioButton
+                    android:id="@+id/radio1"
+                    android:theme="@style/MyRadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <RadioButton
+                    android:id="@+id/radio2"
+                    android:theme="@style/MyRadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <RadioButton
+                    android:id="@+id/radio3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:theme="@style/MyRadioButton"
+                    android:layout_weight="1" />
+
+            </RadioGroup>
+
+        </LinearLayout>
+
+
+    </in.vaksys.vivekpk.extras.PercentLinearLayout>
 
     <Button
         android:id="@+id/btn_done"
