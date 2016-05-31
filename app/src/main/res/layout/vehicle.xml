@@ -38,7 +38,7 @@
                     android:textStyle="bold" />
 
                 <ImageView
-                    android:id="@+id/img_vehicelDetailEdit"
+                    android:id="@+id/img_vehicelDetailEdit_gen"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|right"
@@ -69,7 +69,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_detailvehicleNumber"
+                        android:id="@+id/tv_detailvehicleNumber_gen"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -103,7 +103,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_detailvehicleBrand"
+                        android:id="@+id/tv_detailvehicleBrand_gen"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -137,7 +137,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_detailvehicleNumberModel"
+                        android:id="@+id/tv_detailvehicleNumberModel_gen"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
