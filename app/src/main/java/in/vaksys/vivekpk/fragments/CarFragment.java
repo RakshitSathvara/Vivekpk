@@ -1,16 +1,18 @@
 package in.vaksys.vivekpk.fragments;
 
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -18,28 +20,31 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import in.vaksys.vivekpk.R;
+import in.vaksys.vivekpk.adapter.CarRecyclerViewAdapter;
 import in.vaksys.vivekpk.adapter.mySpinnerAdapterBrand;
 import in.vaksys.vivekpk.adapter.mySpinnerAdapterModel;
+import in.vaksys.vivekpk.dbPojo.VehicleDetails;
 import in.vaksys.vivekpk.dbPojo.VehicleModels;
 import in.vaksys.vivekpk.extras.AppConfig;
 import in.vaksys.vivekpk.extras.MyApplication;
-import in.vaksys.vivekpk.extras.PercentLinearLayout;
+import in.vaksys.vivekpk.model.ClaimMessage;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -54,21 +59,24 @@ public class CarFragment extends Fragment {
     RecyclerView carDetailRecyclerView;
     EditText etCarDetails;
     Button btnContinue;
-    PercentLinearLayout percentEnterCarDetails;
     @Bind(R.id.btn_addVVehicle)
     Button btnAddVVehicle;
     @Bind(R.id.AddVehicleBtnLayout)
     LinearLayout AddVehicleBtnLayout;
+    @Bind(R.id.add_car_detail)
+    View addCarView;
+
     private Realm realm;
     MyApplication myApplication;
     private String modelSpinnItem;
 
-    boolean btnvisible = true, detailLayout = false, recyclerview = false;
-    private String CarSpinnItem;
     private int carPosi;
     private int makePosi;
-    private String MakeSpinnItem;
     private String mCarDetail;
+    private RealmResults<VehicleDetails> results;
+    private CarRecyclerViewAdapter carAdapter;
+    String myid;
+
 
     public static CarFragment newInstance(int index) {
         CarFragment fragment = new CarFragment();
@@ -86,6 +94,11 @@ public class CarFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_car, container, false);
         ButterKnife.bind(this, rootView);
 
+        addCarView.setVisibility(View.GONE);
+        carDetailRecyclerView.setVisibility(View.GONE);
+        AddVehicleBtnLayout.setVisibility(View.GONE);
+
+
         myApplication = MyApplication.getInstance();
 
 
@@ -93,72 +106,14 @@ public class CarFragment extends Fragment {
         spCarModel = (Spinner) rootView.findViewById(R.id.sp_selectModel);
         etCarDetails = (EditText) rootView.findViewById(R.id.et_carDetails);
         btnContinue = (Button) rootView.findViewById(R.id.btn_continue);
-        percentEnterCarDetails = (PercentLinearLayout) rootView.findViewById(R.id.percentEnterCarDetails11);
+
 
         realm = Realm.getDefaultInstance();
         MyApplication.getInstance().createDialog(getActivity(), false);
+        results = realm.where(VehicleDetails.class).equalTo("type", "car").findAll();
+        myApplication.showLog(TAG, "count : " + results.size());
+        SetCarDetailsList();
 
-//        List<String> selectBrand = new ArrayList<String>();
-//        selectBrand.add("Select Brand");
-//        selectBrand.add("Audi");
-//        selectBrand.add("BMW");
-//        selectBrand.add("Jaguar");
-//
-//        ArrayAdapter<String> dataAdapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, selectBrand);
-//
-//        // Drop down layout style - list view with radio button
-//        dataAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//
-//        // attaching data adapter to spinner
-//        spSelectmake.setAdapter(dataAdapter1);
-//        spSelectmake.setSelection(0);
-
-        spSelectmake.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                TextView CarModelSpi = (TextView) view;
-                MakeSpinnItem = CarModelSpi.getText().toString();
-                makePosi = position;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-//        List<String> carModel = new ArrayList<String>();
-//        carModel.add("Select Model");
-//        carModel.add("A7");
-//        carModel.add("X4");
-//        carModel.add("A2");
-//        ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, carModel);
-//
-//        // Drop down layout style - list view with radio button
-//        dataAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//
-//        // attaching data adapter to spinner
-//        spCarModel.setAdapter(dataAdapter2);
-//        spCarModel.setSelection(0);
-//
-//        spCarModel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                TextView CarModelSpi = (TextView) view;
-//                CarSpinnItem = CarModelSpi.getText().toString();
-//                carPosi = position;
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
-
-      /*  btnAddVVehicle.setVisibility(View.VISIBLE);
-        carDetailRecyclerView.setVisibility(View.VISIBLE);
-        percentEnterCarDetails.setVisibility(View.INVISIBLE);
-*/
 
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,9 +124,17 @@ public class CarFragment extends Fragment {
             }
         });
 
-
+        btnAddVVehicle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addCarView.setVisibility(View.VISIBLE);
+                carDetailRecyclerView.setVisibility(View.GONE);
+                AddVehicleBtnLayout.setVisibility(View.GONE);
+            }
+        });
         LodingBrand();
         LodingModel();
+
         return rootView;
     }
 
@@ -188,8 +151,8 @@ public class CarFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 modelSpinnItem = ((TextView) view.findViewById(R.id.rowText)).getText().toString();
-                makePosi= position;
-                String myid = ((TextView) view.findViewById(R.id.rowid)).getText().toString();
+                makePosi = position;
+                myid = ((TextView) view.findViewById(R.id.rowid)).getText().toString();
                 Toast.makeText(getActivity(), "You have selected " + modelSpinnItem + " " + myid, Toast.LENGTH_SHORT).show();
             }
 
@@ -239,8 +202,190 @@ public class CarFragment extends Fragment {
 
     private void getData() {
         mCarDetail = etCarDetails.getText().toString();
-        RegisterVehicle(mCarDetail, CarSpinnItem, MakeSpinnItem);
+        carAdapter.AddVehicle(getActivity(), "car", Integer.parseInt(myid), mCarDetail);
+        carDetailRecyclerView.setVisibility(View.VISIBLE);
+        AddVehicleBtnLayout.setVisibility(View.VISIBLE);
+        addCarView.setVisibility(View.GONE);
+        //    results = realm.where(VehicleDetails.class).equalTo("type", "car").findAll();
+//        carAdapter = new CarRecyclerViewAdapter(getActivity(), results);
+//        carDetailRecyclerView.setAdapter(carAdapter);
+//        carAdapter.notifyDataSetChanged();
+//        RegisterVehicle(mCarDetail, CarSpinnItem, MakeSpinnItem);
+//        carAdapter.notifyDataSetChanged();
     }
+
+    private boolean validateCarSpinner() {
+        if (carPosi == 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private boolean validateMakeSpinner() {
+        if (makePosi == 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private boolean validateRegNumber() {
+        if (etCarDetails.getText().toString().trim().isEmpty()) {
+            etCarDetails.setError(getString(R.string.err_msg_number));
+            requestFocus(etCarDetails);
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private void requestFocus(View view) {
+        if (view.requestFocus()) {
+            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
+
+    private void confirmDialog(final String carNo, String model) {
+        final Dialog confirm = new Dialog(getActivity());
+        confirm.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        confirm.setContentView(R.layout.claim_this_vehicle);
+
+        Button btnCancel = (Button) confirm.findViewById(R.id.btn_claming_this_vehicle_cancel);
+        Button btnClaim = (Button) confirm.findViewById(R.id.btn_claming_this_vehicle_claim);
+        TextView VehicleNo = (TextView) confirm.findViewById(R.id.tv_claimNumber);
+        TextView VehicleModel = (TextView) confirm.findViewById(R.id.tv_claimCarModel);
+
+        VehicleNo.setText(carNo);
+        VehicleModel.setText(model);
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                confirm.dismiss();
+            }
+        });
+        btnClaim.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClaimVehicle(carNo);
+                confirm.dismiss();
+            }
+        });
+        confirm.show();
+    }
+
+    private void ClaimVehicle(final String vehicle_number) {
+
+        String tag_string_req = "req_claim_vehicle";
+
+        myApplication.DialogMessage("Claiming Vehicle...");
+        myApplication.showDialog();
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_CLAIM_VEHICLE, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                myApplication.hideDialog();
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+                    Log.e(TAG, "onResponse: " + jObj.toString());
+
+                    if (!error) {
+                        Toast.makeText(getActivity(), jObj.getString("message") + "... ", Toast.LENGTH_LONG).show();
+
+                    } else {
+                        // Error in login. Get the error message
+                        myApplication.hideDialog();
+                        String errorMsg = jObj.getString("message");
+                        Toast.makeText(getActivity(),
+                                "Error :" + errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    myApplication.hideDialog();
+                    // JSON error
+                    e.printStackTrace();
+                    Toast.makeText(getActivity(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+//                Log.e(TAG, "Login Error: " + error.getMessage());
+                myApplication.ErrorSnackBar(getActivity());
+                myApplication.hideDialog();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+
+                params.put("vehicleNo", vehicle_number);
+
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+                return headers;
+
+            }
+        };
+        // Adding request to request queue
+        myApplication.addToRequestQueue(strReq, tag_string_req);
+    }
+
+
+    private void SetCarDetailsList() {
+
+        carDetailRecyclerView.setHasFixedSize(true);
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        carDetailRecyclerView.setLayoutManager(manager);
+        results = realm.where(VehicleDetails.class).equalTo("type", "car").findAll();
+        if (results.size() > 0) {
+            carDetailRecyclerView.setVisibility(View.VISIBLE);
+            AddVehicleBtnLayout.setVisibility(View.VISIBLE);
+            carAdapter = new CarRecyclerViewAdapter(getActivity(), results);
+            carDetailRecyclerView.setAdapter(carAdapter);
+        } else {
+            addCarView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Subscribe
+    public void onEvent(ClaimMessage messageCar) {
+        Log.e("car datata", messageCar.getCarNo() + " " + messageCar.getModel());
+        String aa = realm.where(VehicleModels.class).equalTo("id", messageCar.getModel()).findFirst().getManufacturerName();
+        myApplication.showLog(TAG, aa);
+//        Toast.makeText(getActivity(), messageCar.getModel(), Toast.LENGTH_SHORT).show();
+        confirmDialog(messageCar.getCarNo(), aa);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+}
+/*
 
     private void RegisterVehicle(String mCarDetail, final String carSpinnItem, final String makeSpinnItem) {
         String tag_string_req = "req_add_model";
@@ -319,53 +464,6 @@ public class CarFragment extends Fragment {
         MyApplication.getInstance().addToRequestQueue(strReq, tag_string_req);
 
     }
+*/
 
-    private boolean validateCarSpinner() {
-        if (carPosi == 0) {
-            return false;
-        } else {
-            return true;
-        }
-    }
 
-    private boolean validateMakeSpinner() {
-        if (makePosi == 0) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    private boolean validateRegNumber() {
-        if (etCarDetails.getText().toString().trim().isEmpty()) {
-            etCarDetails.setError(getString(R.string.err_msg_number));
-            requestFocus(etCarDetails);
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    private void SwitchUI() {
-        if (btnvisible) {
-            btnAddVVehicle.setVisibility(View.INVISIBLE);
-            percentEnterCarDetails.setVisibility(View.VISIBLE);
-            btnvisible = false;
-        } else {
-            btnAddVVehicle.setVisibility(View.VISIBLE);
-            percentEnterCarDetails.setVisibility(View.INVISIBLE);
-        }
-    }
-
-    private void requestFocus(View view) {
-        if (view.requestFocus()) {
-            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-        }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
-    }
-}

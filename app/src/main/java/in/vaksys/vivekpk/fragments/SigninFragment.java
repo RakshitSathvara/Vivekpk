@@ -107,11 +107,11 @@ public class SigninFragment extends Fragment {
         mPassword = etPassword.getText().toString();
 
 
-        signUp(mContactNo, mPassword);
+        signIn(mContactNo, mPassword);
 
     }
 
-    private void signUp(final String mContactNo, final String mPassword) {
+    private void signIn(final String mContactNo, final String mPassword) {
         String tag_string_req = "req_login";
 
         myApplication.DialogMessage("Loging in...");
@@ -428,19 +428,23 @@ public class SigninFragment extends Fragment {
                                     String insuranceExpDate = jsonObject.getString("insuranceExpDate");
                                     String pollutionExpDate = jsonObject.getString("pollutionExpDate");
                                     String service_exp_date = jsonObject.getString("service_exp_date");
+                                    String note = jsonObject.getString("note");
+                                    String type = jsonObject.getString("type");
 //                                    String createdAt = jsonObject.getString("createdAt");
 //                                    String updatedAt = jsonObject.getString("updatedAt");
 
                                     vehicleDetails = realm.createObject(VehicleDetails.class);
 
                                     vehicleDetails.setVehicleId(id);
-                                    vehicleDetails.setVehicleBrandName(VehicleName);
+                                    vehicleDetails.setName(VehicleName);
                                     vehicleDetails.setVehicleModelID(modelId);
                                     vehicleDetails.setVehicleNo(vehicleNo);
                                     vehicleDetails.setInsuranceCompany(insuranceCompany);
                                     vehicleDetails.setInsuranceExpireDate(insuranceExpDate);
                                     vehicleDetails.setPollutionExpireDate(pollutionExpDate);
                                     vehicleDetails.setServiceExpireDate(service_exp_date);
+                                    vehicleDetails.setNote(note);
+                                    vehicleDetails.setType(type);
 
 
                                 }
@@ -488,7 +492,7 @@ public class SigninFragment extends Fragment {
         super.onStop();
         // Remember to close the Realm instance when done with it.
         // TODO: 19-05-2016 handle realm.close();
-         realm.close();
+        realm.close();
     }
 
     private boolean validateNumber() {
@@ -526,8 +530,6 @@ public class SigninFragment extends Fragment {
             getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
-
-
 
 
 }
