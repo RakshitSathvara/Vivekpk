@@ -1,5 +1,7 @@
 package in.vaksys.vivekpk.dbPojo;
 
+import java.util.Date;
+
 import io.realm.RealmObject;
 
 /**
@@ -7,15 +9,15 @@ import io.realm.RealmObject;
  */
 public class VehicleDetails extends RealmObject {
 
-    private String UserAPiKey;
+    private String UserID;
 
     private int VehicleId;
 
-    private String NotificationDate;
+    private String name;
 
-    private String ReminderTpe;
-    // TODO: 30-05-2016 remove this column and relevent activities like in signin fragment
-    private String VehicleBrandName;
+    private Date NotificationDate;
+
+    private String ReminderType;
 
     private int VehicleModelID;
 
@@ -39,13 +41,9 @@ public class VehicleDetails extends RealmObject {
 
     private String mDate;
 
-    public String getVehicleBrandName() {
-        return VehicleBrandName;
-    }
+    private String type;
 
-    public void setVehicleBrandName(String vehicleBrandName) {
-        VehicleBrandName = vehicleBrandName;
-    }
+    private String note;
 
     public int getVehicleModelID() {
         return VehicleModelID;
@@ -119,19 +117,19 @@ public class VehicleDetails extends RealmObject {
         RcRenewDate = rcRenewDate;
     }
 
-    public String getUserAPiKey() {
-        return UserAPiKey;
+    public String getUserID() {
+        return UserID;
     }
 
-    public void setUserAPiKey(String userAPiKey) {
-        UserAPiKey = userAPiKey;
+    public void setUserID(String userID) {
+        UserID = userID;
     }
 
-    public String getNotificationDate() {
+    public Date getNotificationDate() {
         return NotificationDate;
     }
 
-    public void setNotificationDate(String notificationDate) {
+    public void setNotificationDate(Date notificationDate) {
         NotificationDate = notificationDate;
     }
 
@@ -143,12 +141,12 @@ public class VehicleDetails extends RealmObject {
         VehicleId = vehicleId;
     }
 
-    public String getReminderTpe() {
-        return ReminderTpe;
+    public String getReminderType() {
+        return ReminderType;
     }
 
-    public void setReminderTpe(String reminderTpe) {
-        ReminderTpe = reminderTpe;
+    public void setReminderType(String reminderType) {
+        ReminderType = reminderType;
     }
 
     public String getServiceExpireDate() {
@@ -165,5 +163,29 @@ public class VehicleDetails extends RealmObject {
 
     public void setmDate(String mDate) {
         this.mDate = mDate;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }

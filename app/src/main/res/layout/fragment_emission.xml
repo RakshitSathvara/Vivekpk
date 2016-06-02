@@ -25,7 +25,7 @@
 
         <include layout="@layout/add_vehicle_details" />
 
-        <include layout="@layout/vehicle" />
+        <include layout="@layout/newvehicle" />
 
         <include layout="@layout/expiry_date" />
 

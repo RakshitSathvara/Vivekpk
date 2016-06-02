@@ -106,9 +106,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         holder.VehicleNumber.setText(details.getVehicleNo());
         holder.VehicleBrand.setText(vehicleModels.getManufacturerName());
-//        myApplication.showLog(TAG, String.valueOf(details.getVehicleModelID()));
         holder.VehicleModel.setText(vehicleModels.getModel());
-//        holder.VehicleModel.setText(details.getVehicleModelID());
+
         holder.btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -64,7 +64,6 @@ public class SigninFragment extends Fragment {
     VehicleModels vehicleModels;
     InsuranceCompanies insuranceCompanies;
     VehicleDetails vehicleDetails;
-
     EmergencyContact emergencyContact;
 
     @Override
@@ -79,7 +78,7 @@ public class SigninFragment extends Fragment {
         btnSignIn = (Button) rootView.findViewById(R.id.btn_signin);
 
         myApplication = MyApplication.getInstance();
-        realm = Realm.getDefaultInstance();
+
         myApplication.createDialog(getActivity(), false);
 
         btnSignIn.setOnClickListener(new View.OnClickListener() {
@@ -110,11 +109,11 @@ public class SigninFragment extends Fragment {
         mPassword = etPassword.getText().toString();
 
 
-        signUp(mContactNo, mPassword);
+        signIn(mContactNo, mPassword);
 
     }
 
-    private void signUp(final String mContactNo, final String mPassword) {
+    private void signIn(final String mContactNo, final String mPassword) {
         String tag_string_req = "req_login";
 
         myApplication.DialogMessage("Loging in...");
@@ -431,26 +430,31 @@ public class SigninFragment extends Fragment {
                                     String insuranceExpDate = jsonObject.getString("insuranceExpDate");
                                     String pollutionExpDate = jsonObject.getString("pollutionExpDate");
                                     String service_exp_date = jsonObject.getString("service_exp_date");
+                                    String note = jsonObject.getString("note");
+                                    String type = jsonObject.getString("type");
 //                                    String createdAt = jsonObject.getString("createdAt");
 //                                    String updatedAt = jsonObject.getString("updatedAt");
 
                                     vehicleDetails = realm.createObject(VehicleDetails.class);
 
                                     vehicleDetails.setVehicleId(id);
-                                    vehicleDetails.setVehicleBrandName(VehicleName);
+                                    vehicleDetails.setName(VehicleName);
                                     vehicleDetails.setVehicleModelID(modelId);
                                     vehicleDetails.setVehicleNo(vehicleNo);
                                     vehicleDetails.setInsuranceCompany(insuranceCompany);
                                     vehicleDetails.setInsuranceExpireDate(insuranceExpDate);
                                     vehicleDetails.setPollutionExpireDate(pollutionExpDate);
                                     vehicleDetails.setServiceExpireDate(service_exp_date);
+                                    vehicleDetails.setNote(note);
+                                    vehicleDetails.setType(type);
 
 
                                 }
                                 realm.commitTransaction();
-                                //    myApplication.hideDialog();
+                                myApplication.hideDialog();
 
                                 LoadingEmergenyContact();
+
 
                             } else {
                                 String errorMsg = response.getString("message");
@@ -484,8 +488,6 @@ public class SigninFragment extends Fragment {
         };
         myApplication.addToRequestQueue(request);
     }
-
-    //------------------------------------------------------------//
 
     private void LoadingEmergenyContact() {
         myApplication.DialogMessage("Loading Emergency Contact...");
@@ -502,9 +504,9 @@ public class SigninFragment extends Fragment {
                                 realm.beginTransaction();
                                 // Getting JSON Array node
                                 JSONArray results1 = response.getJSONArray("result");
-                                myApplication.showLog(TAG, "" + results1.length());
+                                myApplication.showLog(TAG,""+results1.length());
 
-                                if (results1.length() > 0) {
+                                if (results1.length() > 0){
                                     for (int i = 0; i < results1.length(); i++) {
 
                                         JSONObject jsonObject = results1.getJSONObject(i);
@@ -517,18 +519,25 @@ public class SigninFragment extends Fragment {
                                         emergencyContact.setId(id);
                                         emergencyContact.setContactName(name);
                                         emergencyContact.setPhoneNumber(phone);
+
                                     }
                                     realm.commitTransaction();
                                     myApplication.hideDialog();
-                                }
-                                startActivity(new Intent(getActivity(), HomeActivity.class));
-                                getActivity().finish();
-                            } else {
 
-                                String errorMsg = response.getString("message");
+                                    startActivity(new Intent(getActivity(), HomeActivity.class));
+
+
+                                } else {
+                                    String errorMsg = response.getString("message");
+                                    Toast.makeText(getActivity(),
+                                            "Error :" + errorMsg, Toast.LENGTH_LONG).show();
+                                    myApplication.hideDialog();
+
+                                }
+                            }else {
+
                                 Toast.makeText(getActivity(),
-                                        "Error :" + errorMsg, Toast.LENGTH_LONG).show();
-                                myApplication.hideDialog();
+                                        "Error :" + "Lenth is o", Toast.LENGTH_LONG).show();
                             }
 
 
@@ -558,46 +567,6 @@ public class SigninFragment extends Fragment {
         myApplication.addToRequestQueue(request);
     }
 
-    private void det() {
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, AppConfig.URL_EMERGENY_CONTACT, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> stringMap = new HashMap<>();
-                stringMap.put("id", "23");
-                return stringMap;
-            }
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-
-                HashMap<String, String> hashMap = new HashMap<>();
-                hashMap.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
-
-                return hashMap;
-            }
-
-            @Override
-            public String getBodyContentType() {
-                return "application/json";
-            }
-        };
-
-
-        MyApplication.getInstance().addToRequestQueue(jsonObjectRequest);
-
-//        hashMap.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
-    }
 
     @Override
     public void onStop() {

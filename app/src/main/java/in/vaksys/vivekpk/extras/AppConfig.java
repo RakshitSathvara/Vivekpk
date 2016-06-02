@@ -14,9 +14,9 @@ public class AppConfig {
 
     public static String URL_ADD_USER_VEHICLE = URL_ROOT + "v1/userVehicle";
 
-    public static String URL_ADD_VEHICLE_MODEL = URL_ROOT + "v1/vehicleModel";
+    public static String URL_DELETE_USER_VEHICLE = URL_ROOT + "v1/userVehicle?id=";
 
-    public static String URL_GET_USER_VEHICLE= URL_ROOT + "v1/userVehicles";
+    public static String URL_GET_USER_VEHICLE = URL_ROOT + "v1/userVehicles";
 
     public static String URL_GET_INSURANCE_COMPANY = URL_ROOT + "v1/insurancecompanies";
 
@@ -28,6 +28,13 @@ public class AppConfig {
 
     public static final String URL_UPLOAD_DOC = URL_ROOT + "v1/upload";
 
+    public static final String URL_CLAIM_VEHICLE = URL_ROOT + "v1/claimvehicle";
+
+    public static final String URL_UPDATE_USER = URL_ROOT + "v1/user";
     public static final String URL_EMERGENY_CONTACT = URL_ROOT + "v1/contact";
+
+
+    public static final String URL_TEMP = "http://jarvis007.16mb.com/backend/v1/";
+
 
 }

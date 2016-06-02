@@ -15,7 +15,7 @@
 
     <include layout="@layout/search_invite" />
 
-    <include layout="@layout/vehicle" />
+    <include layout="@layout/newvehicle" />
 
     <include layout="@layout/reason_for_contacting" />
 

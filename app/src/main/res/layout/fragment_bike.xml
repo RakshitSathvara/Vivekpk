@@ -2,13 +2,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="in.vaksys.vivekpk.fragments.CarFragment">
+    tools:context="in.vaksys.vivekpk.fragments.BikeFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <include layout="@layout/enter_car_details" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/bikeRecycle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp" />
+        <!--tools:listitem="@layout/vehicle"-->
+
+        <include
+            android:id="@+id/add_car_detail_bike"
+            layout="@layout/enter_car_details" />
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:id="@+id/AddVehicleBtnLayoutbike"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="#FFFFFF"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btn_addVVehiclebike"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@null"
+                android:drawableLeft="@drawable/add_button_gallery"
+                android:drawablePadding="15dp"
+                android:gravity="center"
+                android:text="Add Vehicle"
+                android:textAllCaps="false" />
+        </LinearLayout>
+
     </LinearLayout>
 </ScrollView>
