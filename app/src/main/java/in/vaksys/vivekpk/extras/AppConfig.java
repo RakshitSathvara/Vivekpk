@@ -28,4 +28,6 @@ public class AppConfig {
 
     public static final String URL_UPLOAD_DOC = URL_ROOT + "v1/upload";
 
+    public static final String URL_EMERGENY_CONTACT = URL_ROOT + "v1/contact";
+
 }

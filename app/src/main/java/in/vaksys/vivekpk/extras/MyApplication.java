@@ -50,9 +50,9 @@ public class MyApplication extends Application {
         mInstance = this;
 
         RealmConfiguration configuration = new RealmConfiguration.Builder(this)
-                .name("DaddysRoad231.realm")
+                .name("DaddysRoad23123.realm")
                 .deleteRealmIfMigrationNeeded()
-                .schemaVersion(9)
+                .schemaVersion(10)
                 .build();
         Realm.setDefaultConfiguration(configuration);
 

@@ -33,6 +33,7 @@ import java.util.UUID;
 
 import in.vaksys.vivekpk.R;
 import in.vaksys.vivekpk.activities.HomeActivity;
+import in.vaksys.vivekpk.dbPojo.EmergencyContact;
 import in.vaksys.vivekpk.dbPojo.InsuranceCompanies;
 import in.vaksys.vivekpk.dbPojo.Users;
 import in.vaksys.vivekpk.dbPojo.VehicleDetails;
@@ -64,6 +65,8 @@ public class SigninFragment extends Fragment {
     InsuranceCompanies insuranceCompanies;
     VehicleDetails vehicleDetails;
 
+    EmergencyContact emergencyContact;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -76,7 +79,7 @@ public class SigninFragment extends Fragment {
         btnSignIn = (Button) rootView.findViewById(R.id.btn_signin);
 
         myApplication = MyApplication.getInstance();
-
+        realm = Realm.getDefaultInstance();
         myApplication.createDialog(getActivity(), false);
 
         btnSignIn.setOnClickListener(new View.OnClickListener() {
@@ -445,10 +448,9 @@ public class SigninFragment extends Fragment {
 
                                 }
                                 realm.commitTransaction();
-                                myApplication.hideDialog();
+                                //    myApplication.hideDialog();
 
-                                startActivity(new Intent(getActivity(), HomeActivity.class));
-
+                                LoadingEmergenyContact();
 
                             } else {
                                 String errorMsg = response.getString("message");
@@ -483,12 +485,126 @@ public class SigninFragment extends Fragment {
         myApplication.addToRequestQueue(request);
     }
 
+    //------------------------------------------------------------//
+
+    private void LoadingEmergenyContact() {
+        myApplication.DialogMessage("Loading Emergency Contact...");
+//        myApplication.showDialog();
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, AppConfig.URL_EMERGENY_CONTACT,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+//                setAreaSpinner();
+                        try {
+
+                            boolean error = response.getBoolean("error");
+                            if (!error) {
+                                realm.beginTransaction();
+                                // Getting JSON Array node
+                                JSONArray results1 = response.getJSONArray("result");
+                                myApplication.showLog(TAG, "" + results1.length());
+
+                                if (results1.length() > 0) {
+                                    for (int i = 0; i < results1.length(); i++) {
+
+                                        JSONObject jsonObject = results1.getJSONObject(i);
+                                        int id = jsonObject.getInt("id");
+                                        String name = jsonObject.getString("name");
+                                        String phone = jsonObject.getString("phone");
+
+                                        emergencyContact = realm.createObject(EmergencyContact.class);
+
+                                        emergencyContact.setId(id);
+                                        emergencyContact.setContactName(name);
+                                        emergencyContact.setPhoneNumber(phone);
+                                    }
+                                    realm.commitTransaction();
+                                    myApplication.hideDialog();
+                                }
+                                startActivity(new Intent(getActivity(), HomeActivity.class));
+                                getActivity().finish();
+                            } else {
+
+                                String errorMsg = response.getString("message");
+                                Toast.makeText(getActivity(),
+                                        "Error :" + errorMsg, Toast.LENGTH_LONG).show();
+                                myApplication.hideDialog();
+                            }
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            myApplication.hideDialog();
+
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                myApplication.hideDialog();
+                //Toast.makeText(getApplicationContext(), "Responce : " + error, Toast.LENGTH_LONG).show();
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                    myApplication.ErrorSnackBar(getActivity());
+                }
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+                return headers;
+            }
+        };
+        myApplication.addToRequestQueue(request);
+    }
+
+    private void det() {
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, AppConfig.URL_EMERGENY_CONTACT, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> stringMap = new HashMap<>();
+                stringMap.put("id", "23");
+                return stringMap;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+
+                return hashMap;
+            }
+
+            @Override
+            public String getBodyContentType() {
+                return "application/json";
+            }
+        };
+
+
+        MyApplication.getInstance().addToRequestQueue(jsonObjectRequest);
+
+//        hashMap.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+    }
+
     @Override
     public void onStop() {
         super.onStop();
         // Remember to close the Realm instance when done with it.
         // TODO: 19-05-2016 handle realm.close();
-         realm.close();
+        realm.close();
     }
 
     private boolean validateNumber() {
@@ -526,8 +642,6 @@ public class SigninFragment extends Fragment {
             getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
-
-
 
 
 }

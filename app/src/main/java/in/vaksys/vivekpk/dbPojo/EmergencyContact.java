@@ -36,4 +36,6 @@ public class EmergencyContact extends RealmObject {
     public void setPhoneNumber(String phoneNumber) {
         PhoneNumber = phoneNumber;
     }
+
+
 }

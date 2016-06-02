@@ -14,7 +14,7 @@ public class VehicleDetails extends RealmObject {
     private String NotificationDate;
 
     private String ReminderTpe;
-
+    // TODO: 30-05-2016 remove this column and relevent activities like in signin fragment
     private String VehicleBrandName;
 
     private int VehicleModelID;

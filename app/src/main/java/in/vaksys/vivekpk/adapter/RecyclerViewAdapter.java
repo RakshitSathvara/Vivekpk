@@ -27,6 +27,7 @@ import butterknife.ButterKnife;
 import in.vaksys.vivekpk.R;
 import in.vaksys.vivekpk.dbPojo.InsuranceCompanies;
 import in.vaksys.vivekpk.dbPojo.VehicleDetails;
+import in.vaksys.vivekpk.dbPojo.VehicleModels;
 import in.vaksys.vivekpk.extras.MyApplication;
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -101,9 +102,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(final AdapterHolder holder, int position) {
         details = detailses.get(position);
+        VehicleModels vehicleModels = realm.where(VehicleModels.class).equalTo("id", details.getVehicleModelID()).findFirst();
 
         holder.VehicleNumber.setText(details.getVehicleNo());
-        holder.VehicleBrand.setText(details.getVehicleBrandName());
+        holder.VehicleBrand.setText(vehicleModels.getManufacturerName());
+//        myApplication.showLog(TAG, String.valueOf(details.getVehicleModelID()));
+        holder.VehicleModel.setText(vehicleModels.getModel());
 //        holder.VehicleModel.setText(details.getVehicleModelID());
         holder.btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override

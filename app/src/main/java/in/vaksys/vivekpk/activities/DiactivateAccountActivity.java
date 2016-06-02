@@ -29,7 +29,7 @@ public class DiactivateAccountActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-    }
+}
 
     /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {

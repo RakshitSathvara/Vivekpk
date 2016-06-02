@@ -184,9 +184,9 @@ public class VolleyHelper {
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("name", name);
-                params.put("modelId", String.valueOf(modelid));
-                params.put("vehicleNo", vehicle_number);
-                params.put("type", type);
+//                params.put("modelId", String.valueOf(modelid));
+//                params.put("vehicleNo", vehicle_number);
+//                params.put("type", type);
 
                 return params;
             }
