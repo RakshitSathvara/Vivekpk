@@ -55,7 +55,7 @@ public class CarFragment extends Fragment {
 
     private static final String TAG = "carFragment";
     Spinner spSelectmake, spCarModel;
-    @Bind(R.id.carDetailRecyclerView)
+    @Bind(R.id.carRecycle)
     RecyclerView carDetailRecyclerView;
     EditText etCarDetails;
     Button btnContinue;
@@ -93,6 +93,11 @@ public class CarFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_car, container, false);
         ButterKnife.bind(this, rootView);
+
+
+        RecyclerView.LayoutManager manager = new LinearLayoutManager(getActivity());
+        carDetailRecyclerView.setLayoutManager(manager);
+
 
         addCarView.setVisibility(View.GONE);
         carDetailRecyclerView.setVisibility(View.GONE);
@@ -350,9 +355,8 @@ public class CarFragment extends Fragment {
 
     private void SetCarDetailsList() {
 
-        carDetailRecyclerView.setHasFixedSize(true);
-        LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-        carDetailRecyclerView.setLayoutManager(manager);
+//        carDetailRecyclerView.setHasFixedSize(true);
+
         results = realm.where(VehicleDetails.class).equalTo("type", "car").findAll();
         if (results.size() > 0) {
             carDetailRecyclerView.setVisibility(View.VISIBLE);
