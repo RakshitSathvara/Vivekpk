@@ -47,7 +47,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/tv_date"
+                        android:id="@+id/tv_date_serv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Expiry Date"

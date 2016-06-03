@@ -230,7 +230,7 @@ public class MyAccountActivity extends AppCompatActivity {
     }
 
     private void loadData() {
-        Users user = realm.createObject(Users.class);
+        Users user = realm.where(Users.class).findFirst();
 
         etFirstName.setText(user.getFirstName());
         etLastName.setText(user.getLastName());

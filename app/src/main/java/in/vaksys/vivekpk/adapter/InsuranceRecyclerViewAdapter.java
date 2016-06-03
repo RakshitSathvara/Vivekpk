@@ -29,18 +29,22 @@ import in.vaksys.vivekpk.dbPojo.InsuranceCompanies;
 import in.vaksys.vivekpk.dbPojo.VehicleDetails;
 import in.vaksys.vivekpk.dbPojo.VehicleModels;
 import in.vaksys.vivekpk.extras.MyApplication;
+import in.vaksys.vivekpk.extras.VolleyHelper;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmModel;
 import io.realm.RealmResults;
 
 /**
  * Created by Harsh on 26-05-2016.
  */
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.AdapterHolder> {
+public class InsuranceRecyclerViewAdapter extends RecyclerView.Adapter<InsuranceRecyclerViewAdapter.AdapterHolder> {
 
+    private static final String BLANK = "";
     private final Context context;
     private final RealmResults<VehicleDetails> detailses;
     MyApplication myApplication;
-    private static final String TAG = "RecyclerViewAdapter";
+    private static final String TAG = "InsuranceRecyclerViewAdapter";
     private Realm realm;
     private String modelSpinnItem;
     private String myid;
@@ -53,7 +57,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     //    Calendar newDate;
 
-    public RecyclerViewAdapter(Context context, RealmResults<VehicleDetails> detailses) {
+    public InsuranceRecyclerViewAdapter(Context context, RealmResults<VehicleDetails> detailses) {
 
         this.myApplication = MyApplication.getInstance();
         realm = Realm.getDefaultInstance();
@@ -104,6 +108,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         details = detailses.get(position);
         VehicleModels vehicleModels = realm.where(VehicleModels.class).equalTo("id", details.getVehicleModelID()).findFirst();
 
+        holder.VehicleIDHiddden.setText(String.valueOf(details.getVehicleId()));
+
         holder.VehicleNumber.setText(details.getVehicleNo());
         holder.VehicleBrand.setText(vehicleModels.getManufacturerName());
         holder.VehicleModel.setText(vehicleModels.getModel());
@@ -111,7 +117,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                AddUpdateReminder(holder.VehicleIDHiddden.getText().toString(),
+                        details.getVehicleModelID(), myid, holder.date.getText().toString(), BLANK, BLANK, BLANK);
             }
         });
         holder.btnCancel.setOnClickListener(new View.OnClickListener() {
@@ -129,6 +136,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         });
         setupInsuranceSpinner(holder.mSpinner);
         //   holder.date.setText(myApplication.getmDate());
+    }
+
+    private void AddUpdateReminder(String VehicleId, int vehicleModelID, String InsuranceCompany,
+                                   String Ins_exp_date, String Poll_exp_date, String Serv_exp_date, String Note) {
+
+        VolleyHelper helper = new VolleyHelper((Activity) context);
+        helper.UpdateVehicle(Integer.parseInt(VehicleId), vehicleModelID, InsuranceCompany, Ins_exp_date, Poll_exp_date, Serv_exp_date, Note);
+        detailses.addChangeListener(new RealmChangeListener<RealmResults<VehicleDetails>>() {
+            @Override
+            public void onChange(RealmResults<VehicleDetails> element) {
+                notifyDataSetChanged();
+            }
+        });
     }
 
     private void SetData(final AdapterHolder holder) {
@@ -182,6 +202,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Button btnConfirm;
         @Bind(R.id.select_expiry_date_insurance)
         LinearLayout SelectDate;
+        @Bind(R.id.vehcileIdHidden_det)
+        TextView VehicleIDHiddden;
+
 
         AdapterHolder(View view) {
             super(view);

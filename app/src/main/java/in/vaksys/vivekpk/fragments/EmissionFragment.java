@@ -21,9 +21,6 @@ import android.widget.Toast;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -85,7 +82,7 @@ public class EmissionFragment extends Fragment {
             }
         });*/
 
-        tvDate = (TextView) rootView.findViewById(R.id.tv_date);
+        tvDate = (TextView) rootView.findViewById(R.id.tv_date_exp);
 
         linearVehicle = (LinearLayout) rootView.findViewById(R.id.linearVehicleDetails);
         linearExpiryDate = (LinearLayout) rootView.findViewById(R.id.linearExpiryDate);

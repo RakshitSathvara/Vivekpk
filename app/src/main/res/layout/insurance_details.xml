@@ -33,7 +33,7 @@
                     android:textStyle="bold" />
 
                 <ImageView
-                    android:id="@+id/img_vehicelDetailEdit"
+                    android:id="@+id/img_vehicelDetailEdit_det"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|right"
@@ -64,13 +64,19 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_detailvehicleNumber"
+                        android:id="@+id/tv_detailvehicleNumber_det"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginTop="5dp"
                         android:text="KA05j95959"
                         android:textColor="#83837F" />
+
+                    <TextView
+                        android:id="@+id/vehcileIdHidden_dets"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone" />
 
                 </LinearLayout>
 
@@ -97,7 +103,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_detailvehicleBrand"
+                        android:id="@+id/tv_detailvehicleBrand_det"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -130,7 +136,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_detailvehicleNumberModel"
+                        android:id="@+id/tv_detailvehicleNumberModel_det"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -175,7 +181,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_companyName"
+                        android:id="@+id/tv_companyName_det"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
@@ -230,7 +236,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_date"
+                        android:id="@+id/tv_date_det"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"

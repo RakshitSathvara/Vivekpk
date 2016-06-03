@@ -2,7 +2,6 @@ package in.vaksys.vivekpk.fragments;
 
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -11,12 +10,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import in.vaksys.vivekpk.R;
 import in.vaksys.vivekpk.adapter.ViewPagerAdapter;
-import in.vaksys.vivekpk.extras.MyApplication;
-import in.vaksys.vivekpk.extras.SpinnerCallback;
 
 /**
  * Created by Harsh on 03-05-2016.
@@ -57,6 +53,8 @@ public class MainTabFragment extends Fragment {
         viewPager = (ViewPager) view.findViewById(R.id.viewpager1);
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
+        viewPager.setCurrentItem(0);
+
         /*status = MyApplication.getInstance().getValue();
         if (status == 0) {
             viewPager.setCurrentItem(0);

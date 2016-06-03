@@ -9,6 +9,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -23,6 +24,8 @@ import in.vaksys.vivekpk.dbPojo.VehicleDetails;
 import in.vaksys.vivekpk.model.ClaimMessage;
 import io.realm.Realm;
 import io.realm.RealmResults;
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
@@ -145,6 +148,7 @@ public class VolleyHelper {
 
     }
 
+
     public void UpdateVehicle(final int VehicleId, final int modelid, final String insuranceCompany, final String insurace_exp_date,
                               final String pollution_exp_date, final String service_exp_date, final String note) {
 
@@ -235,55 +239,78 @@ public class VolleyHelper {
 
 
         okhttp3.Request request = new okhttp3.Request.Builder()
-                .url(AppConfig.URL_TEMP + "/userVehicle")
+                .url(AppConfig.URL_DELETE_USER_VEHICLE)
                 .delete(formBody)
-                .addHeader("authorization", "99742a0bbcf11b9ac6b10e90b3a76f34")
+                .addHeader("Authorization", "52d8c0efea5039cd0d778db7521889cf")
                 .build();
 
-
-        client.newCall(request).enqueue(new okhttp3.Callback() {
+        client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(okhttp3.Call call, IOException e) {
+            public void onFailure(Call call, IOException e) {
                 myApplication.ErrorSnackBar(activity);
                 myApplication.hideDialog();
             }
 
             @Override
-            public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
+            public void onResponse(Call call, okhttp3.Response response) throws IOException {
+
                 myApplication.hideDialog();
 
-                myApplication.showLog(TAG, String.valueOf(response.code()));
-                myApplication.showLog(TAG, String.valueOf(response.body().string()));
+//                myApplication.showLog(TAG, String.valueOf(response.code()));
+                myApplication.showLog(TAG, response.body().string().toString());
 
-
-                if (!response.isSuccessful()) {
+//                System.out.print(response.body().string());
+               /* if (!response.isSuccessful()) {
                     throw new IOException("Unexpected code " + response);
                 } else {
                     try {
-                        String aa = response.body().string().trim();
-                        JSONObject jObj = new JSONObject(aa);
-                        myApplication.showLog(TAG, jObj.toString());
+                        Reader aa = response.body().charStream();
 
-                        boolean error = jObj.getBoolean("error");
-                        Log.e(TAG, "onResponse: " + jObj.toString());
+                        Gson gson = new Gson();
 
-                        // Check for error node in json
-                        if (!error) {
-                            Toast.makeText(activity,
-                                    "Delete Successfull... ", Toast.LENGTH_LONG).show();
+                        DeleteData response11 = gson.fromJson(aa, DeleteData.class);
 
-                            DeleteIntoDatabase(VehicleId);
-                        } else {
-                            String errorMsg = jObj.getString("message");
-                            Toast.makeText(activity,
-                                    "Error :" + errorMsg, Toast.LENGTH_LONG).show();
-                        }
-                    } catch (JSONException e) {
-                        // JSON error
+                        Log.e(TAG, "onResponse: " + response11.getMessage());
+                    } catch (JsonSyntaxException | JsonIOException e) {
                         e.printStackTrace();
-//                    Toast.makeText(activity, "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                     }
+*/
+
+                try {
+//                    String aa = (response.body().string()).replaceAll("\\s+", "");
+                        /*JsonObject aaa = new JsonObject();
+                        aaa.add("ad",aa);
+                        JsonParser parser = new JsonParser();
+                        JsonObject o = parser.parse(aa).getAsJsonObject();
+*/
+                    JSONObject jObj = new JSONObject(response.body().string().toString());
+
+                    myApplication.showLog(TAG, jObj.toString());
+
+                    Gson gson = new Gson();
+
+                    DeleteData response11 = gson.fromJson((response.body().string()).replaceAll("\\s+", ""), DeleteData.class);
+
+                    boolean error = jObj.getBoolean("error");
+                    Log.e(TAG, "onResponse: " + response11.getMessage());
+
+                    // Check for error node in json
+                    if (!error) {
+                        Toast.makeText(activity,
+                                "Delete Successfull... ", Toast.LENGTH_LONG).show();
+
+                        DeleteIntoDatabase(VehicleId);
+                    } else {
+                        String errorMsg = jObj.getString("message");
+                        Toast.makeText(activity,
+                                "Error :" + errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    // JSON error
+                    e.printStackTrace();
+//                    Toast.makeText(activity, "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 }
+
             }
         });
 
