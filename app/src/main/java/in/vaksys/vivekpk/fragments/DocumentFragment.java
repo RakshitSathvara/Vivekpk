@@ -1,10 +1,7 @@
 package in.vaksys.vivekpk.fragments;
 
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -16,11 +13,9 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,36 +25,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NoConnectionError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.TimeoutError;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
-
 import org.greenrobot.eventbus.EventBus;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Random;
 
 import in.vaksys.vivekpk.R;
-import in.vaksys.vivekpk.activities.HomeActivity;
 import in.vaksys.vivekpk.adapter.ImageAdapter;
 import in.vaksys.vivekpk.dbPojo.UserImages;
-import in.vaksys.vivekpk.dbPojo.VehicleModels;
-import in.vaksys.vivekpk.extras.AppConfig;
 import in.vaksys.vivekpk.extras.MyApplication;
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -68,13 +46,26 @@ import io.realm.RealmResults;
  * A simple {@link Fragment} subclass.
  */
 public class DocumentFragment extends Fragment {
+    public static final int MEDIA_TYPE_IMAGE = 1;
     private static final String TAG = "DocumentFragment";
+    private static final String IMAGE_DIRECTORY_NAME = "EzyRidePhotos";
+    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
+    public static String timeStamp, myImageUrl;
+    public Uri fileUri;
+    public int PICK_IMAGE_REQUEST = 1;
+    Bitmap bitmap;
+    MyApplication myApplication;
+    UserImages userImages;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+    ImageAdapter imageAdapter;
+    RecyclerView ImageRecyclerview;
+    RealmResults<UserImages> results;
     private LinearLayout linearAddDrivingLicense;
     private LinearLayout linearAddGallery;
     private ImageView imgAddGallery;
     private LinearLayout linearAddCamera;
     private ImageView imgAddCamera;
-
     private LinearLayout linearYourDrivingLicense;
     private ImageView imgLicenseImgEdit;
     private ImageView imgLicenseImgOne;
@@ -103,29 +94,10 @@ public class DocumentFragment extends Fragment {
     private LinearLayout linearVehicelDocBills;
     private LinearLayout numberRcBills;
     private TextView tvBillsCount;
-
     private Button btnRegisterVehicle;
     private LinearLayout linearVehicleDetailsListRaw;
-
-    public Uri fileUri;
-    private static final String IMAGE_DIRECTORY_NAME = "EzyRidePhotos";
-    public int PICK_IMAGE_REQUEST = 1;
-    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
-    public static final int MEDIA_TYPE_IMAGE = 1;
-    public static String timeStamp, myImageUrl;
-    Bitmap bitmap;
     private Uri filePath;
-
-    MyApplication myApplication;
     private Realm realm;
-    UserImages userImages;
-
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
-
-    ImageAdapter imageAdapter;
-    RecyclerView ImageRecyclerview;
-    RealmResults<UserImages> results;
     //private MultiStateToggleButton multiStateToggleButton;
     private EventBus bus = EventBus.getDefault();
 
@@ -137,6 +109,33 @@ public class DocumentFragment extends Fragment {
         return fragment;
     }
 
+    private static File getOutputMediaFile(int type) {
+
+        // External sdcard location
+        File mediaStorageDir = new File(
+                Environment
+                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                IMAGE_DIRECTORY_NAME);
+
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                MyApplication.getInstance().showLog(TAG, "Oops! Failed create " + IMAGE_DIRECTORY_NAME + " directory");
+                return null;
+            }
+        }
+// Create a media file name
+        timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
+                Locale.getDefault()).format(new Date());
+        File mediaFile;
+        if (type == MEDIA_TYPE_IMAGE) {
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator
+                    + "IMG_" + timeStamp + ".jpg");
+        } else {
+            return null;
+        }
+        return mediaFile;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -209,7 +208,6 @@ public class DocumentFragment extends Fragment {
         });*/
         return view;
     }
-
 
     private void SetImagesViews() {
         myApplication.showLog(TAG, "innerview");
@@ -297,34 +295,6 @@ public class DocumentFragment extends Fragment {
         return Uri.fromFile(getOutputMediaFile(type));
     }
 
-    private static File getOutputMediaFile(int type) {
-
-        // External sdcard location
-        File mediaStorageDir = new File(
-                Environment
-                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                IMAGE_DIRECTORY_NAME);
-
-        // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-                MyApplication.getInstance().showLog(TAG, "Oops! Failed create " + IMAGE_DIRECTORY_NAME + " directory");
-                return null;
-            }
-        }
-// Create a media file name
-        timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
-                Locale.getDefault()).format(new Date());
-        File mediaFile;
-        if (type == MEDIA_TYPE_IMAGE) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator
-                    + "IMG_" + timeStamp + ".jpg");
-        } else {
-            return null;
-        }
-        return mediaFile;
-    }
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -404,7 +374,7 @@ public class DocumentFragment extends Fragment {
     private String getRealPathFromURI(Uri contentURI) {
         Uri contentUri = Uri.parse(String.valueOf(contentURI));
 
-        String[] projection = { MediaStore.Images.Media.DATA };
+        String[] projection = {MediaStore.Images.Media.DATA};
         Cursor cursor = null;
         try {
             if (Build.VERSION.SDK_INT > 19) {
@@ -417,7 +387,7 @@ public class DocumentFragment extends Fragment {
 
                 cursor = getActivity().getContentResolver().query(
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                        projection, sel, new String[] { id }, null);
+                        projection, sel, new String[]{id}, null);
             } else {
                 cursor = getActivity().getContentResolver().query(contentUri,
                         projection, null, null, null);
@@ -449,7 +419,7 @@ public class DocumentFragment extends Fragment {
 
         String calString = String.valueOf(fileSizeInMB);
 
-        myApplication.showLog("image lenth is ------>>>",calString);
+        myApplication.showLog("image lenth is ------>>>", calString);
 
         return calString;
     }

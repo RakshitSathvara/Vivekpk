@@ -64,7 +64,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_detailvehicleNumber"
+                        android:id="@+id/tv_insurance_detailvehicle_Number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -97,7 +97,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_detailvehicleBrand"
+                        android:id="@+id/tv_insurance_detailvehicle_Brand"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -130,7 +130,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_detailvehicleNumberModel"
+                        android:id="@+id/tv_insurance_detailvehicle_Model"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -175,7 +175,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_companyName"
+                        android:id="@+id/tv_insurance_detailvehicle_companyName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
@@ -188,6 +188,7 @@
                     android:id="@+id/img_edit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
                     android:src="@drawable/edit_icon" />
 
             </LinearLayout>
@@ -218,6 +219,7 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
                     android:layout_weight="4"
                     android:orientation="vertical">
 
@@ -230,7 +232,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_date"
+                        android:id="@+id/tv_insurance_detailvehicle_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"

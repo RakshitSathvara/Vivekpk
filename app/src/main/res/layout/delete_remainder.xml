@@ -23,7 +23,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tv_vehicleNumber"
+            android:id="@+id/tv_delete_dialog_vehicleNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -34,7 +34,7 @@
 
 
         <TextView
-            android:id="@+id/tv_vehicleModel"
+            android:id="@+id/tv_delete_dialog_vehicleModel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -59,7 +59,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btn_reminder_cancel"
+            android:id="@+id/btn_delete_dialog_cancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -74,7 +74,7 @@
             android:background="#929091" />
 
         <Button
-            android:id="@+id/btn_reminder_delete"
+            android:id="@+id/btn_delete_dialog_delete"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

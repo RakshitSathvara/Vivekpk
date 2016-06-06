@@ -30,8 +30,15 @@ public class MyApplication extends Application {
     public static final String TAG = MyApplication.class.getSimpleName();
 
     private static MyApplication mInstance;
+    int value;
     private RequestQueue mRequestQueue;
     private ProgressDialog pDialog;
+    private String mDate;
+
+    // common in volley singleton and analytics
+    public static synchronized MyApplication getInstance() {
+        return mInstance;
+    }
 
     public int getValue() {
         return value;
@@ -40,9 +47,6 @@ public class MyApplication extends Application {
     public void setValue(int value) {
         this.value = value;
     }
-
-    int value;
-    private String mDate;
 
     @Override
     public void onCreate() {
@@ -57,13 +61,6 @@ public class MyApplication extends Application {
         Realm.setDefaultConfiguration(configuration);
 
     }
-
-    // common in volley singleton and analytics
-    public static synchronized MyApplication getInstance() {
-        return mInstance;
-    }
-
-
 
     // for volley
     public RequestQueue getRequestQueue() {
@@ -131,9 +128,9 @@ public class MyApplication extends Application {
     public void hideDialog() {
         //// TODO: 23-05-2016  errorr solve
 
-            //show dialog
-            if (pDialog.isShowing())
-                pDialog.dismiss();
+        //show dialog
+        if (pDialog.isShowing())
+            pDialog.dismiss();
 
     }
 

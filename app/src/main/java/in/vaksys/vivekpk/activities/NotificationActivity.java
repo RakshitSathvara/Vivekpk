@@ -2,8 +2,8 @@ package in.vaksys.vivekpk.activities;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
@@ -18,8 +18,8 @@ import in.vaksys.vivekpk.R;
 
 public class NotificationActivity extends AppCompatActivity {
 
-    private Toolbar toolbar;
     Spinner spinner_select_value;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

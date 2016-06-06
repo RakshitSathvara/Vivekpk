@@ -30,21 +30,16 @@ import io.realm.RealmResults;
  */
 public class InsuranceFragment extends Fragment {
 
-    private TextView tvDate;
-
-    private DatePickerDialog fromDatePickerDialog;
-
-    private SimpleDateFormat dateFormatter;
-    private String SelectedDate;
     public static final String TAG = "DATE";
-
-    private Button btn_addVehicle, btn_setAlert, btn_setAlertDetail;
-
-    private Spinner spInsuranceCompany;
-
     RecyclerViewAdapter imageAdapter;
     RecyclerView InsuranceRecyclerview;
     RealmResults<VehicleDetails> results;
+    private TextView tvDate;
+    private DatePickerDialog fromDatePickerDialog;
+    private SimpleDateFormat dateFormatter;
+    private String SelectedDate;
+    private Button btn_addVehicle, btn_setAlert, btn_setAlertDetail;
+    private Spinner spInsuranceCompany;
     private MyApplication myApplication;
     private Realm realm;
 

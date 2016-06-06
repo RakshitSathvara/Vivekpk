@@ -21,9 +21,6 @@ import android.widget.Toast;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -38,21 +35,19 @@ import in.vaksys.vivekpk.model.Message;
  */
 public class EmissionFragment extends Fragment {
 
+    public static final String TAG = "DATE";
+    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+    Calendar c = Calendar.getInstance();
     private LinearLayout linearVehicle, linearAddVehicle, linearExpiryDate;
     private Button btn_addVehicle, btn_setAlert;
     private TextView tvDate;
-
     private DatePickerDialog fromDatePickerDialog;
-
     private SimpleDateFormat dateFormatter;
     private String SelectedDate;
-    public static final String TAG = "DATE";
-
 
     public EmissionFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -146,13 +141,13 @@ public class EmissionFragment extends Fragment {
                     @Override
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
 
-                        if(checkedId == R.id.radio1) {
+                        if (checkedId == R.id.radio1) {
                             Toast.makeText(getActivity(), "radio1",
                                     Toast.LENGTH_SHORT).show();
-                        } else if(checkedId == R.id.radio2) {
+                        } else if (checkedId == R.id.radio2) {
                             Toast.makeText(getActivity(), "radio2",
                                     Toast.LENGTH_SHORT).show();
-                        } else if(checkedId == R.id.radio3){
+                        } else if (checkedId == R.id.radio3) {
                             Toast.makeText(getActivity(), "radio3",
                                     Toast.LENGTH_SHORT).show();
                         }
@@ -175,9 +170,6 @@ public class EmissionFragment extends Fragment {
 
         return rootView;
     }
-
-    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
-    Calendar c = Calendar.getInstance();
 
     private void SelectfromDate() {
         c.add(Calendar.DAY_OF_MONTH, 26);

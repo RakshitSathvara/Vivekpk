@@ -33,20 +33,19 @@ import in.vaksys.vivekpk.model.Message;
  */
 public class ServiceFragment extends Fragment {
 
+    public static final String TAG = "DATE";
+    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+    Calendar c = Calendar.getInstance();
     private TextView tvDate;
-
     private DatePickerDialog fromDatePickerDialog;
-
     private SimpleDateFormat dateFormatter;
     private String SelectedDate;
-    public static final String TAG = "DATE";
     private LinearLayout linearVehicle, linearAddVehicle, linearServiceDueDate;
     private Button btn_addVehicle, btn_setAlert;
 
     public ServiceFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -114,9 +113,6 @@ public class ServiceFragment extends Fragment {
         return rootView;
     }
 
-    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
-    Calendar c = Calendar.getInstance();
-
     private void SelectfromDate() {
         c.add(Calendar.DAY_OF_MONTH, 26);  // number of days to add, can also use Calendar.DAY_OF_MONTH in place of Calendar.DATE
         String formattedDate = sdf.format(c.getTime()); // current date
@@ -146,8 +142,8 @@ public class ServiceFragment extends Fragment {
     }
 
     @Subscribe
-    public void onEvent(Message messageCar){
-        Log.e("car datata",messageCar.getMsg());
+    public void onEvent(Message messageCar) {
+        Log.e("car datata", messageCar.getMsg());
         Toast.makeText(getActivity(), messageCar.getMsg(), Toast.LENGTH_SHORT).show();
     }
 

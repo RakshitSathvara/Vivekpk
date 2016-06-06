@@ -30,10 +30,9 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 
     private final Context context;
     private final RealmResults<UserImages> userImages;
-    private Realm realm;
-
     MyApplication myApplication;
     UserImages userImages1;
+    private Realm realm;
 
     public ImageAdapter(Context context, RealmResults<UserImages> userImages) {
         this.context = context;
@@ -76,19 +75,6 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
         return (null != userImages ? userImages.size() : 0);
     }
 
-
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.single_image_id)
-        TextView ImgaeUUID;
-        @Bind(R.id.single_image)
-        ImageView ImageUser;
-
-        ViewHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-        }
-    }
-
     public void saveImageToDatabase(String bitmap, String ImageName) {
 
         try {
@@ -101,6 +87,18 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        @Bind(R.id.single_image_id)
+        TextView ImgaeUUID;
+        @Bind(R.id.single_image)
+        ImageView ImageUser;
+
+        ViewHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
         }
     }
 

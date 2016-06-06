@@ -49,7 +49,14 @@ import in.vaksys.vivekpk.model.Message;
 public class HomeActivity extends AppCompatActivity {
 
     private static final String TAG = "in activity";
-
+    ImageView img, notification;
+    LinearLayout linearHelpCenter, linearMenuMyaccount, linearMenuNews, linearMenuinvitefriend, linearRateApp, linearRefferalCode;
+    int i = 0;
+    MenuItem menuItem;
+    Menu menu;
+    TextView toolName;
+    ImageView imageToolBar;
+    PreferenceHelper prefs;
     private MainTabFragment currentFragment;
     private DocumentFragment documentFragment;
     private ReminderTabFragment reminderTabFragment;
@@ -58,19 +65,10 @@ public class HomeActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
     private AHBottomNavigation bottomNavigation;
     private Toolbar toolbar;
-    ImageView img, notification;
     private Spinner spinner_select_value;
     private CarFragment carFragment;
     private BikeFragment bikeFragment;
     private SpinnerCallback spinnerCallback;
-    LinearLayout linearHelpCenter, linearMenuMyaccount, linearMenuNews, linearMenuinvitefriend, linearRateApp, linearRefferalCode;
-    int i = 0;
-    MenuItem menuItem;
-    Menu menu;
-    TextView toolName;
-    ImageView imageToolBar;
-    PreferenceHelper prefs;
-
     private EventBus bus = EventBus.getDefault();
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -232,7 +230,7 @@ public class HomeActivity extends AppCompatActivity {
                     //toolbar.setTitle("");
                     toolName.setText("");
                     spinner_select_value.setVisibility(View.GONE);
-                  //  i = 0;
+                    //  i = 0;
                     //menuItem.setVisible(false);
                 } else if (position == 1) {
 //                    bottomNavigation.setNotification(0, 1);
@@ -240,17 +238,17 @@ public class HomeActivity extends AppCompatActivity {
                     //   MyApplication.getInstance().showLog("spinnnner valewe",item);
                     spinner_select_value.setVisibility(View.VISIBLE);
 
-                  ///  Bundle bundle = new Bundle();
-                  //  String myMessage = item;
-                  int v =  spinner_select_value.getVisibility();
-                    MyApplication.getInstance().showLog("spinnnner visibility :::::",""+ v);
+                    ///  Bundle bundle = new Bundle();
+                    //  String myMessage = item;
+                    int v = spinner_select_value.getVisibility();
+                    MyApplication.getInstance().showLog("spinnnner visibility :::::", "" + v);
 
-                    if (v == 0){
+                    if (v == 0) {
                         // Invisible
 
                         bus.post(new Message("car"));
 
-                    }else {
+                    } else {
                         //visible
 
                         bus.post(new Message(item));
@@ -264,7 +262,7 @@ public class HomeActivity extends AppCompatActivity {
 //                        MyApplication.getInstance().showLog("spinnnner valewe", "car");
 //                        bundle.putString("message", "car");
 //                    }
-                  //  reminderTabFragment.setArguments(bundle);
+                    //  reminderTabFragment.setArguments(bundle);
 
 
                     fragmentManager.beginTransaction()
@@ -275,7 +273,7 @@ public class HomeActivity extends AppCompatActivity {
                     toolName.setText("Reminder");
                     imageToolBar.setVisibility(View.GONE);
 
-                  //  i = 1;
+                    //  i = 1;
                     //menuItem.setVisible(false);
 
 
@@ -292,7 +290,7 @@ public class HomeActivity extends AppCompatActivity {
                     spinner_select_value.setVisibility(View.VISIBLE);
 
 
-                //    i = 1;
+                    //    i = 1;
                 } else if (position == 3) {
                     fragmentManager.beginTransaction()
                             .replace(R.id.fragment_container, emergencyFragment)
@@ -302,12 +300,12 @@ public class HomeActivity extends AppCompatActivity {
                     toolName.setText("Emergency");
                     imageToolBar.setVisibility(View.GONE);
                     spinner_select_value.setVisibility(View.VISIBLE);
-                 //   i = 1;
+                    //   i = 1;
                 } else if (!wasSelected) {
                     fragmentManager.beginTransaction()
                             .replace(R.id.fragment_container, currentFragment)
                             .commit();
-                  //  i = 1;
+                    //  i = 1;
 
                 }/*  else if (position > 0) {
 //                    currentFragment.refresh();

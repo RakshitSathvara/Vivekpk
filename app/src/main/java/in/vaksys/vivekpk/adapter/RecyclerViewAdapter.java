@@ -37,19 +37,19 @@ import io.realm.RealmResults;
  */
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.AdapterHolder> {
 
+    private static final String TAG = "RecyclerViewAdapter";
     private final Context context;
     private final RealmResults<VehicleDetails> detailses;
     MyApplication myApplication;
-    private static final String TAG = "RecyclerViewAdapter";
+    SimpleDateFormat sdf;
+    VehicleDetails details;
+    AdapterHolder viewHolder;
     private Realm realm;
     private String modelSpinnItem;
     private String myid;
     private DatePickerDialog fromDatePickerDialog;
     private SimpleDateFormat dateFormatter;
     private String SelectedDate;
-    SimpleDateFormat sdf;
-    VehicleDetails details;
-    AdapterHolder viewHolder;
 
     //    Calendar newDate;
 

@@ -13,7 +13,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,11 +44,6 @@ public class ListViewAdapter extends BaseAdapter {
         } catch (ClassCastException e) {
             throw new ClassCastException("Fragment must implement AdapterCallback.");
         }
-    }
-
-    public class ViewHolder {
-        TextView code;
-        TextView countryName;
     }
 
     @Override
@@ -120,6 +114,11 @@ public class ListViewAdapter extends BaseAdapter {
             }
         }
         notifyDataSetChanged();
+    }
+
+    public class ViewHolder {
+        TextView code;
+        TextView countryName;
     }
 
 }

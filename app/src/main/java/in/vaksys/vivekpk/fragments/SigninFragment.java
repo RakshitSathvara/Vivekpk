@@ -527,17 +527,13 @@ public class SigninFragment extends Fragment {
                                     startActivity(new Intent(getActivity(), HomeActivity.class));
 
 
-                                } else {
-                                    String errorMsg = response.getString("message");
-                                    Toast.makeText(getActivity(),
-                                            "Error :" + errorMsg, Toast.LENGTH_LONG).show();
-                                    myApplication.hideDialog();
-
                                 }
                             }else {
 
+                                String errorMsg = response.getString("message");
                                 Toast.makeText(getActivity(),
-                                        "Error :" + "Lenth is o", Toast.LENGTH_LONG).show();
+                                        "Error :" + errorMsg, Toast.LENGTH_LONG).show();
+                                myApplication.hideDialog();
                             }
 
 
