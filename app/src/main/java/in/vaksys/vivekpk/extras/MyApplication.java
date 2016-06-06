@@ -23,6 +23,11 @@ import com.nispok.snackbar.Snackbar;
 import com.nispok.snackbar.enums.SnackbarType;
 import com.nispok.snackbar.listeners.ActionClickListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
@@ -62,7 +67,6 @@ public class MyApplication extends Application {
     public static synchronized MyApplication getInstance() {
         return mInstance;
     }
-
 
 
     // for volley
@@ -131,9 +135,9 @@ public class MyApplication extends Application {
     public void hideDialog() {
         //// TODO: 23-05-2016  errorr solve
 
-            //show dialog
-            if (pDialog.isShowing())
-                pDialog.dismiss();
+        //show dialog
+        if (pDialog.isShowing())
+            pDialog.dismiss();
 
     }
 
@@ -149,6 +153,19 @@ public class MyApplication extends Application {
 
     public void showLog(String TAG, String msg) {
         Log.e(TAG, msg);
+    }
+
+    public String ChanageDate(String CurrentDate, int days) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+        Calendar c = Calendar.getInstance();
+        try {
+            c.setTime(sdf.parse(CurrentDate));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        c.add(Calendar.DATE, days);  // number of days to add
+        sdf.format(c.getTime());  // dt is now the new date
+        return CurrentDate;
     }
 
     public String getmDate() {

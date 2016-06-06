@@ -1,10 +1,7 @@
 package in.vaksys.vivekpk.fragments;
 
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -16,11 +13,9 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,39 +25,29 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NoConnectionError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.TimeoutError;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
-
 import org.greenrobot.eventbus.EventBus;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Random;
 
 import in.vaksys.vivekpk.R;
-import in.vaksys.vivekpk.activities.HomeActivity;
 import in.vaksys.vivekpk.adapter.ImageAdapter;
 import in.vaksys.vivekpk.dbPojo.UserImages;
-import in.vaksys.vivekpk.dbPojo.VehicleModels;
-import in.vaksys.vivekpk.extras.AppConfig;
 import in.vaksys.vivekpk.extras.MyApplication;
 import io.realm.Realm;
 import io.realm.RealmResults;
+import okhttp3.Headers;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -128,6 +113,9 @@ public class DocumentFragment extends Fragment {
     RealmResults<UserImages> results;
     //private MultiStateToggleButton multiStateToggleButton;
     private EventBus bus = EventBus.getDefault();
+
+    private static final String IMGUR_CLIENT_ID = "...";
+    private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
 
     public static DocumentFragment newInstance(int index) {
         DocumentFragment fragment = new DocumentFragment();
@@ -404,7 +392,7 @@ public class DocumentFragment extends Fragment {
     private String getRealPathFromURI(Uri contentURI) {
         Uri contentUri = Uri.parse(String.valueOf(contentURI));
 
-        String[] projection = { MediaStore.Images.Media.DATA };
+        String[] projection = {MediaStore.Images.Media.DATA};
         Cursor cursor = null;
         try {
             if (Build.VERSION.SDK_INT > 19) {
@@ -417,7 +405,7 @@ public class DocumentFragment extends Fragment {
 
                 cursor = getActivity().getContentResolver().query(
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                        projection, sel, new String[] { id }, null);
+                        projection, sel, new String[]{id}, null);
             } else {
                 cursor = getActivity().getContentResolver().query(contentUri,
                         projection, null, null, null);
@@ -428,8 +416,7 @@ public class DocumentFragment extends Fragment {
 
         String path = null;
         try {
-            int column_index = cursor
-                    .getColumnIndex(MediaStore.Images.Media.DATA);
+            int column_index = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
             path = cursor.getString(column_index).toString();
             cursor.close();
@@ -449,7 +436,7 @@ public class DocumentFragment extends Fragment {
 
         String calString = String.valueOf(fileSizeInMB);
 
-        myApplication.showLog("image lenth is ------>>>",calString);
+        myApplication.showLog("image lenth is ------>>>", calString);
 
         return calString;
     }
@@ -577,6 +564,8 @@ public class DocumentFragment extends Fragment {
         String rnd = "Licence" + GenerteRandomNumber();
 //        SendToServer(encoded, rnd);
 
+        SendImage();
+
 
         imageAdapter.saveImageToDatabase(BitmapToString(bitmap), rnd);
         results = realm.where(UserImages.class).findAll();
@@ -585,6 +574,34 @@ public class DocumentFragment extends Fragment {
         if (results.size() == 1) {
             SetImagesViews();
         }
+    }
+
+    private void SendImage() {
+
+
+    }
+
+    OkHttpClient client = new OkHttpClient();
+
+    public void run() throws Exception {
+        // Use the imgur image upload API as documented at https://api.imgur.com/endpoints/image
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addPart(
+                        Headers.of("Content-Disposition", "form-data; name=\"file\""),
+                        RequestBody.create(MEDIA_TYPE_PNG, new File("website/static/logo-square.png")))
+                .build();
+
+        Request request = new Request.Builder()
+                .header("Authorization", "Client-ID " + IMGUR_CLIENT_ID)
+                .url("https://api.imgur.com/3/image")
+                .post(requestBody)
+                .build();
+
+        Response response = client.newCall(request).execute();
+        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+        System.out.println(response.body().string());
     }
 
     private int GenerteRandomNumber() {

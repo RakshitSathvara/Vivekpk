@@ -1,112 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/linearServiceDueDate"
-    android:layout_width="match_parent"
+<in.vaksys.vivekpk.extras.PercentLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/percentEnterCarDetails11"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
     android:orientation="vertical"
     android:padding="8dp"
     android:visibility="visible">
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="#F8F8F8">
+        android:background="@drawable/dialog_shape"
+        android:orientation="vertical"
+        app:layout_widthPercent="90%">
 
-        <LinearLayout
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="15dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Service Due Date"
-                android:textColor="#83837F"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="10dp">
 
-                <ImageView
-                    android:layout_width="0dp"
+
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:src="@drawable/calendar" />
+                    android:layout_marginTop="8dp"
+                    android:text="Service Due Date"
+                    android:textColor="#83837F"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="4"
-                    android:orientation="vertical">
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/tv_date_serv"
-                        android:layout_width="match_parent"
+                    <ImageView
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Expiry Date"
-                        android:textColor="#83837F"
-                        android:textSize="15sp" />
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:src="@drawable/calendar" />
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="2dp"
-                        android:layout_marginTop="5dp"
-                        android:background="#C2BCBF" />
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_date_serv"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Expiry Date"
+                            android:textColor="#83837F"
+                            android:textSize="15sp" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:layout_marginTop="5dp"
+                            android:background="#C2BCBF" />
+                    </LinearLayout>
                 </LinearLayout>
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Note"
+                    android:textColor="#83837F"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/et_optionalField_serv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Optional Field" />
+                </LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp">
+
+                    <in.vaksys.vivekpk.extras.PercentLinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center">
+
+                        <Button
+                            android:id="@+id/btn_service_due_date_cancel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="5dp"
+                            android:background="#DCD8D6"
+                            android:text="Cancle"
+                            android:textColor="#818080"
+                            app:layout_widthPercent="50%" />
+
+                        <Button
+                            android:id="@+id/btn_service_due_date_setAlert"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:background="@color/colorPrimary"
+                            android:text="Set Alert"
+                            app:layout_widthPercent="50%" />
+
+                    </in.vaksys.vivekpk.extras.PercentLinearLayout>
+
+                </FrameLayout>
+
 
             </LinearLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Note"
-                android:textColor="#83837F"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
 
-            <EditText
-                android:id="@+id/et_optionalField"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Optional Field" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/btn_service_due_date_cancel"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
-                    android:layout_weight="1"
-                    android:background="#C2BCBF"
-                    android:text="cancel" />
-
-                <Button
-                    android:id="@+id/btn_service_due_date_setAlert"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/btn_yellow_border_shape"
-                    android:text="set alert" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </android.support.v7.widget.CardView>
-
-</LinearLayout>
+</in.vaksys.vivekpk.extras.PercentLinearLayout>

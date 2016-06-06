@@ -82,38 +82,6 @@ public class InsuranceFragment extends Fragment {
             myApplication.showLog(TAG, "details");
         }
     }
- /*
-    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
-    Calendar c = Calendar.getInstance();
-
-   private void SelectfromDate() {
-        c.add(Calendar.DAY_OF_MONTH, 26);  // number of days to add, can also use Calendar.DAY_OF_MONTH in place of Calendar.DATE
-        String formattedDate = sdf.format(c.getTime());
-        Date d = null;
-        try {
-            d = sdf.parse(formattedDate);
-        } catch (ParseException e) {
-            Log.e(TAG, "SelectfromDate: " + e);
-        }
-        fromDatePickerDialog.getDatePicker().setMinDate(d.getTime());
-        fromDatePickerDialog.show();
-    }
-
-    private void setDateTimeField() {
-
-        Calendar newCalendar = Calendar.getInstance();
-        fromDatePickerDialog = new DatePickerDialog(getActivity(), R.style.DialogTheme, new DatePickerDialog.OnDateSetListener() {
-
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Calendar newDate = Calendar.getInstance();
-                newDate.set(year, monthOfYear, dayOfMonth);
-                SelectedDate = dateFormatter.format(newDate.getTime());
-                tvDate.setText(SelectedDate);
-            }
-
-        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-    }*/
-
     private void SetInsurance() {
         myApplication.showLog(TAG, "innerview");
 

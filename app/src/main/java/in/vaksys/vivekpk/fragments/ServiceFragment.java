@@ -1,47 +1,46 @@
 package in.vaksys.vivekpk.fragments;
 
 
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-
 import in.vaksys.vivekpk.R;
+import in.vaksys.vivekpk.adapter.ServiceDetailsRecyclerViewAdapter;
+import in.vaksys.vivekpk.adapter.ServiceRecyclerViewAdapter;
+import in.vaksys.vivekpk.dbPojo.VehicleDetails;
+import in.vaksys.vivekpk.extras.MyApplication;
 import in.vaksys.vivekpk.model.Message;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ServiceFragment extends Fragment {
 
-    private TextView tvDate;
 
-    private DatePickerDialog fromDatePickerDialog;
+    private static final String TAG = "ServiceFragment";
+    private Button btn_addVehicle;
 
-    private SimpleDateFormat dateFormatter;
-    private String SelectedDate;
-    public static final String TAG = "DATE";
-    private LinearLayout linearVehicle, linearAddVehicle, linearServiceDueDate;
-    private Button btn_addVehicle, btn_setAlert;
+    ServiceRecyclerViewAdapter serviceRecyclerViewAdapter;
+    ServiceDetailsRecyclerViewAdapter detailsRecyclerViewAdapter;
+    RecyclerView ServiceRecyclerview;
+    RecyclerView ServiceDetailsRecyclerview;
+    RealmResults<VehicleDetails> results;
+    RealmResults<VehicleDetails> detailsesResults;
+    private MyApplication myApplication;
+    private Realm realm;
 
     public ServiceFragment() {
         // Required empty public constructor
@@ -54,115 +53,55 @@ public class ServiceFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_service, container, false);
 
-        tvDate = (TextView) rootView.findViewById(R.id.tv_date_serv);
 
-        setDateTimeField();
-
-        dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
-
-
-        tvDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SelectfromDate();
-            }
-
-            /*@Override
-            public boolean onTouch(View v, MotionEvent event) {
-                SelectfromDate();
-                return true;
-            }
-*/
-        });
-
-        linearVehicle = (LinearLayout) rootView.findViewById(R.id.linearVehicleDetails);
-        linearServiceDueDate = (LinearLayout) rootView.findViewById(R.id.linearServiceDueDate);
-        linearAddVehicle = (LinearLayout) rootView.findViewById(R.id.linearAddVehicle);
-
+        ServiceRecyclerview = (RecyclerView) rootView.findViewById(R.id.ServiceEditRecyclerView);
+        ServiceDetailsRecyclerview = (RecyclerView) rootView.findViewById(R.id.ServiceDetailsRecyclerView);
+        myApplication = MyApplication.getInstance();
+        realm = Realm.getDefaultInstance();
         btn_addVehicle = (Button) rootView.findViewById(R.id.btn_addVehicle);
-        btn_setAlert = (Button) rootView.findViewById(R.id.btn_service_due_date_setAlert);
 
-        btn_addVehicle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                linearVehicle.setVisibility(View.VISIBLE);
-                linearAddVehicle.setVisibility(View.GONE);
-                linearServiceDueDate.setVisibility(View.VISIBLE);
-            }
-        });
-
-        btn_setAlert.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Dialog dialog = new Dialog(getActivity());
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(R.layout.remind_me);
-
-                Button btn_done = (Button) dialog.findViewById(R.id.btn_done);
-                btn_done.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                        Toast.makeText(getActivity(), "Reminder Set", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-                dialog.show();
-            }
-        });
+        SetInsurance();
+        SetInsuranceDetails();
 
         return rootView;
     }
 
-    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
-    Calendar c = Calendar.getInstance();
 
-    private void SelectfromDate() {
-        c.add(Calendar.DAY_OF_MONTH, 26);  // number of days to add, can also use Calendar.DAY_OF_MONTH in place of Calendar.DATE
-        String formattedDate = sdf.format(c.getTime()); // current date
-        Date d = null;
-        try {
-            d = sdf.parse(formattedDate);
-        } catch (ParseException e) {
-            Log.e(TAG, "SelectfromDate: " + e);
+    private void SetInsuranceDetails() {
+        ServiceDetailsRecyclerview.setHasFixedSize(true);
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        ServiceDetailsRecyclerview.setLayoutManager(manager);
+        detailsesResults = realm.where(VehicleDetails.class).notEqualTo("ServiceExpireDate", "").findAll();
+        myApplication.showLog(TAG, "inside details" + detailsesResults.size());
+        if (results.size() > -1) {
+            detailsRecyclerViewAdapter = new ServiceDetailsRecyclerViewAdapter(getActivity(), detailsesResults);
+            ServiceDetailsRecyclerview.setAdapter(detailsRecyclerViewAdapter);
+        } else {
+            myApplication.showLog(TAG, "details");
         }
-        fromDatePickerDialog.getDatePicker().setMinDate(d.getTime());
-        fromDatePickerDialog.show();
     }
 
-    private void setDateTimeField() {
+    private void SetInsurance() {
+        myApplication.showLog(TAG, "innerview");
 
-        Calendar newCalendar = Calendar.getInstance();
-        fromDatePickerDialog = new DatePickerDialog(getActivity(), R.style.DialogTheme, new DatePickerDialog.OnDateSetListener() {
-
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Calendar newDate = Calendar.getInstance();
-                newDate.set(year, monthOfYear, dayOfMonth);
-                SelectedDate = dateFormatter.format(newDate.getTime());
-                tvDate.setText(SelectedDate);
-            }
-
-        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        ServiceRecyclerview.setHasFixedSize(true);
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        ServiceRecyclerview.setLayoutManager(manager);
+        results = realm.where(VehicleDetails.class).equalTo("ServiceExpireDate", "").findAll();
+        myApplication.showLog(TAG, "inside viwe" + results.size());
+        if (results.size() > -1) {
+            serviceRecyclerViewAdapter = new ServiceRecyclerViewAdapter(getActivity(), results);
+            ServiceRecyclerview.setAdapter(serviceRecyclerViewAdapter);
+        } else {
+            myApplication.showLog(TAG, "innerview222222");
+        }
     }
 
     @Subscribe
-    public void onEvent(Message messageCar){
-        Log.e("car datata",messageCar.getMsg());
+    public void onEvent(Message messageCar) {
+        Log.e("car datata", messageCar.getMsg());
         Toast.makeText(getActivity(), messageCar.getMsg(), Toast.LENGTH_SHORT).show();
     }
-
-
-//    @Override
-//    public void onDestroy() {
-//        super.onDestroy();
-//        bus.unregister(this);
-//    }
-//
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        bus.register(this);
-//    }
 
     @Override
     public void onStart() {

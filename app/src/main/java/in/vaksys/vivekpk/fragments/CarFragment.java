@@ -37,7 +37,7 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import in.vaksys.vivekpk.R;
-import in.vaksys.vivekpk.adapter.CarRecyclerViewAdapter;
+import in.vaksys.vivekpk.adapter.CarBikeRecyclerViewAdapter;
 import in.vaksys.vivekpk.adapter.mySpinnerAdapterBrand;
 import in.vaksys.vivekpk.adapter.mySpinnerAdapterModel;
 import in.vaksys.vivekpk.dbPojo.VehicleDetails;
@@ -74,7 +74,7 @@ public class CarFragment extends Fragment {
     private int makePosi;
     private String mCarDetail;
     private RealmResults<VehicleDetails> results;
-    private CarRecyclerViewAdapter carAdapter;
+    private CarBikeRecyclerViewAdapter carAdapter;
     String myid;
 
 
@@ -212,7 +212,7 @@ public class CarFragment extends Fragment {
         AddVehicleBtnLayout.setVisibility(View.VISIBLE);
         addCarView.setVisibility(View.GONE);
         //    results = realm.where(VehicleDetails.class).equalTo("type", "car").findAll();
-//        carAdapter = new CarRecyclerViewAdapter(getActivity(), results);
+//        carAdapter = new CarBikeRecyclerViewAdapter(getActivity(), results);
 //        carDetailRecyclerView.setAdapter(carAdapter);
 //        carAdapter.notifyDataSetChanged();
 //        RegisterVehicle(mCarDetail, CarSpinnItem, MakeSpinnItem);
@@ -361,7 +361,7 @@ public class CarFragment extends Fragment {
         if (results.size() > 0) {
             carDetailRecyclerView.setVisibility(View.VISIBLE);
             AddVehicleBtnLayout.setVisibility(View.VISIBLE);
-            carAdapter = new CarRecyclerViewAdapter(getActivity(), results);
+            carAdapter = new CarBikeRecyclerViewAdapter(getActivity(), results);
             carDetailRecyclerView.setAdapter(carAdapter);
         } else {
             addCarView.setVisibility(View.VISIBLE);

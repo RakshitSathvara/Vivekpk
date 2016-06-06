@@ -11,13 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,7 +28,6 @@ import java.util.Locale;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import in.vaksys.vivekpk.R;
-import in.vaksys.vivekpk.dbPojo.InsuranceCompanies;
 import in.vaksys.vivekpk.dbPojo.VehicleDetails;
 import in.vaksys.vivekpk.dbPojo.VehicleModels;
 import in.vaksys.vivekpk.extras.MyApplication;
@@ -42,7 +39,7 @@ import io.realm.RealmResults;
 /**
  * Created by Harsh on 26-05-2016.
  */
-public class InsuranceDetailsRecyclerViewAdapter extends RecyclerView.Adapter<InsuranceDetailsRecyclerViewAdapter.AdapterHolder> {
+public class EmissionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<EmissionDetailsRecyclerViewAdapter.AdapterHolder> {
 
     private static final String BLANK = "";
     private final Context context;
@@ -65,7 +62,7 @@ public class InsuranceDetailsRecyclerViewAdapter extends RecyclerView.Adapter<In
 
     //    Calendar newDate;
 
-    public InsuranceDetailsRecyclerViewAdapter(Context context, RealmResults<VehicleDetails> detailses) {
+    public EmissionDetailsRecyclerViewAdapter(Context context, RealmResults<VehicleDetails> detailses) {
 
         this.myApplication = MyApplication.getInstance();
         realm = Realm.getDefaultInstance();
@@ -81,7 +78,7 @@ public class InsuranceDetailsRecyclerViewAdapter extends RecyclerView.Adapter<In
 
     @Override
     public AdapterHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.insurance_details, null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.emission_details, null);
         viewHolder = new AdapterHolder(view);
         return viewHolder;
     }
@@ -90,15 +87,13 @@ public class InsuranceDetailsRecyclerViewAdapter extends RecyclerView.Adapter<In
     public void onBindViewHolder(final AdapterHolder holder, int position) {
         details = detailses.get(position);
         VehicleModels vehicleModels = realm.where(VehicleModels.class).equalTo("id", details.getVehicleModelID()).findFirst();
-        InsuranceCompanies insuranceCompanies = realm.where(InsuranceCompanies.class).equalTo("InsuranceId", Integer.parseInt(details.getInsuranceCompany())).findFirst();
 
         holder.VehicleIDHiddden.setText(String.valueOf(details.getVehicleId()));
 
         holder.VehicleNumber.setText(details.getVehicleNo());
         holder.VehicleBrand.setText(vehicleModels.getManufacturerName());
         holder.VehicleModel.setText(vehicleModels.getModel());
-        holder.InsurancePolicyName.setText(insuranceCompanies.getInsuranceName());
-        holder.InsurancePolicyExpiryDate.setText(details.getInsuranceExpireDate());
+        holder.EmissionExpiryDate.setText(details.getPollutionExpireDate());
 
         detailses.addChangeListener(new RealmChangeListener<RealmResults<VehicleDetails>>() {
             @Override
@@ -114,15 +109,13 @@ public class InsuranceDetailsRecyclerViewAdapter extends RecyclerView.Adapter<In
 //                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 //                final View layout = inflater.inflate(R.layout.enter_car_details_edit, null, false);
                 confirm.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                confirm.setContentView(R.layout.insurance_policy);
+                confirm.setContentView(R.layout.emission_edit);
                 confirm.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-                Button btnCancel = (Button) confirm.findViewById(R.id.btn_insurance_expiry_cancel);
-                Button btnSetAlert = (Button) confirm.findViewById(R.id.btn_insurance_expiry_setAlert);
+                Button btnCancel = (Button) confirm.findViewById(R.id.btn_emission_expiry_cancel);
+                Button btnSetAlert = (Button) confirm.findViewById(R.id.btn_emission_expiry_setAlert);
 
-                final TextView DatePicker = (TextView) confirm.findViewById(R.id.tv_date);
-                Spinner mSpinner = (Spinner) confirm.findViewById(R.id.sp_insuranceCompany_det);
-                setupInsuranceSpinner(mSpinner);
+                final TextView DatePicker = (TextView) confirm.findViewById(R.id.tv_date_emission);
 
                 DatePicker.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -140,8 +133,8 @@ public class InsuranceDetailsRecyclerViewAdapter extends RecyclerView.Adapter<In
                 btnSetAlert.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        setId = 5;
-                        if ((Integer.parseInt(myid) == 0) || DatePicker.getText().toString().equalsIgnoreCase("Expiry Date")) {
+                        setId = 0;
+                        if (DatePicker.getText().toString().equalsIgnoreCase("Expiry Date")) {
                             Toast.makeText(context, "Please fill the data", Toast.LENGTH_SHORT).show();
                         } else {
                             confirm1 = new Dialog(context);
@@ -177,7 +170,6 @@ public class InsuranceDetailsRecyclerViewAdapter extends RecyclerView.Adapter<In
                             });
 
                             Button btn_done = (Button) confirm1.findViewById(R.id.btn_done);
-
                             btn_done.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -194,8 +186,8 @@ public class InsuranceDetailsRecyclerViewAdapter extends RecyclerView.Adapter<In
                                         return;
                                     }
                                     AddUpdateReminder(holder.VehicleIDHiddden.getText().toString(),
-                                            details.getVehicleModelID(), myid, DatePicker.getText().toString()
-                                            , BLANK, BLANK, BLANK, NotificationDate);
+                                            details.getVehicleModelID(), BLANK, BLANK
+                                            , DatePicker.getText().toString(), BLANK, BLANK, NotificationDate);
                                     confirm1.dismiss();
                                 }
                             });
@@ -235,29 +227,6 @@ public class InsuranceDetailsRecyclerViewAdapter extends RecyclerView.Adapter<In
         fromDatePickerDialog.show();
     }
 
-    private void setupInsuranceSpinner(Spinner mSpinner) {
-
-        RealmResults<InsuranceCompanies> results = realm.where(InsuranceCompanies.class).findAll();
-
-        mySpinnerAdapterInsurance mySpinnerAdapterCity = new mySpinnerAdapterInsurance(context, results, "bike");
-        mSpinner.setAdapter(mySpinnerAdapterCity);
-
-        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                modelSpinnItem = ((TextView) view.findViewById(R.id.rowText)).getText().toString();
-                myid = ((TextView) view.findViewById(R.id.rowid)).getText().toString();
-                myApplication.showLog(TAG, "You have selected " + modelSpinnItem + " " + myid);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-//                Toast.makeText(context, "You have selected Nothing ..", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-    }
-
     @Override
     public int getItemCount() {
         return (null != detailses ? detailses.size() : 0);
@@ -265,19 +234,17 @@ public class InsuranceDetailsRecyclerViewAdapter extends RecyclerView.Adapter<In
     }
 
     public class AdapterHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.tv_detailvehicleNumber_det)
+        @Bind(R.id.tv_detailvehicleNumber_emi_det)
         TextView VehicleNumber;
-        @Bind(R.id.tv_detailvehicleBrand_det)
+        @Bind(R.id.tv_detailvehicleBrand_emi_det)
         TextView VehicleBrand;
-        @Bind(R.id.tv_detailvehicleNumberModel_det)
+        @Bind(R.id.tv_detailvehicleNumberModel_emi_det)
         TextView VehicleModel;
-        @Bind(R.id.img_vehicelDetailEdit_det)
+        @Bind(R.id.img_vehicelDetailEdit_emi_det)
         ImageView EditButton;
-        @Bind(R.id.tv_companyName_det)
-        TextView InsurancePolicyName;
-        @Bind(R.id.tv_date_det)
-        TextView InsurancePolicyExpiryDate;
-        @Bind(R.id.vehcileIdHidden_dets)
+        @Bind(R.id.tv_date_emi_det)
+        TextView EmissionExpiryDate;
+        @Bind(R.id.vehcileIdHidden_emi_det)
         TextView VehicleIDHiddden;
 
         AdapterHolder(View view) {

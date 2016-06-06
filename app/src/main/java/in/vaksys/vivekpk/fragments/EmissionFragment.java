@@ -2,19 +2,17 @@ package in.vaksys.vivekpk.fragments;
 
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +26,13 @@ import java.util.Date;
 import java.util.Locale;
 
 import in.vaksys.vivekpk.R;
+import in.vaksys.vivekpk.adapter.EmissionDetailsRecyclerViewAdapter;
+import in.vaksys.vivekpk.adapter.EmisssionRecyclerViewAdapter;
+import in.vaksys.vivekpk.dbPojo.VehicleDetails;
+import in.vaksys.vivekpk.extras.MyApplication;
 import in.vaksys.vivekpk.model.Message;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,6 +49,15 @@ public class EmissionFragment extends Fragment {
     private String SelectedDate;
     public static final String TAG = "DATE";
 
+    EmissionDetailsRecyclerViewAdapter detailsRecyclerViewAdapter;
+    EmisssionRecyclerViewAdapter emisssionAdapter;
+    RecyclerView EmissionRecyclerview;
+    RecyclerView EmissionDetailsRecyclerview;
+    RealmResults<VehicleDetails> results;
+    RealmResults<VehicleDetails> detailsesResults;
+    private MyApplication myApplication;
+    private Realm realm;
+
 
     public EmissionFragment() {
         // Required empty public constructor
@@ -57,58 +70,31 @@ public class EmissionFragment extends Fragment {
         // Inflate the layout for this fragment
         final View rootView = inflater.inflate(R.layout.fragment_emission, container, false);
 
-
-       /* multiStateToggleButton = (MultiStateToggleButton) rootView.findViewById(R.id.mstb_emissionvehicleChoice);
-        multiStateToggleButton.enableMultipleChoice(false);
-        multiStateToggleButton.setValue(0);
-        //multiStateToggleButton.setColorRes(R.color.cardview_dark_background, R.color.cardview_dark_background);
-
-        multiStateToggleButton.setOnValueChangedListener(new ToggleButton.OnValueChangedListener() {
-            @Override
-            public void onValueChanged(int value) {
-                Log.e("MSTB", "onValueChanged: " + value);
-                switch (value) {
-                    case 0:
-                        Toast.makeText(getActivity(), "Car Selected..", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 1:
-                        Toast.makeText(getActivity(), "Bike Selected..", Toast.LENGTH_SHORT).show();
-                        break;
-                    default:
-                        Toast.makeText(getActivity(), "Please S" +
-                                "elect any..", Toast.LENGTH_SHORT).show();
-                        break;
-                }
-            }
-        });*/
-
-        tvDate = (TextView) rootView.findViewById(R.id.tv_date_exp);
-
-        linearVehicle = (LinearLayout) rootView.findViewById(R.id.linearVehicleDetails);
-        linearExpiryDate = (LinearLayout) rootView.findViewById(R.id.linearExpiryDate);
-        linearAddVehicle = (LinearLayout) rootView.findViewById(R.id.linearAddVehicle);
-        setDateTimeField();
-
-        dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+        myApplication = MyApplication.getInstance();
+        realm = Realm.getDefaultInstance();
 
 
-        tvDate.setOnClickListener(new View.OnClickListener() {
+        EmissionRecyclerview = (RecyclerView) rootView.findViewById(R.id.EmissionEditRecyclerView);
+        EmissionDetailsRecyclerview = (RecyclerView) rootView.findViewById(R.id.EmissionRecyclerView);
+        SetInsurance();
+        SetInsuranceDetails();
+        /*tvDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SelectfromDate();
             }
 
-            /*@Override
+            *//*@Override
             public boolean onTouch(View v, MotionEvent event) {
                 SelectfromDate();
                 return true;
             }
-*/
-        });
+*//*
+        });*/
         btn_addVehicle = (Button) rootView.findViewById(R.id.btn_addVehicle);
         btn_setAlert = (Button) rootView.findViewById(R.id.btn_expiry_date_setAlert);
 
-        btn_addVehicle.setOnClickListener(new View.OnClickListener() {
+       /* btn_addVehicle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 linearVehicle.setVisibility(View.VISIBLE);
@@ -143,13 +129,13 @@ public class EmissionFragment extends Fragment {
                     @Override
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
 
-                        if(checkedId == R.id.radio1) {
+                        if (checkedId == R.id.radio1) {
                             Toast.makeText(getActivity(), "radio1",
                                     Toast.LENGTH_SHORT).show();
-                        } else if(checkedId == R.id.radio2) {
+                        } else if (checkedId == R.id.radio2) {
                             Toast.makeText(getActivity(), "radio2",
                                     Toast.LENGTH_SHORT).show();
-                        } else if(checkedId == R.id.radio3){
+                        } else if (checkedId == R.id.radio3) {
                             Toast.makeText(getActivity(), "radio3",
                                     Toast.LENGTH_SHORT).show();
                         }
@@ -169,7 +155,7 @@ public class EmissionFragment extends Fragment {
                 dialog.show();
             }
         });
-
+*/
         return rootView;
     }
 
@@ -203,6 +189,37 @@ public class EmissionFragment extends Fragment {
 
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
     }
+
+    private void SetInsuranceDetails() {
+        EmissionDetailsRecyclerview.setHasFixedSize(true);
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        EmissionDetailsRecyclerview.setLayoutManager(manager);
+        detailsesResults = realm.where(VehicleDetails.class).notEqualTo("PollutionExpireDate", "").findAll();
+        myApplication.showLog(TAG, "inside details" + detailsesResults.size());
+        if (results.size() > -1) {
+            detailsRecyclerViewAdapter = new EmissionDetailsRecyclerViewAdapter(getActivity(), detailsesResults);
+            EmissionDetailsRecyclerview.setAdapter(detailsRecyclerViewAdapter);
+        } else {
+            myApplication.showLog(TAG, "details");
+        }
+    }
+
+    private void SetInsurance() {
+        myApplication.showLog(TAG, "innerview");
+
+        EmissionRecyclerview.setHasFixedSize(true);
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        EmissionRecyclerview.setLayoutManager(manager);
+        results = realm.where(VehicleDetails.class).equalTo("PollutionExpireDate", "").findAll();
+        myApplication.showLog(TAG, "inside viwe" + results.size());
+        if (results.size() > -1) {
+            emisssionAdapter = new EmisssionRecyclerViewAdapter(getActivity(), results);
+            EmissionRecyclerview.setAdapter(emisssionAdapter);
+        } else {
+            myApplication.showLog(TAG, "innerview222222");
+        }
+    }
+
 
     @Subscribe
     public void onEvent(Message messageCar) {

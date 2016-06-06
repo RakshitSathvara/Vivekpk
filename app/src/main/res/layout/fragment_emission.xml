@@ -13,7 +13,6 @@
         android:orientation="vertical">
 
 
-
         <!-- <org.honorato.multistatetogglebutton.MultiStateToggleButton
              android:id="@+id/mstb_emissionvehicleChoice"
              android:layout_width="match_parent"
@@ -25,9 +24,14 @@
 
         <include layout="@layout/add_vehicle_details" />
 
-        <include layout="@layout/newvehicle" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/EmissionRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-        <include layout="@layout/expiry_date" />
-
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/EmissionEditRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </LinearLayout>
 </ScrollView>

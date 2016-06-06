@@ -67,6 +67,11 @@ public class MyAccountActivity extends AppCompatActivity {
     private String mPass;
     private String mNumber;
     private String mEmail;
+    private String oldFname;
+    private String oldLname;
+    private String oldMnumber;
+    private String oldEmail;
+    Map<String, String> FinalParams;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +98,7 @@ public class MyAccountActivity extends AppCompatActivity {
     }
 
     private void confirmDialogPassWord() {
-        confirm = new Dialog(this);
+        confirm = new Dialog(this, R.style.DialogTheme);
         confirm.requestWindowFeature(Window.FEATURE_NO_TITLE);
         confirm.setContentView(R.layout.change_password);
 
@@ -112,7 +117,8 @@ public class MyAccountActivity extends AppCompatActivity {
         confirm.show();
     }
 
-    public void UpdateUser(final String mFname, final String mLname, final String mPass, final String mNumber, final String mEmail) {
+
+    public void UpdateUser(final String mFname, final String mLname, final String mPass, final String mNumber, final String mEmail, final Map<String, String> finalParams) {
 
         String tag_string_req = "req_update_user";
 
@@ -134,7 +140,6 @@ public class MyAccountActivity extends AppCompatActivity {
                     if (!error) {
                         Toast.makeText(MyAccountActivity.this,
                                 "Login Successfull... ", Toast.LENGTH_LONG).show();
-
                         // parsing the user profile information
 
                         UpdateUserIntoDatabase(mFname, mLname, mEmail, mNumber, mPass);
@@ -165,14 +170,8 @@ public class MyAccountActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() {
                 // Posting parameters to login url
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("firstName", mFname);
-                params.put("lastName", mLname);
-                params.put("email", mEmail);
-                params.put("password", mPass);
-                params.put("phone", mNumber);
 
-                return params;
+                return finalParams;
             }
 
             @Override
@@ -208,7 +207,7 @@ public class MyAccountActivity extends AppCompatActivity {
 
         Toast.makeText(this, "Setup Complete", Toast.LENGTH_LONG).show();
         myApplication.hideDialog();
-
+        onBackPressed();
     }
 
     private void VerifyPasswrod(String old, String NewPass, String CPass) {
@@ -216,8 +215,12 @@ public class MyAccountActivity extends AppCompatActivity {
         if (old.equals(oldPassword)) {
             if (NewPass.length() > 6) {
                 if (NewPass.equals(CPass)) {
-                    etPassword.setText(NewPass);
-                    confirm.dismiss();
+                    if (!old.equals(NewPass)) {
+                        etPassword.setText(NewPass);
+                        confirm.dismiss();
+                    } else {
+                        Toast.makeText(MyAccountActivity.this, "You Should Enter New Password", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     Toast.makeText(MyAccountActivity.this, "New Password Doesn't match with Confirm Password", Toast.LENGTH_SHORT).show();
                 }
@@ -232,14 +235,21 @@ public class MyAccountActivity extends AppCompatActivity {
     private void loadData() {
         Users user = realm.where(Users.class).findFirst();
 
-        etFirstName.setText(user.getFirstName());
-        etLastName.setText(user.getLastName());
-        etEmailId.setText(user.getEmail());
-        etMobileNumber.setText(user.getPhoneNo());
-
         etPassword.setInputType(InputType.TYPE_NULL);
 
         oldPassword = user.getPassword();
+        oldFname = user.getFirstName();
+        oldLname = user.getLastName();
+        oldMnumber = user.getPhoneNo();
+        oldEmail = user.getEmail();
+
+
+        etFirstName.setText(oldFname);
+        etLastName.setText(oldLname);
+        etEmailId.setText(oldEmail);
+        etMobileNumber.setText(oldMnumber);
+        etPassword.setText(oldPassword);
+
     }
 
     @OnClick({R.id.btn_myaccount_cancel, R.id.btn_myaccount_save, R.id.btn_myaccount_logout, R.id.btn_myaccount_deactiveAccount})
@@ -279,7 +289,34 @@ public class MyAccountActivity extends AppCompatActivity {
         mPass = etPassword.getText().toString();
         mNumber = etMobileNumber.getText().toString();
         mEmail = etEmailId.getText().toString();
-        UpdateUser(mFname, mLname, mPass, mNumber, mEmail);
+
+        FinalParams = new HashMap<String, String>();
+        FinalParams = ValidateValues(mFname, mLname, mPass, mNumber, mEmail);
+        if (FinalParams.size() > 0) {
+            UpdateUser(mFname, mLname, mPass, mNumber, mEmail, FinalParams);
+        } else {
+            Toast.makeText(MyAccountActivity.this, "No Changes Detected.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private Map<String, String> ValidateValues(String mFname, String mLname, String mPass, String mNumber, String mEmail) {
+        Map<String, String> params = new HashMap<String, String>();
+        if (!mFname.equalsIgnoreCase(oldFname)) {
+            params.put("firstName", mFname);
+        }
+        if (!mLname.equalsIgnoreCase(oldLname)) {
+            params.put("lastName", mLname);
+        }
+        if (!mEmail.equalsIgnoreCase(oldEmail)) {
+            params.put("email", mEmail);
+        }
+        if (!mNumber.equalsIgnoreCase(oldMnumber)) {
+            params.put("phone", mNumber);
+        }
+        if (!mPass.equalsIgnoreCase(oldPassword)) {
+            params.put("password", mPass);
+        }
+        return params;
     }
 
     private boolean validateFirstName() {
