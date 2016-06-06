@@ -2,6 +2,7 @@ package in.vaksys.vivekpk.extras;
 
 import android.app.Activity;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -18,8 +19,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import in.vaksys.vivekpk.adapter.CarRecyclerViewAdapter;
+import in.vaksys.vivekpk.adapter.CarBikeRecyclerViewAdapter;
+import in.vaksys.vivekpk.dbPojo.EmergencyContact;
 import in.vaksys.vivekpk.dbPojo.VehicleDetails;
+import in.vaksys.vivekpk.fragments.EmergencyFragment;
 import in.vaksys.vivekpk.model.ClaimMessage;
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -36,7 +39,7 @@ public class VolleyHelper {
     Activity activity;
     private Realm realm;
     private String BLANK = "";
-    CarRecyclerViewAdapter adapter;
+    CarBikeRecyclerViewAdapter adapter;
 
     OkHttpClient client;
 
@@ -45,7 +48,7 @@ public class VolleyHelper {
         this.myApplication = MyApplication.getInstance();
         this.activity = context;
         myApplication.createDialog(context, false);
-        adapter = new CarRecyclerViewAdapter(activity);
+        adapter = new CarBikeRecyclerViewAdapter(activity);
 
         client = new OkHttpClient();
 
@@ -556,8 +559,7 @@ public class VolleyHelper {
 //stuff that updates ui
                 final RealmResults<EmergencyContact> results = realm.where(EmergencyContact.class).findAll();
                 Log.e(TAG, "SaveIntoDatabase: " + results.size());
-                pDialog.hide();
-
+                myApplication.hideDialog();
                 if (results.size() == 0) {
                     EmergencyFragment.EmergencyRecyclerview.setVisibility(View.GONE);
                     EmergencyFragment.btnContactOne.setVisibility(View.VISIBLE);

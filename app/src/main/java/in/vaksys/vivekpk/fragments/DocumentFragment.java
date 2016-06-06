@@ -37,7 +37,6 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
-import net.gotev.uploadservice.UploadService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -425,14 +424,14 @@ public class DocumentFragment extends Fragment {
                 myApplication.showLog("file image  paths", imagePath);
 
 
-
+                uploadwithRetrofit(imagePath);
 
                 calculateFileSize(imagePath);
                 results = realm.where(UserImages.class).findAll();
                 if (results.size() < 5) {
                  //   bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), filePath);
 
-                    uploadwithRetrofit(imagePath);
+
 
                     // uploadimage(imagePath);
 
@@ -584,7 +583,7 @@ public class DocumentFragment extends Fragment {
             if (uploadId == null)
                 return;
 
-            UploadService.stopUpload(uploadId);
+
         }
     }
 
