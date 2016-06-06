@@ -29,16 +29,21 @@
    -->
         <include layout="@layout/add_vehicle_details" />
 
-        <include layout="@layout/newvehicle" />
+        <!--<include layout="@layout/newvehicle" />-->
 
-        <include layout="@layout/insurance_policy" />
+        <!--<include layout="@layout/insurance_policy" />-->
 
-        <include layout="@layout/insurance_policy_with_vihicle" />
+        <!--<include layout="@layout/insurance_policy_with_vihicle" />-->
 
-        <include layout="@layout/insurance_details" />
+        <!--<include layout="@layout/insurance_details" />-->
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/InsuranceRecyclerView"
+            android:id="@+id/InsuranceDetailsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/InsuranceEditRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

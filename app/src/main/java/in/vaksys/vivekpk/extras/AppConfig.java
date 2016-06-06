@@ -15,7 +15,7 @@ public class AppConfig {
 
     public static String URL_ADD_USER_VEHICLE = URL_ROOT + "v1/userVehicle";
 
-    public static String URL_DELETE_USER_VEHICLE = URL_ROOT + "v1/userVehicle?id=";
+    public static String URL_DELETE_USER_VEHICLE = URL_ROOT + "v1/userVehicle";
 
     public static String URL_GET_USER_VEHICLE = URL_ROOT + "v1/userVehicles";
 
@@ -32,6 +32,7 @@ public class AppConfig {
     public static final String URL_CLAIM_VEHICLE = URL_ROOT + "v1/claimvehicle";
 
     public static final String URL_UPDATE_USER = URL_ROOT + "v1/user";
+
     public static final String URL_EMERGENY_CONTACT = URL_ROOT + "v1/contact";
 
 

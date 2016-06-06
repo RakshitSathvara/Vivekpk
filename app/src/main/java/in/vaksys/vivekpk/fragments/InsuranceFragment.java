@@ -1,8 +1,6 @@
 package in.vaksys.vivekpk.fragments;
 
 
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,16 +8,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
-
-import java.text.SimpleDateFormat;
 
 import in.vaksys.vivekpk.R;
-import in.vaksys.vivekpk.adapter.RecyclerViewAdapter;
+import in.vaksys.vivekpk.adapter.InsuranceDetailsRecyclerViewAdapter;
+import in.vaksys.vivekpk.adapter.InsuranceRecyclerViewAdapter;
 import in.vaksys.vivekpk.dbPojo.VehicleDetails;
 import in.vaksys.vivekpk.extras.MyApplication;
 import io.realm.Realm;
@@ -31,22 +24,18 @@ import io.realm.RealmResults;
 public class InsuranceFragment extends Fragment {
 
     public static final String TAG = "DATE";
-    RecyclerViewAdapter imageAdapter;
+
+    private Button btn_addVehicle;
+
+    InsuranceRecyclerViewAdapter imageAdapter;
+    InsuranceDetailsRecyclerViewAdapter detailsRecyclerViewAdapter;
     RecyclerView InsuranceRecyclerview;
+    RecyclerView InsuranceDetailsRecyclerview;
     RealmResults<VehicleDetails> results;
-    private TextView tvDate;
-    private DatePickerDialog fromDatePickerDialog;
-    private SimpleDateFormat dateFormatter;
-    private String SelectedDate;
-    private Button btn_addVehicle, btn_setAlert, btn_setAlertDetail;
-    private Spinner spInsuranceCompany;
+    RealmResults<VehicleDetails> detailsesResults;
     private MyApplication myApplication;
     private Realm realm;
 
-    // private MultiStateToggleButton multiStateToggleButton;
-
-    private LinearLayout linearAddVehicle, linearVehicleDetails, linearInsurancePolicy, linearInsurancePolicyWithVehicle,
-            linearInsuranceDetails;
 
     public InsuranceFragment() {
         // Required empty public constructor
@@ -59,110 +48,39 @@ public class InsuranceFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_insurance, container, false);
 
+        btn_addVehicle = (Button) rootView.findViewById(R.id.btn_addVehicle);
 
-        linearAddVehicle = (LinearLayout) rootView.findViewById(R.id.linearAddVehicle);
-        linearVehicleDetails = (LinearLayout) rootView.findViewById(R.id.linearVehicleDetails);
-        linearInsurancePolicy = (LinearLayout) rootView.findViewById(R.id.linearInsurancePolicy);
-        linearInsurancePolicyWithVehicle = (LinearLayout) rootView.findViewById(R.id.linearInsurancePolicyWithVehicle);
-        linearInsuranceDetails = (LinearLayout) rootView.findViewById(R.id.linearInsuranceDetails);
-
-        tvDate = (TextView) rootView.findViewById(R.id.tv_date);
-
-        InsuranceRecyclerview = (RecyclerView) rootView.findViewById(R.id.InsuranceRecyclerView);
+        InsuranceRecyclerview = (RecyclerView) rootView.findViewById(R.id.InsuranceEditRecyclerView);
+        InsuranceDetailsRecyclerview = (RecyclerView) rootView.findViewById(R.id.InsuranceDetailsRecyclerView);
         myApplication = MyApplication.getInstance();
         realm = Realm.getDefaultInstance();
-        spInsuranceCompany = (Spinner) rootView.findViewById(R.id.sp_insuranceCompany);
-
-      /*  List<String> insuranse = new ArrayList<String>();
-        insuranse.add("Select Company");
-        insuranse.add("Business Services");
-        insuranse.add("Computers");
-        insuranse.add("Education");
-        insuranse.add("Personal");
-        insuranse.add("Travel");
-
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, insuranse);
-
-        // Drop down layout style - list view with radio button
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // attaching data adapter to spinner
-        spInsuranceCompany.setAdapter(dataAdapter);
-        spInsuranceCompany.setSelection(0);
-
-//        setDateTimeField();
-
-        dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
-*/
-
-        tvDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                SelectfromDate();
-            }
-
-            /*@Override
-            public boolean onTouch(View v, MotionEvent event) {
-                SelectfromDate();
-                return true;
-            }
-*/
-        });
-
-        btn_addVehicle = (Button) rootView.findViewById(R.id.btn_addVehicle);
-        btn_setAlert = (Button) rootView.findViewById(R.id.btn_insurance_expiry_setAlert);
-        btn_setAlertDetail = (Button) rootView.findViewById(R.id.btn_insurance_details_expiry_setAlertDetail);
 
         btn_addVehicle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                linearAddVehicle.setVisibility(View.GONE);
-                linearVehicleDetails.setVisibility(View.VISIBLE);
-                linearInsurancePolicy.setVisibility(View.VISIBLE);
-                linearInsurancePolicyWithVehicle.setVisibility(View.GONE);
-                linearInsuranceDetails.setVisibility(View.GONE);
+
             }
         });
 
-        btn_setAlert.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                linearAddVehicle.setVisibility(View.GONE);
-                linearVehicleDetails.setVisibility(View.GONE);
-                linearInsurancePolicy.setVisibility(View.GONE);
-                linearInsurancePolicyWithVehicle.setVisibility(View.VISIBLE);
-                linearInsuranceDetails.setVisibility(View.GONE);
-            }
-        });
-
-        btn_setAlertDetail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Dialog dialog = new Dialog(getActivity());
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(R.layout.remind_me);
-
-                Button btn_done = (Button) dialog.findViewById(R.id.btn_done);
-                btn_done.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        linearAddVehicle.setVisibility(View.GONE);
-                        linearVehicleDetails.setVisibility(View.GONE);
-                        linearInsurancePolicy.setVisibility(View.GONE);
-                        linearInsurancePolicyWithVehicle.setVisibility(View.GONE);
-                        linearInsuranceDetails.setVisibility(View.VISIBLE);
-
-                        dialog.dismiss();
-                    }
-                });
-                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                dialog.show();
-            }
-        });
 
         SetInsurance();
+        SetInsuranceDetails();
 
         return rootView;
+    }
+
+    private void SetInsuranceDetails() {
+        InsuranceDetailsRecyclerview.setHasFixedSize(true);
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        InsuranceDetailsRecyclerview.setLayoutManager(manager);
+        detailsesResults = realm.where(VehicleDetails.class).notEqualTo("InsuranceCompany", "").findAll();
+        myApplication.showLog(TAG, "inside details" + detailsesResults.size());
+        if (results.size() > -1) {
+            detailsRecyclerViewAdapter = new InsuranceDetailsRecyclerViewAdapter(getActivity(), detailsesResults);
+            InsuranceDetailsRecyclerview.setAdapter(detailsRecyclerViewAdapter);
+        } else {
+            myApplication.showLog(TAG, "details");
+        }
     }
  /*
     SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
@@ -202,10 +120,10 @@ public class InsuranceFragment extends Fragment {
         InsuranceRecyclerview.setHasFixedSize(true);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         InsuranceRecyclerview.setLayoutManager(manager);
-        results = realm.where(VehicleDetails.class).findAll();
+        results = realm.where(VehicleDetails.class).equalTo("InsuranceCompany", "").findAll();
         myApplication.showLog(TAG, "inside viwe" + results.size());
         if (results.size() > -1) {
-            imageAdapter = new RecyclerViewAdapter(getActivity(), results);
+            imageAdapter = new InsuranceRecyclerViewAdapter(getActivity(), results);
             InsuranceRecyclerview.setAdapter(imageAdapter);
         } else {
             myApplication.showLog(TAG, "innerview222222");

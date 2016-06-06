@@ -53,7 +53,7 @@ public class ServiceFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_service, container, false);
 
-        tvDate = (TextView) rootView.findViewById(R.id.tv_date);
+        tvDate = (TextView) rootView.findViewById(R.id.tv_date_serv);
 
         setDateTimeField();
 

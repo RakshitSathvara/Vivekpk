@@ -53,6 +53,8 @@ public class MainTabFragment extends Fragment {
         viewPager = (ViewPager) view.findViewById(R.id.viewpager1);
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
+        viewPager.setCurrentItem(0);
+
         /*status = MyApplication.getInstance().getValue();
         if (status == 0) {
             viewPager.setCurrentItem(0);
