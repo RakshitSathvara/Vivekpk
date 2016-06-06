@@ -33,8 +33,9 @@
         <activity
             android:name=".activities.VerifyOtpActivity"
             android:label="" />
-        <activity android:name=".activities.HomeActivity"
-            android:windowSoftInputMode="stateHidden"/>
+        <activity
+            android:name=".activities.HomeActivity"
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".activities.NewsActivity" />
         <activity android:name=".activities.SearchActivity" />
         <activity android:name=".activities.NotificationActivity" />
@@ -58,7 +59,7 @@
         <activity
             android:name=".activities.Temp"
             android:exported="true" />
-        <activity android:name=".activities.HelpViewActivity"></activity>
+        <activity android:name=".activities.HelpViewActivity" />
     </application>
 
 </manifest>

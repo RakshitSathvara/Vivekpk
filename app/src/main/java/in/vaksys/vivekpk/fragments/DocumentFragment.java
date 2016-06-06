@@ -53,13 +53,26 @@ import okhttp3.Response;
  * A simple {@link Fragment} subclass.
  */
 public class DocumentFragment extends Fragment {
+    public static final int MEDIA_TYPE_IMAGE = 1;
     private static final String TAG = "DocumentFragment";
+    private static final String IMAGE_DIRECTORY_NAME = "EzyRidePhotos";
+    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
+    public static String timeStamp, myImageUrl;
+    public Uri fileUri;
+    public int PICK_IMAGE_REQUEST = 1;
+    Bitmap bitmap;
+    MyApplication myApplication;
+    UserImages userImages;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+    ImageAdapter imageAdapter;
+    RecyclerView ImageRecyclerview;
+    RealmResults<UserImages> results;
     private LinearLayout linearAddDrivingLicense;
     private LinearLayout linearAddGallery;
     private ImageView imgAddGallery;
     private LinearLayout linearAddCamera;
     private ImageView imgAddCamera;
-
     private LinearLayout linearYourDrivingLicense;
     private ImageView imgLicenseImgEdit;
     private ImageView imgLicenseImgOne;
@@ -88,29 +101,10 @@ public class DocumentFragment extends Fragment {
     private LinearLayout linearVehicelDocBills;
     private LinearLayout numberRcBills;
     private TextView tvBillsCount;
-
     private Button btnRegisterVehicle;
     private LinearLayout linearVehicleDetailsListRaw;
-
-    public Uri fileUri;
-    private static final String IMAGE_DIRECTORY_NAME = "EzyRidePhotos";
-    public int PICK_IMAGE_REQUEST = 1;
-    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
-    public static final int MEDIA_TYPE_IMAGE = 1;
-    public static String timeStamp, myImageUrl;
-    Bitmap bitmap;
     private Uri filePath;
-
-    MyApplication myApplication;
     private Realm realm;
-    UserImages userImages;
-
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
-
-    ImageAdapter imageAdapter;
-    RecyclerView ImageRecyclerview;
-    RealmResults<UserImages> results;
     //private MultiStateToggleButton multiStateToggleButton;
     private EventBus bus = EventBus.getDefault();
 
@@ -125,6 +119,33 @@ public class DocumentFragment extends Fragment {
         return fragment;
     }
 
+    private static File getOutputMediaFile(int type) {
+
+        // External sdcard location
+        File mediaStorageDir = new File(
+                Environment
+                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                IMAGE_DIRECTORY_NAME);
+
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                MyApplication.getInstance().showLog(TAG, "Oops! Failed create " + IMAGE_DIRECTORY_NAME + " directory");
+                return null;
+            }
+        }
+// Create a media file name
+        timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
+                Locale.getDefault()).format(new Date());
+        File mediaFile;
+        if (type == MEDIA_TYPE_IMAGE) {
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator
+                    + "IMG_" + timeStamp + ".jpg");
+        } else {
+            return null;
+        }
+        return mediaFile;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -197,7 +218,6 @@ public class DocumentFragment extends Fragment {
         });*/
         return view;
     }
-
 
     private void SetImagesViews() {
         myApplication.showLog(TAG, "innerview");
@@ -283,34 +303,6 @@ public class DocumentFragment extends Fragment {
 
     public Uri getOutputMediaFileUri(int type) {
         return Uri.fromFile(getOutputMediaFile(type));
-    }
-
-    private static File getOutputMediaFile(int type) {
-
-        // External sdcard location
-        File mediaStorageDir = new File(
-                Environment
-                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                IMAGE_DIRECTORY_NAME);
-
-        // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-                MyApplication.getInstance().showLog(TAG, "Oops! Failed create " + IMAGE_DIRECTORY_NAME + " directory");
-                return null;
-            }
-        }
-// Create a media file name
-        timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
-                Locale.getDefault()).format(new Date());
-        File mediaFile;
-        if (type == MEDIA_TYPE_IMAGE) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator
-                    + "IMG_" + timeStamp + ".jpg");
-        } else {
-            return null;
-        }
-        return mediaFile;
     }
 
     @Override

@@ -11,12 +11,20 @@
         android:id="@+id/toolbar1"
         layout="@layout/custom_toolbar" />
 
-    <include layout="@layout/search_and_contact" />
+    <include
+        android:id="@+id/view_vehicleSearch"
+        layout="@layout/search_and_contact" />
 
-    <include layout="@layout/search_invite" />
+    <include
+        android:id="@+id/view_noVehicleFound"
+        layout="@layout/search_invite" />
 
-    <include layout="@layout/newvehicle" />
+    <include
+        android:id="@+id/view_searchVehicleData"
+        layout="@layout/newvehicle" />
 
-    <include layout="@layout/reason_for_contacting" />
+    <include
+        android:id="@+id/view_reasonsForContacting"
+        layout="@layout/reason_for_contacting" />
 
 </LinearLayout>

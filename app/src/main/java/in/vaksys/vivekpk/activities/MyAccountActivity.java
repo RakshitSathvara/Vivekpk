@@ -102,7 +102,7 @@ public class MyAccountActivity extends AppCompatActivity {
         confirm.requestWindowFeature(Window.FEATURE_NO_TITLE);
         confirm.setContentView(R.layout.change_password);
 
-        Button BtnUpdate = (Button) confirm.findViewById(R.id.btn_Update);
+        Button BtnUpdate = (Button) confirm.findViewById(R.id.btn_Update_Password);
         final EditText oldPass = (EditText) confirm.findViewById(R.id.et_currentPassword);
         final EditText pass = (EditText) confirm.findViewById(R.id.et_newPassword);
         final EditText ConfirmPass = (EditText) confirm.findViewById(R.id.et_confirmPassword);

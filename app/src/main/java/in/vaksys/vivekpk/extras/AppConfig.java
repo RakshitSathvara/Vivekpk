@@ -6,6 +6,7 @@ package in.vaksys.vivekpk.extras;
 public class AppConfig {
 
     public static final String SMS_ORIGIN = "ONEWAY";
+
     public static String URL_ROOT = "http://54.213.226.66/";
 
     public static String URL_SIGNUP = URL_ROOT + "v1/register";
@@ -36,6 +37,8 @@ public class AppConfig {
 
 
     public static final String URL_TEMP = "http://jarvis007.16mb.com/backend/v1/";
+
+    public static final String URL_SEARCH_VEHICLE = URL_ROOT + "v1/search";
 
 
 }

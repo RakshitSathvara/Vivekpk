@@ -59,8 +59,8 @@ public class VerifyOtpActivity extends AppCompatActivity {
     TextView tvNotReceive;
     @Bind(R.id.tv_editNumber)
     TextView tvEditNumber;
-    private Toolbar mToolbar;
     String number;
+    private Toolbar mToolbar;
     private ProgressDialog pDialog;
 
 

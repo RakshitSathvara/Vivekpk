@@ -2,7 +2,6 @@ package in.vaksys.vivekpk.fragments;
 
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -17,7 +16,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import in.vaksys.vivekpk.R;
-import in.vaksys.vivekpk.activities.HomeActivity;
 import in.vaksys.vivekpk.adapter.ViewPagerAdapter;
 import in.vaksys.vivekpk.extras.MyApplication;
 import in.vaksys.vivekpk.model.Message;
@@ -27,17 +25,17 @@ import in.vaksys.vivekpk.model.Message;
  * A simple {@link Fragment} subclass.
  */
 public class ReminderTabFragment extends Fragment {
+    //    @BindView(R.id.tabs1)
+    TabLayout tabLayout;
+    //    @BindView(R.id.viewpager1)
+    ViewPager viewPager;
+    String spinnnerValue;
     private int[] tabIcons = {
             R.drawable.insurance_select,
             R.drawable.emission_nav,
             R.drawable.services_nav
     };
-    //    @BindView(R.id.tabs1)
-    TabLayout tabLayout;
-    //    @BindView(R.id.viewpager1)
-    ViewPager viewPager;
     private EventBus bus = EventBus.getDefault();
-    String spinnnerValue;
 
     public static ReminderTabFragment newInstance(int index) {
         ReminderTabFragment fragment = new ReminderTabFragment();
@@ -61,7 +59,6 @@ public class ReminderTabFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_reminder_tab, container, false);
 
 //        spinnnerValue = getArguments().getString("item");
-
 
 
 //        MyApplication.getInstance().showLog("value spinner", spinnnerValue);
@@ -137,8 +134,8 @@ public class ReminderTabFragment extends Fragment {
 
 
     @Subscribe
-    public void onEvent(Message messageCar){
-        Log.e("car datata",messageCar.getMsg());
+    public void onEvent(Message messageCar) {
+        Log.e("car datata", messageCar.getMsg());
         Toast.makeText(getActivity(), messageCar.getMsg(), Toast.LENGTH_SHORT).show();
         spinnnerValue = messageCar.getMsg();
 

@@ -1,17 +1,10 @@
 package in.vaksys.vivekpk.activities;
 
-import android.app.Dialog;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
-import android.widget.LinearLayout;
 
 import in.vaksys.vivekpk.R;
 
@@ -43,7 +36,7 @@ public class DiactivateAccountActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case android.R.id.home:
-                startActivity(new Intent(DiactivateAccountActivity.this,HomeActivity.class));
+                startActivity(new Intent(DiactivateAccountActivity.this, HomeActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

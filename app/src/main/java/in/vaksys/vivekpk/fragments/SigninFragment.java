@@ -504,9 +504,9 @@ public class SigninFragment extends Fragment {
                                 realm.beginTransaction();
                                 // Getting JSON Array node
                                 JSONArray results1 = response.getJSONArray("result");
-                                myApplication.showLog(TAG, "" + results1.length());
+                                myApplication.showLog(TAG,""+results1.length());
 
-                                if (results1.length() > 0) {
+                                if (results1.length() > 0){
                                     for (int i = 0; i < results1.length(); i++) {
 
                                         JSONObject jsonObject = results1.getJSONObject(i);
@@ -524,10 +524,11 @@ public class SigninFragment extends Fragment {
                                     realm.commitTransaction();
                                     myApplication.hideDialog();
 
+                                    startActivity(new Intent(getActivity(), HomeActivity.class));
+
 
                                 }
-                                startActivity(new Intent(getActivity(), HomeActivity.class));
-                            } else {
+                            }else {
 
                                 String errorMsg = response.getString("message");
                                 Toast.makeText(getActivity(),
