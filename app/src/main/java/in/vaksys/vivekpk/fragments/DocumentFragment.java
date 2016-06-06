@@ -1,10 +1,9 @@
 package in.vaksys.vivekpk.fragments;
 
 
-import android.content.BroadcastReceiver;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -16,7 +15,6 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
@@ -27,20 +25,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 
+import net.gotev.uploadservice.UploadService;
+
 import org.greenrobot.eventbus.EventBus;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -53,16 +52,28 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import in.vaksys.vivekpk.BuildConfig;
 import in.vaksys.vivekpk.R;
-import in.vaksys.vivekpk.activities.HomeActivity;
 import in.vaksys.vivekpk.adapter.ImageAdapter;
 import in.vaksys.vivekpk.dbPojo.UserImages;
-import in.vaksys.vivekpk.dbPojo.VehicleModels;
 import in.vaksys.vivekpk.extras.AppConfig;
 import in.vaksys.vivekpk.extras.MyApplication;
+import in.vaksys.vivekpk.extras.ResetApi;
+import in.vaksys.vivekpk.model.data;
 import io.realm.Realm;
 import io.realm.RealmResults;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -75,6 +86,7 @@ public class DocumentFragment extends Fragment {
     private LinearLayout linearAddCamera;
     private ImageView imgAddCamera;
 
+    private static final String USER_AGENT = "UploadServiceDemo/" + BuildConfig.VERSION_NAME;
     private LinearLayout linearYourDrivingLicense;
     private ImageView imgLicenseImgEdit;
     private ImageView imgLicenseImgOne;
@@ -108,7 +120,7 @@ public class DocumentFragment extends Fragment {
     private LinearLayout linearVehicleDetailsListRaw;
 
     public Uri fileUri;
-    private static final String IMAGE_DIRECTORY_NAME = "EzyRidePhotos";
+    private static final String IMAGE_DIRECTORY_NAME = "Photos";
     public int PICK_IMAGE_REQUEST = 1;
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
     public static final int MEDIA_TYPE_IMAGE = 1;
@@ -120,14 +132,21 @@ public class DocumentFragment extends Fragment {
     private Realm realm;
     UserImages userImages;
 
+    OkHttpClient client;
+    Uri picUri;
+
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
+
+    @Bind(R.id.container)
+    LinearLayout container;
 
     ImageAdapter imageAdapter;
     RecyclerView ImageRecyclerview;
     RealmResults<UserImages> results;
     //private MultiStateToggleButton multiStateToggleButton;
     private EventBus bus = EventBus.getDefault();
+
 
     public static DocumentFragment newInstance(int index) {
         DocumentFragment fragment = new DocumentFragment();
@@ -143,6 +162,9 @@ public class DocumentFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_document, container, false);
+
+
+        client = new OkHttpClient();
 
         BindViews(view);
         SetImagesViews();
@@ -283,14 +305,33 @@ public class DocumentFragment extends Fragment {
     }
 
     private void captureImage() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-        fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
 
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+//        Intent chooserIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        File f = new File(Environment.getExternalStorageDirectory(),);
+//        chooserIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+//        fileUri = Uri.fromFile(f);
+//        startActivityForResult(chooserIntent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
 
-        // start the image capture Intent
-        startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+
+        Intent i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+
+        File file = getOutputMediaFile(MEDIA_TYPE_IMAGE);
+        picUri = Uri.fromFile(file); // create
+        i.putExtra(MediaStore.EXTRA_OUTPUT, picUri); // set the image file
+
+        startActivityForResult(i, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+
+
+//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//
+//        fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+//
+//
+//        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+//
+//        // start the image capture Intent
+//        startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
     }
 
     public Uri getOutputMediaFileUri(int type) {
@@ -344,12 +385,23 @@ public class DocumentFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // if the result is capturing Image
-        myApplication.showLog(TAG, " " + resultCode + " " + requestCode + " " + data.toString());
+        //   myApplication.showLog(TAG, " " + resultCode + " " + requestCode + " " + data.toString());
         if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
             if (resultCode == -1) {
                 // successfully captured the image
                 // display it in image view
-                previewCapturedImage();
+
+
+                Uri uri = picUri;
+
+                String captuepath = uri.getPath();
+
+                uploadwithRetrofit(captuepath);
+
+
+                myApplication.showLog("camarea image path ", "" + captuepath);
+
+
             } else if (resultCode == 0) {
                 // user cancelled Image capture
                 Toast.makeText(getActivity(),
@@ -365,32 +417,38 @@ public class DocumentFragment extends Fragment {
         if (requestCode == PICK_IMAGE_REQUEST && data != null && data.getData() != null) {
             if (resultCode == -1) {
                 filePath = data.getData();
+                myApplication.showLog("file paths", "" + filePath);
 
 
                 String imagePath = getRealPathFromURI(filePath);
-                calculateFileSize(imagePath);
-                try {
-                    results = realm.where(UserImages.class).findAll();
-                    if (results.size() < 5) {
-                        bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), filePath);
-                        Send(bitmap);
-                        /*String encoded = BitmapToString(bitmap);
 
-                        SendToServer(encoded);
-                        imageAdapter.saveImageToDatabase(encoded);
+                myApplication.showLog("file image  paths", imagePath);
+
+
+
+
+                calculateFileSize(imagePath);
+                results = realm.where(UserImages.class).findAll();
+                if (results.size() < 5) {
+                 //   bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), filePath);
+
+                    uploadwithRetrofit(imagePath);
+
+                    // uploadimage(imagePath);
+
+                    //   Send(bitmap);
+                    /*String encoded = BitmapToString(bitmap);
+
+                    SendToServer(encoded);
+                    imageAdapter.saveImageToDatabase(encoded);
 //                        myApplication.showLog(TAG, "preview " + results.size());
 //                        myApplication.showLog(TAG, "pick");
-                        if (results.size() == 1) {
-                            SetImagesViews();
-                        }*/
-                    } else {
-                        Toast.makeText(getActivity(),
-                                "Sorry! You can't add more then 4 Driving Licences.", Toast.LENGTH_SHORT)
-                                .show();
-                    }
-                } catch (IOException e) {
+                    if (results.size() == 1) {
+                        SetImagesViews();
+                    }*/
+                } else {
                     Toast.makeText(getActivity(),
-                            "Sorry! Failed to Select image", Toast.LENGTH_SHORT)
+                            "Sorry! You can't add more then 4 Driving Licences.", Toast.LENGTH_SHORT)
                             .show();
                 }
             } else if (resultCode == 0) {
@@ -401,10 +459,12 @@ public class DocumentFragment extends Fragment {
         }
     }
 
+
+
     private String getRealPathFromURI(Uri contentURI) {
         Uri contentUri = Uri.parse(String.valueOf(contentURI));
 
-        String[] projection = { MediaStore.Images.Media.DATA };
+        String[] projection = {MediaStore.Images.Media.DATA};
         Cursor cursor = null;
         try {
             if (Build.VERSION.SDK_INT > 19) {
@@ -417,7 +477,7 @@ public class DocumentFragment extends Fragment {
 
                 cursor = getActivity().getContentResolver().query(
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                        projection, sel, new String[] { id }, null);
+                        projection, sel, new String[]{id}, null);
             } else {
                 cursor = getActivity().getContentResolver().query(contentUri,
                         projection, null, null, null);
@@ -449,148 +509,276 @@ public class DocumentFragment extends Fragment {
 
         String calString = String.valueOf(fileSizeInMB);
 
-        myApplication.showLog("image lenth is ------>>>",calString);
+        myApplication.showLog("image lenth is ------>>>", calString);
 
         return calString;
     }
 
-//    private void SendToServer(String bitmap, String rnd) {
-//        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, AppConfig.URL_SPINNER, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-////                setAreaSpinner();
-//                try {
+
+
+
+
+//    private void previewCapturedImage() {
+//        results = realm.where(UserImages.class).findAll();
+//        if (results.size() < 5) {
+//            try {
+//                BitmapFactory.Options options = new BitmapFactory.Options();
+//                options.inSampleSize = 8;
+//                bitmap = BitmapFactory.decodeFile(fileUri.getPath(),
+//                        options);
+//                Send(bitmap);
 //
-//                    boolean error = response.getBoolean("error");
-//                    if (!error) {
-//                        realm.beginTransaction();
-//                        // Getting JSON Array node
-//                        JSONArray results1 = response.getJSONArray("result");
-//
-//                        vehicleModels = realm.createObject(VehicleModels.class);
-//
-//                        vehicleModels.setId(0);
-//                        vehicleModels.setManufacturerName("Select Brand");
-//                        vehicleModels.setModel("Select Model");
-//                        vehicleModels.setType("");
-//                        vehicleModels.setCreatedAt("31131");
-//                        vehicleModels.setUpdatedAt("21232");
-//
-//                        for (int i = 0; i < results1.length(); i++) {
-//
-//                            JSONObject jsonObject = results1.getJSONObject(i);
-//                            int id = jsonObject.getInt("id");
-//                            String manufacturerName = jsonObject.getString("manufacturerName");
-//                            String model = jsonObject.getString("model");
-//                            String type = jsonObject.getString("type");
-//                            String createdAt = jsonObject.getString("createdAt");
-//                            String updatedAt = jsonObject.getString("updatedAt");
-//
-//                            vehicleModels = realm.createObject(VehicleModels.class);
-//
-//                            vehicleModels.setId(id);
-//                            vehicleModels.setManufacturerName(manufacturerName);
-//                            vehicleModels.setModel(model);
-//                            vehicleModels.setType(type);
-//                            vehicleModels.setCreatedAt(createdAt);
-//                            vehicleModels.setUpdatedAt(updatedAt);
-//
-//                        }
-//                        realm.commitTransaction();
-//                        myApplication.hideDialog();
-//
-//                        startActivity(new Intent(getActivity(), HomeActivity.class));
-//
-//
-//                    } else {
-//                        String errorMsg = response.getString("message");
-//                        Toast.makeText(getActivity(),
-//                                "Error :" + errorMsg, Toast.LENGTH_LONG).show();
-//                        myApplication.hideDialog();
-//
-//                    }
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                    myApplication.hideDialog();
-//
-//                }
+//            } catch (NullPointerException e) {
+//                e.printStackTrace();
 //            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                myApplication.hideDialog();
-//                //Toast.makeText(getApplicationContext(), "Responce : " + error, Toast.LENGTH_LONG).show();
-//                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
-//                    myApplication.ErrorSnackBar(getActivity());
-//                }
-//            }
-//        }) {
-//            @Override
-//            protected Map<String, String> getParams() {
-//                // Posting parameters to login url
-//                Map<String, String> params = new HashMap<String, String>();
-//                params.put("password", mPassword);
-//                params.put("phone", mContactNo);
-//
-//                return params;
-//            }
-//
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                HashMap<String, String> headers = new HashMap<String, String>();
-//                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
-//                return headers;
-//            }
-//        };
-//        myApplication.addToRequestQueue(request);
+//        } else {
+//            Toast.makeText(getActivity(),
+//                    "Sorry! You can't add more then 4 Driving Licences.", Toast.LENGTH_SHORT)
+//                    .show();
+//        }
+//   }
+
+//    private void Send(Bitmap bitmap) {
+////        String encoded = BitmapToString(bitmap);
+////        String rnd = "Licence" + GenerteRandomNumber();
+//////        SendToServer(encoded, rnd);
+////
+////
+////        imageAdapter.saveImageToDatabase(BitmapToString(bitmap), rnd);
+////        results = realm.where(UserImages.class).findAll();
+////        /*myApplication.showLog(TAG, "preview " + results.size());
+////        myApplication.showLog(TAG, "capture");*/
+////        if (results.size() == 1) {
+////            SetImagesViews();
+////        }
 //    }
-
-    private String BitmapToString(Bitmap bitmap) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] b = baos.toByteArray();
-        return Base64.encodeToString(b, Base64.DEFAULT);
-    }
-
-    private void previewCapturedImage() {
-        results = realm.where(UserImages.class).findAll();
-        if (results.size() < 5) {
-            try {
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inSampleSize = 8;
-                bitmap = BitmapFactory.decodeFile(fileUri.getPath(),
-                        options);
-                Send(bitmap);
-
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-            }
-        } else {
-            Toast.makeText(getActivity(),
-                    "Sorry! You can't add more then 4 Driving Licences.", Toast.LENGTH_SHORT)
-                    .show();
-        }
-    }
-
-    private void Send(Bitmap bitmap) {
-        String encoded = BitmapToString(bitmap);
-        String rnd = "Licence" + GenerteRandomNumber();
-//        SendToServer(encoded, rnd);
-
-
-        imageAdapter.saveImageToDatabase(BitmapToString(bitmap), rnd);
-        results = realm.where(UserImages.class).findAll();
-        /*myApplication.showLog(TAG, "preview " + results.size());
-        myApplication.showLog(TAG, "capture");*/
-        if (results.size() == 1) {
-            SetImagesViews();
-        }
-    }
 
     private int GenerteRandomNumber() {
         Random r = new Random();
         return r.nextInt(9999 - 1000) + 1000;
     }
 
+
+    class UploadProgressViewHolder {
+        View itemView;
+
+        @Bind(R.id.uploadTitle)
+        TextView uploadTitle;
+        @Bind(R.id.uploadProgress)
+        ProgressBar progressBar;
+
+        String uploadId;
+
+        UploadProgressViewHolder(View view, String filename) {
+            itemView = view;
+            ButterKnife.bind(this, itemView);
+
+            progressBar.setMax(100);
+            progressBar.setProgress(0);
+
+            uploadTitle.setText(getString(R.string.upload_progress, filename));
+        }
+
+        @OnClick(R.id.cancelUploadButton)
+        void onCancelUploadClick() {
+            if (uploadId == null)
+                return;
+
+            UploadService.stopUpload(uploadId);
+        }
+    }
+
+
+    private void uploadwithRetrofit(String imagePath) {
+
+        MyApplication.getInstance().DialogMessage("Upload Documents...");
+        MyApplication.getInstance().showDialog();
+
+        RequestBody requestFile =
+                RequestBody.create(MediaType.parse("multipart/form-data"), new File(imagePath));
+
+        // MultipartBody.Part is used to send also the actual file name
+        MultipartBody.Part body =
+                MultipartBody.Part.createFormData("file", "vishal", requestFile);
+//        MultipartBody.Part body =
+//                MultipartBody.Part.create(requestFile);
+
+//
+//        OkHttpClient okHttpClient1 = new OkHttpClient().newBuilder()
+//                .connectTimeout(120, TimeUnit.SECONDS)
+//                .writeTimeout(120, TimeUnit.SECONDS)
+//                .readTimeout(120, TimeUnit.SECONDS)
+//                .build();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(AppConfig.URL_UPLOAD_DOC)
+                .addConverterFactory(GsonConverterFactory.create())
+//                .client(okHttpClient1)
+                .build();
+
+        ResetApi resetApi = retrofit.create(ResetApi.class);
+
+        retrofit2.Call<data> call = resetApi.getTasks("52d8c0efea5039cd0d778db7521889cf", body);
+
+        call.enqueue(new retrofit2.Callback<data>() {
+            @Override
+            public void onResponse(retrofit2.Call<data> call, Response<data> response) {
+
+                MyApplication.getInstance().hideDialog();
+
+                int code = response.code();
+                myApplication.showLog("code", "" + code);
+
+                Toast.makeText(getActivity(), "Respose Code " + code, Toast.LENGTH_SHORT).show();
+
+                if (response.code() == 200) {
+
+                    data myResp = response.body();
+                    boolean error = myResp.isError();
+
+                    if (!error) {
+
+                        String imageurl = myResp.getResult();
+
+                        myApplication.showLog("respose", imageurl);
+                        Toast.makeText(getActivity(), "Url" + imageurl, Toast.LENGTH_SHORT).show();
+
+                        AddVehicalesDocument(imageurl);
+
+
+                    } else {
+                        MyApplication.getInstance().hideDialog();
+
+                        Toast.makeText(getActivity(), "Error For Uploading Documnent", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                } else {
+
+                    MyApplication.getInstance().hideDialog();
+
+                    Toast.makeText(getActivity(), "Error Some Fatch Data", Toast.LENGTH_SHORT).show();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<data> call, Throwable t) {
+
+                MyApplication.getInstance().hideDialog();
+
+                if (t instanceof TimeoutError || t instanceof NoConnectionError) {
+                    myApplication.ErrorSnackBar(getActivity());
+                }
+
+            }
+        });
+
+    }
+
+    private void AddVehicalesDocument(final String imageurl) {
+
+
+        String tag_string_req = "req_delete_vehicle";
+
+        myApplication.DialogMessage("Add  Document...");
+        myApplication.showDialog();
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_ADD_DOC, new com.android.volley.Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                myApplication.hideDialog();
+
+                myApplication.showLog("respodse", response);
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+                    Log.e(TAG, "onResponse: " + jObj.toString());
+
+                    // Check for error node in json
+                    if (!error) {
+                        Toast.makeText(getActivity(),
+                                "add Successfull... ", Toast.LENGTH_LONG).show();
+
+                        // parsing the user profile information
+                        JSONObject profileObj = jObj.getJSONObject("result");
+
+                        int id = profileObj.getInt("id");
+
+                        myApplication.showLog("image id", "" + id);
+
+                        SaveImageIntoDatabase(id, imageurl);
+
+                        // DeleteContactToDatabase(contactid);
+                    } else {
+                        // Error in login. Get the error message
+                        String errorMsg = jObj.getString("message");
+                        Toast.makeText(getActivity(),
+                                "Error :" + errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    // JSON error
+                    e.printStackTrace();
+                    Toast.makeText(getActivity(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+//                Log.e(TAG, "Login Error: " + error.getMessage());
+                myApplication.ErrorSnackBar((Activity) getActivity());
+                myApplication.hideDialog();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> stringMap = new HashMap<>();
+                stringMap.put("url", imageurl);
+                stringMap.put("type", "licence");
+//               stringMap.put("vehicleId", "21");
+
+                return stringMap;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+                myApplication.showLog(TAG, String.valueOf("passed auth"));
+                return headers;
+
+            }
+
+
+        };
+        // Adding request to request queue
+        myApplication.addToRequestQueue(strReq, tag_string_req);
+
+
+    }
+
+    private void SaveImageIntoDatabase(int id, String imageurl) {
+
+
+        //       String rnd = "Licence" + GenerteRandomNumber();
+//        SendToServer(encoded, rnd);
+
+
+        imageAdapter.saveImageToDatabase(String.valueOf(id), imageurl, "");
+        imageAdapter.notifyDataSetChanged();
+        results = realm.where(UserImages.class).findAll();
+        myApplication.showLog(TAG, "preview " + results.size());
+        myApplication.showLog(TAG, "capture");
+        if (results.size() == 1) {
+            SetImagesViews();
+        }
+
+    }
 
 }

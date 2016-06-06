@@ -26,7 +26,8 @@ public class AppConfig {
 
     public static final String URL_SPINNER_VEHICLE_MODELS = URL_ROOT + "v1/vehiclemodels";
 
-    public static final String URL_UPLOAD_DOC = URL_ROOT + "v1/upload";
+    public static final String URL_UPLOAD_DOC = URL_ROOT + "v1/";
+    public static final String URL_ADD_DOC = URL_ROOT + "v1/document";
 
     public static final String URL_CLAIM_VEHICLE = URL_ROOT + "v1/claimvehicle";
 

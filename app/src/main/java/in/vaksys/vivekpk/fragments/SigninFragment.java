@@ -492,6 +492,9 @@ public class SigninFragment extends Fragment {
     private void LoadingEmergenyContact() {
         myApplication.DialogMessage("Loading Emergency Contact...");
 //        myApplication.showDialog();
+
+
+
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, AppConfig.URL_EMERGENY_CONTACT,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -524,20 +527,19 @@ public class SigninFragment extends Fragment {
                                     realm.commitTransaction();
                                     myApplication.hideDialog();
 
-                                    startActivity(new Intent(getActivity(), HomeActivity.class));
 
-
-                                } else {
-                                    String errorMsg = response.getString("message");
-                                    Toast.makeText(getActivity(),
-                                            "Error :" + errorMsg, Toast.LENGTH_LONG).show();
-                                    myApplication.hideDialog();
 
                                 }
+                                startActivity(new Intent(getActivity(), HomeActivity.class));
+
+
                             }else {
 
+                                String errorMsg = response.getString("message");
                                 Toast.makeText(getActivity(),
-                                        "Error :" + "Lenth is o", Toast.LENGTH_LONG).show();
+                                        "Error :" + errorMsg, Toast.LENGTH_LONG).show();
+                                myApplication.hideDialog();
+
                             }
 
 
