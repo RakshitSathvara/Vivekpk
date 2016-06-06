@@ -27,16 +27,14 @@ import in.vaksys.vivekpk.fragments.SignupFragment;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "MainActivity";
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    final ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+    PreferenceHelper prefs;
     private LinearLayout linearLayout1, linearLayout2, linearLayout3;
     private CheckBox checkBox;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    final ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-    private static final String TAG = "MainActivity";
-    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    PreferenceHelper prefs;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

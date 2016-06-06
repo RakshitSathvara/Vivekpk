@@ -16,12 +16,12 @@ import io.realm.RealmResults;
  */
 public class mySpinnerAdapterModel extends BaseAdapter {
 
+    private static final String TAG = "mySpinnerAdapterBrand";
+    private static LayoutInflater inflater = null;
     private final Context context;
     //    private final List<ModelPojo.ResultEntity> cityEntityList;
     private final RealmResults<VehicleModels> vehicleModelses;
-    private static LayoutInflater inflater = null;
     String mType;
-    private static final String TAG = "mySpinnerAdapterBrand";
 
     public mySpinnerAdapterModel(Context context, RealmResults<VehicleModels> vehicleModelses, String type) {
         this.context = context;

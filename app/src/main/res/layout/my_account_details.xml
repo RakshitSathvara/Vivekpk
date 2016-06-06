@@ -79,6 +79,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="First Name"
+                            android:lines="1"
                             android:textSize="16sp" />
 
                     </android.support.design.widget.TextInputLayout>
@@ -95,6 +96,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Last Name"
+                            android:lines="1"
                             android:textSize="16sp" />
 
                     </android.support.design.widget.TextInputLayout>
@@ -125,6 +127,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Email ID"
+                            android:lines="1"
                             android:textSize="16sp" />
 
                     </android.support.design.widget.TextInputLayout>
@@ -156,6 +159,7 @@
                             android:layout_height="wrap_content"
                             android:hint="Mobile Number"
                             android:inputType="number"
+                            android:lines="1"
                             android:textSize="16sp" />
 
                     </android.support.design.widget.TextInputLayout>
@@ -180,13 +184,14 @@
                         android:layout_weight="1"
                         android:padding="10dp">
 
-
                         <EditText
                             android:id="@+id/et_password"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Change Password"
                             android:inputType="textPassword"
+                            android:lines="1"
+                            android:password="true"
                             android:textSize="16sp" />
 
                     </android.support.design.widget.TextInputLayout>

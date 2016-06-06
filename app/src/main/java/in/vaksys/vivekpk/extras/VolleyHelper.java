@@ -1,13 +1,7 @@
 package in.vaksys.vivekpk.extras;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -20,20 +14,14 @@ import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
 import in.vaksys.vivekpk.adapter.CarRecyclerViewAdapter;
-import in.vaksys.vivekpk.dbPojo.EmergencyContact;
 import in.vaksys.vivekpk.dbPojo.VehicleDetails;
-import in.vaksys.vivekpk.fragments.EmergencyFragment;
 import in.vaksys.vivekpk.model.ClaimMessage;
 import io.realm.Realm;
-import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -49,12 +37,8 @@ public class VolleyHelper {
     private Realm realm;
     private String BLANK = "";
     CarRecyclerViewAdapter adapter;
-    private RealmResults<EmergencyContact> data;
-    private HttpURLConnection conn = null;
 
     OkHttpClient client;
-
-    ProgressDialog pDialog;
 
     public VolleyHelper(Activity context) {
 
@@ -63,11 +47,9 @@ public class VolleyHelper {
         myApplication.createDialog(context, false);
         adapter = new CarRecyclerViewAdapter(activity);
 
-
         client = new OkHttpClient();
 
     }
-
 
     public void AddVehicle(final String type, final int modelid, final String vehicle_number) {
 
@@ -163,8 +145,9 @@ public class VolleyHelper {
 
     }
 
+
     public void UpdateVehicle(final int VehicleId, final int modelid, final String insuranceCompany, final String insurace_exp_date,
-                              final String pollution_exp_date, final String service_exp_date, final String note) {
+                              final String pollution_exp_date, final String service_exp_date, final String note, final String notificationDate) {
 
         String tag_string_req = "req_update_vehicle";
 
@@ -190,7 +173,7 @@ public class VolleyHelper {
 
                         // parsing the user profile information
 
-                        UpdateIntoDatabase(BLANK, VehicleId, modelid, insuranceCompany, insurace_exp_date, pollution_exp_date, service_exp_date, note);
+                        UpdateIntoDatabase(BLANK, VehicleId, modelid, insuranceCompany, insurace_exp_date, pollution_exp_date, service_exp_date, note, notificationDate);
 
 
                     } else {
@@ -244,125 +227,72 @@ public class VolleyHelper {
     }
 
     public void DeleteVehicle(final int VehicleId) {
+
+        String tag_string_req = "req_delete_vehicle";
+
         myApplication.DialogMessage("Deleting Vehicle...");
         myApplication.showDialog();
 
-        RequestBody formBody = new FormBody.Builder()
-                .add("id", String.valueOf(VehicleId))
-                .build();
+        StringRequest strReq = new StringRequest(Request.Method.DELETE,
+                AppConfig.URL_DELETE_USER_VEHICLE, new Response.Listener<String>() {
 
-
-        okhttp3.Request request = new okhttp3.Request.Builder()
-                .url(AppConfig.URL_TEMP + "/userVehicle")
-                .delete(formBody)
-                .addHeader("authorization", "99742a0bbcf11b9ac6b10e90b3a76f34")
-                .build();
-
-
-        client.newCall(request).enqueue(new okhttp3.Callback() {
             @Override
-            public void onFailure(okhttp3.Call call, IOException e) {
+            public void onResponse(String response) {
+                myApplication.hideDialog();
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+                    Log.e(TAG, "onResponse: " + jObj.toString());
+
+                    // Check for error node in json
+                    if (!error) {
+                        Toast.makeText(activity,
+                                "Delete Successfull... ", Toast.LENGTH_LONG).show();
+
+                        // parsing the user profile information
+//                        JSONObject profileObj = jObj.getJSONObject("result");
+
+                        DeleteIntoDatabase(VehicleId);
+                    } else {
+                        // Error in login. Get the error message
+                        String errorMsg = jObj.getString("message");
+                        Toast.makeText(activity,
+                                "Error :" + errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    // JSON error
+                    e.printStackTrace();
+                    Toast.makeText(activity, "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+//                Log.e(TAG, "Login Error: " + error.getMessage());
                 myApplication.ErrorSnackBar(activity);
                 myApplication.hideDialog();
             }
+        }) {
 
             @Override
-            public void onResponse(okhttp3.Call call, final okhttp3.Response response) throws IOException {
-                myApplication.hideDialog();
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+                headers.put("id", String.valueOf(VehicleId));
+                myApplication.showLog(TAG, String.valueOf("passed auth"));
+                return headers;
 
-                myApplication.showLog(TAG, String.valueOf(response.code()));
-                myApplication.showLog(TAG, String.valueOf(response.body().string()));
-
-                final String s = response.body().string();
-
-
-                if (!response.isSuccessful()) {
-                    throw new IOException("Unexpected code " + response);
-                } else {
-
-                    myApplication.showLog("eflkjfjhfhf", "work for");
-
-                    activity.runOnUiThread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            myApplication.showLog("eflkjfjhfhf", "work for runOnUiThread");
-
-                            myApplication.showLog("eflkjfjhfhf", "work for try ");
-                            getData(s, VehicleId);
-
-                            Looper.loop();
-                        }
-                    });
-
-//                    new Thread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//
-//
-//                            myApplication.showLog("eflkjfjhfhf", "work for run ");
-//                            try {
-//
-//                                myApplication.showLog("eflkjfjhfhf", "work for try ");
-//
-//                                getData(response.body().string(), VehicleId);
-//                            } catch (IOException e) {
-//                                e.printStackTrace();
-//                            }
-//
-//
-//                        }
-//                    });
-
-
-                }
             }
-        });
+        };
+        // Adding request to request queue
+        myApplication.addToRequestQueue(strReq, tag_string_req);
 
-
-    }
-
-    private void getData(String string, int vehicleId) {
-
-
-        JSONObject jObj = null;
-
-        //    myApplication.showLog(TAG, jObj.toString());
-
-        boolean error = false;
-        try {
-            error = jObj.getBoolean("error");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        Log.e(TAG, "onResponse: " + jObj.toString());
-
-        // Check for error node in json
-        if (!error) {
-            Toast.makeText(activity,
-                    "Delete Successfull... ", Toast.LENGTH_LONG).show();
-
-            DeleteIntoDatabase(vehicleId);
-        } else {
-            String errorMsg = null;
-            try {
-                errorMsg = jObj.getString("message");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            Toast.makeText(activity,
-                    "Error :" + errorMsg, Toast.LENGTH_LONG).show();
-        }
     }
 
     public void DeleteContact(final int contactid) {
-//        MyApplication.getInstance().DialogMessage("Deleting Contact...");
-//        MyApplication.getInstance().showDialog();
-
-        pDialog = new ProgressDialog(activity);
-        pDialog.setMessage("Deleting Contact...");
-        pDialog.setCancelable(true);
-        pDialog.show();
+        myApplication.DialogMessage("Deleting Contact...");
+        myApplication.showDialog();
 
         RequestBody formBody = new FormBody.Builder()
                 .add("id", String.valueOf(contactid))
@@ -380,12 +310,12 @@ public class VolleyHelper {
             @Override
             public void onFailure(okhttp3.Call call, IOException e) {
                 myApplication.ErrorSnackBar(activity);
-                MyApplication.getInstance().hideDialog();
+                myApplication.hideDialog();
             }
 
             @Override
             public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
-                //        MyApplication.getInstance().hideDialog();
+                myApplication.hideDialog();
 
                 myApplication.showLog(TAG, String.valueOf(response.code()));
                 myApplication.showLog(TAG, String.valueOf(response.body().string()));
@@ -537,7 +467,7 @@ public class VolleyHelper {
 
 
     private void UpdateIntoDatabase(final String name, final int vehicleId, final int ModelId, String insuranceCompany, String ins_exp_date, String poll_exp_date,
-                                    String serv_exp_date, String note) {
+                                    String serv_exp_date, String note, String NotificationDate) {
         myApplication.DialogMessage("Setting Up Vehicle...");
         myApplication.showDialog();
 
@@ -552,6 +482,7 @@ public class VolleyHelper {
         user.setInsuranceExpireDate(ins_exp_date);
         user.setPollutionExpireDate(poll_exp_date);
         user.setServiceExpireDate(serv_exp_date);
+        user.setNotificationDate(NotificationDate);
         user.setNote(note);
 
         realm.commitTransaction();

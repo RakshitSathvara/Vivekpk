@@ -16,12 +16,12 @@ import io.realm.RealmResults;
  */
 public class mySpinnerAdapterBrand extends BaseAdapter {
 
+    private static final String TAG = "mySpinnerAdapterBrand";
+    private static LayoutInflater inflater = null;
     private final Context context;
     //    private final List<ModelPojo.ResultEntity> cityEntityList;
     private final RealmResults<VehicleModels> vehicleModelses;
-    private static LayoutInflater inflater = null;
     String mType;
-    private static final String TAG = "mySpinnerAdapterBrand";
 
     public mySpinnerAdapterBrand(Context context, RealmResults<VehicleModels> vehicleModelses, String type) {
         this.context = context;
@@ -78,7 +78,7 @@ public class mySpinnerAdapterBrand extends BaseAdapter {
                 holder.idtext.setText(String.valueOf(vehicleModels.getId()));
             }
         }
-        if (mType.equalsIgnoreCase("bike") ) {
+        if (mType.equalsIgnoreCase("bike")) {
 //            Log.e(TAG, "getView:  bike" + item.getType());
             if (vehicleModels.getType().equalsIgnoreCase("car")) {      // here i have to change bike when real api comes . // TODO: 18-05-2016
 //                Log.e(TAG, "getView:  bike 1111 " + item.getType());

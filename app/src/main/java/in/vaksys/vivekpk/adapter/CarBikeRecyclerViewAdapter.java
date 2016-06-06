@@ -34,13 +34,14 @@ import io.realm.RealmResults;
 /**
  * Created by Harsh on 26-05-2016.
  */
-public class CarRecyclerViewAdapter extends RecyclerView.Adapter<CarRecyclerViewAdapter.AdapterHolder> {
+public class CarBikeRecyclerViewAdapter extends RecyclerView.Adapter<CarBikeRecyclerViewAdapter.AdapterHolder> {
 
+    private static final String BLANK = "";
     private final Context context;
     private RealmResults<VehicleDetails> detailses = null;
     MyApplication myApplication;
     private Realm realm;
-    private static final String TAG = "CarRecyclerViewAdapter";
+    private static final String TAG = "CarBikeRecyclerViewAdapter";
     AdapterHolder viewHolder;
     private VehicleDetails details;
     Spinner brandSpinner, ModelSpinner;
@@ -50,7 +51,7 @@ public class CarRecyclerViewAdapter extends RecyclerView.Adapter<CarRecyclerView
     Dialog confirm;
 
 
-    public CarRecyclerViewAdapter(Context context, RealmResults<VehicleDetails> detailses) {
+    public CarBikeRecyclerViewAdapter(Context context, RealmResults<VehicleDetails> detailses) {
 
         this.myApplication = MyApplication.getInstance();
         realm = Realm.getDefaultInstance();
@@ -61,7 +62,7 @@ public class CarRecyclerViewAdapter extends RecyclerView.Adapter<CarRecyclerView
 
     }
 
-    public CarRecyclerViewAdapter(Context context) {
+    public CarBikeRecyclerViewAdapter(Context context) {
         this.context = context;
     }
 
@@ -247,7 +248,7 @@ public class CarRecyclerViewAdapter extends RecyclerView.Adapter<CarRecyclerView
     public void UpdateVehicle(Activity activity, final int VehicleId, final int modelid, final String insuranceCompany, final String insurace_exp_date,
                               final String pollution_exp_date, final String service_exp_date, final String note) {
         VolleyHelper helper = new VolleyHelper(activity);
-        helper.UpdateVehicle(VehicleId, modelid, insuranceCompany, insurace_exp_date, pollution_exp_date, service_exp_date, note);
+        helper.UpdateVehicle(VehicleId, modelid, insuranceCompany, insurace_exp_date, pollution_exp_date, service_exp_date, note,BLANK);
         detailses.addChangeListener(new RealmChangeListener<RealmResults<VehicleDetails>>() {
             @Override
             public void onChange(RealmResults<VehicleDetails> element) {

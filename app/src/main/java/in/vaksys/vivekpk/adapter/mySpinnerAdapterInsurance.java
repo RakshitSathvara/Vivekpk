@@ -16,12 +16,12 @@ import io.realm.RealmResults;
  */
 public class mySpinnerAdapterInsurance extends BaseAdapter {
 
+    private static final String TAG = "mySpinnerAdapterBrand";
+    private static LayoutInflater inflater = null;
     private final Context context;
     //    private final List<ModelPojo.ResultEntity> cityEntityList;
     private final RealmResults<InsuranceCompanies> insuranceCompanies;
-    private static LayoutInflater inflater = null;
     String mType;
-    private static final String TAG = "mySpinnerAdapterBrand";
 
     public mySpinnerAdapterInsurance(Context context, RealmResults<InsuranceCompanies> insuranceCompanies, String type) {
         this.context = context;

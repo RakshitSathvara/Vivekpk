@@ -1,22 +1,18 @@
 package in.vaksys.vivekpk.activities;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import in.vaksys.vivekpk.R;
@@ -47,6 +43,42 @@ public class WebViewActivity extends AppCompatActivity {
         webView.loadUrl("http://daddysroad.com/faqapp.html");
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK) && webView.canGoBack()) {
+            webView.goBack();
+            return true;
+        } else {
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = new MenuInflater(this);
+        menuInflater.inflate(R.menu.notification_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                startActivity(new Intent(this, HomeActivity.class));
+                return true;
+
+
+            case R.id.notificationToolbar:
+                startActivity(new Intent(WebViewActivity.this, NotificationActivity.class));
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     private class WebViewClientDemo extends WebViewClient {
         @Override
@@ -73,44 +105,6 @@ public class WebViewActivity extends AppCompatActivity {
     private class WebChromeClientDemo extends WebChromeClient {
         public void onProgressChanged(WebView view, int progress) {
             progressBar.setProgress(progress);
-        }
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if ((keyCode == KeyEvent.KEYCODE_BACK) && webView.canGoBack()) {
-            webView.goBack();
-            return true;
-        } else {
-            finish();
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = new MenuInflater(this);
-        menuInflater.inflate(R.menu.notification_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-
-            case android.R.id.home:
-                startActivity(new Intent(this, HomeActivity.class));
-                return true;
-
-
-            case R.id.notificationToolbar:
-                startActivity(new Intent(WebViewActivity.this, NotificationActivity.class));
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
         }
     }
 }

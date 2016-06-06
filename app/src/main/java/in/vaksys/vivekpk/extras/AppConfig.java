@@ -6,6 +6,7 @@ package in.vaksys.vivekpk.extras;
 public class AppConfig {
 
     public static final String SMS_ORIGIN = "ONEWAY";
+
     public static String URL_ROOT = "http://54.213.226.66/";
 
     public static String URL_SIGNUP = URL_ROOT + "v1/register";
@@ -14,7 +15,7 @@ public class AppConfig {
 
     public static String URL_ADD_USER_VEHICLE = URL_ROOT + "v1/userVehicle";
 
-    public static String URL_DELETE_USER_VEHICLE = URL_ROOT + "v1/userVehicle?id=";
+    public static String URL_DELETE_USER_VEHICLE = URL_ROOT + "v1/userVehicle";
 
     public static String URL_GET_USER_VEHICLE = URL_ROOT + "v1/userVehicles";
 
@@ -32,10 +33,13 @@ public class AppConfig {
     public static final String URL_CLAIM_VEHICLE = URL_ROOT + "v1/claimvehicle";
 
     public static final String URL_UPDATE_USER = URL_ROOT + "v1/user";
+
     public static final String URL_EMERGENY_CONTACT = URL_ROOT + "v1/contact";
 
 
     public static final String URL_TEMP = "http://jarvis007.16mb.com/backend/v1/";
+
+    public static final String URL_SEARCH_VEHICLE = URL_ROOT + "v1/search";
 
 
 }

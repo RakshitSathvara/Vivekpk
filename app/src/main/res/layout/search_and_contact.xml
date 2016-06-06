@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/linear_contactSearch"
-    android:visibility="visible"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="12dp">
+    android:padding="12dp"
+    android:visibility="visible">
 
     <TextView
         android:layout_width="match_parent"
@@ -41,7 +41,7 @@
                     android:src="@drawable/search_contact_owner" />
 
                 <EditText
-                    android:id="@+id/et_searchVehicleNumber"
+                    android:id="@+id/et_search_searchVehicleNumber"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="8"
@@ -51,8 +51,8 @@
             </LinearLayout>
 
 
-            <!--<Button
-                android:id="@+id/btn_search"
+            <Button
+                android:id="@+id/btn_search_searchVehicle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -63,13 +63,13 @@
                 android:background="@color/colorPrimary"
                 android:text="Search"
                 android:textAllCaps="false"
-                android:textStyle="bold" />-->
+                android:textStyle="bold" />
 
-            <ListView
-                android:id="@+id/lv_searchContact"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="8dp"></ListView>
+            <!-- <ListView
+                 android:id="@+id/lv_searchContact"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:layout_marginTop="8dp"></ListView>-->
 
 
         </LinearLayout>

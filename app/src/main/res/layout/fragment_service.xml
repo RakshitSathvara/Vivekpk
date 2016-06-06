@@ -22,9 +22,15 @@
 
         <include layout="@layout/add_vehicle_details" />
 
-        <include layout="@layout/newvehicle" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/ServiceDetailsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-        <include layout="@layout/service_due_date" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/ServiceEditRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 </ScrollView>

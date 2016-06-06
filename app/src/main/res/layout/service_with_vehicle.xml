@@ -37,7 +37,7 @@
                     android:textStyle="bold" />
 
                 <ImageView
-                    android:id="@+id/img_vehicelDetailEdit"
+                    android:id="@+id/img_vehicelDetailEdit_serv1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|right"
@@ -68,7 +68,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_detailvehicleNumber"
+                        android:id="@+id/tv_detailvehicleNumber_serv1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -77,7 +77,7 @@
                         android:textColor="#83837F" />
 
                     <TextView
-                        android:id="@+id/vehcileIdHidden_det"
+                        android:id="@+id/vehcileIdHidden_serv1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:visibility="gone" />
@@ -107,7 +107,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_detailvehicleBrand"
+                        android:id="@+id/tv_detailvehicleBrand_serv1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -140,7 +140,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_detailvehicleNumberModel"
+                        android:id="@+id/tv_detailvehicleNumberModel_serv1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -160,122 +160,99 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="8dp"
-                android:orientation="vertical"
-                android:padding="8dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Insurance Policy"
-                    android:textColor="#83837F"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_gravity="center"
-                    android:orientation="horizontal">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="15dp">
 
-                    <ImageView
-                        android:layout_width="0dp"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:src="@drawable/insurance_policy" />
+                        android:text="Service Due Date"
+                        android:textColor="#83837F"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="4"
-                        android:orientation="vertical">
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
 
-                        <Spinner
-                            android:id="@+id/sp_insuranceCompany"
-                            android:layout_width="match_parent"
+                        <ImageView
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:spinnerMode="dialog" />
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:src="@drawable/calendar" />
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="2dp"
-                            android:layout_marginTop="5dp"
-                            android:background="#C2BCBF" />
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_date_serv1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Expiry Date"
+                                android:textColor="#83837F"
+                                android:textSize="15sp" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="2dp"
+                                android:layout_marginTop="5dp"
+                                android:background="#C2BCBF" />
+                        </LinearLayout>
+
+
                     </LinearLayout>
 
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Expiry Date"
-                    android:textColor="#83837F"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="0dp"
+                    <TextView
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:src="@drawable/calendar" />
+                        android:layout_marginTop="8dp"
+                        android:text="Note"
+                        android:textColor="#83837F"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/et_optionalField_serv1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Optional Field" />
 
                     <LinearLayout
-                        android:id="@+id/select_expiry_date_insurance"
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="4"
-                        android:orientation="vertical">
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
 
-                        <TextView
-                            android:id="@+id/tv_date_en"
-                            android:layout_width="match_parent"
+                        <Button
+                            android:id="@+id/btn_service_due_date_cancel1"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="Expiry Date"
-                            android:textColor="#83837F"
-                            android:textSize="15sp" />
+                            android:layout_marginRight="5dp"
+                            android:layout_weight="1"
+                            android:background="#C2BCBF"
+                            android:text="cancel" />
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="2dp"
-                            android:layout_marginTop="5dp"
-                            android:background="#C2BCBF" />
+                        <Button
+                            android:id="@+id/btn_service_due_date_setAlert1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/btn_yellow_border_shape"
+                            android:text="set alert" />
+
                     </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="36dp"
-                    android:layout_marginBottom="6dp"
-                    android:layout_marginTop="16dp"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/btn_insurance_details_expiry_cancel"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="8dp"
-                        android:layout_weight="1"
-                        android:background="#C2BCBF"
-                        android:text="cancel" />
-
-                    <Button
-                        android:id="@+id/btn_insurance_details_expiry_setAlertDetail"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/btn_yellow_border_shape"
-                        android:text="set alert" />
 
                 </LinearLayout>
 

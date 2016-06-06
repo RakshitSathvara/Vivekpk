@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/linearInsurancePolicyWithVehicle"
+    android:id="@+id/linearInsuranceDetails"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -12,20 +12,16 @@
         android:layout_height="wrap_content"
         android:background="#F8F8F8">
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingBottom="8dp"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingTop="8dp">
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:padding="10dp">
 
                 <TextView
                     android:layout_width="0dp"
@@ -37,7 +33,7 @@
                     android:textStyle="bold" />
 
                 <ImageView
-                    android:id="@+id/img_vehicelDetailEdit"
+                    android:id="@+id/img_vehicelDetailEdit_serv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|right"
@@ -68,16 +64,16 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_detailvehicleNumber"
+                        android:id="@+id/tv_detailvehicleNumber_serv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="5dp"
                         android:text="KA05j95959"
                         android:textColor="#83837F" />
 
                     <TextView
-                        android:id="@+id/vehcileIdHidden_det"
+                        android:id="@+id/vehcileIdHidden_serv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:visibility="gone" />
@@ -86,7 +82,7 @@
 
                 <View
                     android:layout_width="1dp"
-                    android:layout_height="25dp"
+                    android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:background="#929091" />
 
@@ -107,11 +103,11 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_detailvehicleBrand"
+                        android:id="@+id/tv_detailvehicleBrand_serv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="5dp"
                         android:text="Jaguar"
                         android:textColor="#83837F" />
 
@@ -119,7 +115,7 @@
 
                 <View
                     android:layout_width="1dp"
-                    android:layout_height="25dp"
+                    android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:background="#929091" />
 
@@ -140,11 +136,11 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_detailvehicleNumberModel"
+                        android:id="@+id/tv_detailvehicleNumberModel_serv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="5dp"
                         android:text="Sedan"
                         android:textColor="#83837F" />
 
@@ -153,133 +149,129 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="2dp"
+                android:layout_height="1dp"
                 android:layout_marginTop="8dp"
                 android:background="#CCC" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:orientation="vertical"
-                android:padding="8dp">
+                android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Insurance Policy"
-                    android:textColor="#83837F"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:src="@drawable/calendar" />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_gravity="center"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:src="@drawable/insurance_policy" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="4"
-                        android:orientation="vertical">
-
-                        <Spinner
-                            android:id="@+id/sp_insuranceCompany"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:spinnerMode="dialog" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="2dp"
-                            android:layout_marginTop="5dp"
-                            android:background="#C2BCBF" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Expiry Date"
-                    android:textColor="#83837F"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:layout_weight="4"
+                    android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="0dp"
+                    <TextView
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:src="@drawable/calendar" />
+                        android:text="Expiry Date"
+                        android:textColor="#CAC6C9"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
 
-                    <LinearLayout
-                        android:id="@+id/select_expiry_date_insurance"
-                        android:layout_width="0dp"
+                    <TextView
+                        android:id="@+id/tv_date_serv"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="4"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tv_date_en"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Expiry Date"
-                            android:textColor="#83837F"
-                            android:textSize="15sp" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="2dp"
-                            android:layout_marginTop="5dp"
-                            android:background="#C2BCBF" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="36dp"
-                    android:layout_marginBottom="6dp"
-                    android:layout_marginTop="16dp"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/btn_insurance_details_expiry_cancel"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="8dp"
-                        android:layout_weight="1"
-                        android:background="#C2BCBF"
-                        android:text="cancel" />
-
-                    <Button
-                        android:id="@+id/btn_insurance_details_expiry_setAlertDetail"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/btn_yellow_border_shape"
-                        android:text="set alert" />
-
+                        android:layout_marginTop="5dp"
+                        android:text="12 Fab 2016"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:src="@drawable/insurance_policy" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Note"
+                        android:textColor="#CAC6C9"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_companyName_serv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="Oriental Insurance"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/img_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/edit_icon" />
+
+            </LinearLayout>
+
+            <!--<TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Expiry Date"
+                android:textColor="#83837F"
+                android:textSize="16sp"
+                android:textStyle="bold" />-->
+
+
+            <!--<LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:background="#C2BCBF"
+                    android:text="cancel" />
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:background="@color/colorPrimary"
+                    android:text="set alert" />
+
+            </LinearLayout>-->
+
         </LinearLayout>
 
     </android.support.v7.widget.CardView>

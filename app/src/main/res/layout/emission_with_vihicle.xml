@@ -37,7 +37,7 @@
                     android:textStyle="bold" />
 
                 <ImageView
-                    android:id="@+id/img_vehicelDetailEdit"
+                    android:id="@+id/img_vehicelDetailEdit_emi"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|right"
@@ -68,7 +68,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_detailvehicleNumber"
+                        android:id="@+id/tv_detailvehicleNumber_emi"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -77,7 +77,7 @@
                         android:textColor="#83837F" />
 
                     <TextView
-                        android:id="@+id/vehcileIdHidden_det"
+                        android:id="@+id/vehcileIdHidden_emi"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:visibility="gone" />
@@ -107,7 +107,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_detailvehicleBrand"
+                        android:id="@+id/tv_detailvehicleBrand_emi"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -140,7 +140,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_detailvehicleNumberModel"
+                        android:id="@+id/tv_detailvehicleNumberModel_emi"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -165,48 +165,6 @@
                 android:padding="8dp">
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Insurance Policy"
-                    android:textColor="#83837F"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_gravity="center"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:src="@drawable/insurance_policy" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="4"
-                        android:orientation="vertical">
-
-                        <Spinner
-                            android:id="@+id/sp_insuranceCompany"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:spinnerMode="dialog" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="2dp"
-                            android:layout_marginTop="5dp"
-                            android:background="#C2BCBF" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -229,14 +187,14 @@
                         android:src="@drawable/calendar" />
 
                     <LinearLayout
-                        android:id="@+id/select_expiry_date_insurance"
+                        android:id="@+id/select_expiry_date_emi"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="4"
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/tv_date_en"
+                            android:id="@+id/tv_date_en_emi"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Expiry Date"
@@ -260,7 +218,7 @@
                     android:orientation="horizontal">
 
                     <Button
-                        android:id="@+id/btn_insurance_details_expiry_cancel"
+                        android:id="@+id/btn_emi_expiry_cancel"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="8dp"
@@ -269,7 +227,7 @@
                         android:text="cancel" />
 
                     <Button
-                        android:id="@+id/btn_insurance_details_expiry_setAlertDetail"
+                        android:id="@+id/btn_emi_expiry_setAlertDetail"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"

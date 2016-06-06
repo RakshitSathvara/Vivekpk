@@ -33,7 +33,7 @@
                     android:textStyle="bold" />
 
                 <ImageView
-                    android:id="@+id/img_vehicelDetailEdit_det"
+                    android:id="@+id/img_vehicelDetailEdit_emi_det"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|right"
@@ -64,7 +64,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_detailvehicleNumber_det"
+                        android:id="@+id/tv_detailvehicleNumber_emi_det"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -73,7 +73,7 @@
                         android:textColor="#83837F" />
 
                     <TextView
-                        android:id="@+id/vehcileIdHidden_dets"
+                        android:id="@+id/vehcileIdHidden_emi_det"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:visibility="gone" />
@@ -103,7 +103,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_detailvehicleBrand_det"
+                        android:id="@+id/tv_detailvehicleBrand_emi_det"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -136,7 +136,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_detailvehicleNumberModel_det"
+                        android:id="@+id/tv_detailvehicleNumberModel_emi_det"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -152,51 +152,6 @@
                 android:layout_height="1dp"
                 android:layout_marginTop="8dp"
                 android:background="#CCC" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:src="@drawable/insurance_policy" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="4"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Insurance Policy"
-                        android:textColor="#CAC6C9"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tv_companyName_det"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="Oriental Insurance"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <ImageView
-                    android:id="@+id/img_edit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/edit_icon" />
-
-            </LinearLayout>
 
             <!--<TextView
                 android:layout_width="wrap_content"
@@ -236,7 +191,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_date_det"
+                        android:id="@+id/tv_date_emi_det"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"

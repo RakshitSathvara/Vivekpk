@@ -1,7 +1,5 @@
 package in.vaksys.vivekpk.dbPojo;
 
-import java.util.Date;
-
 import io.realm.RealmObject;
 
 /**
@@ -15,7 +13,7 @@ public class VehicleDetails extends RealmObject {
 
     private String name;
 
-    private Date NotificationDate;
+    private String NotificationDate;
 
     private String ReminderType;
 
@@ -125,11 +123,11 @@ public class VehicleDetails extends RealmObject {
         UserID = userID;
     }
 
-    public Date getNotificationDate() {
+    public String getNotificationDate() {
         return NotificationDate;
     }
 
-    public void setNotificationDate(Date notificationDate) {
+    public void setNotificationDate(String notificationDate) {
         NotificationDate = notificationDate;
     }
 

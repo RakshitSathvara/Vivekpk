@@ -10,10 +10,6 @@ public class Validator {
 
     private static final String TAG = "Vivekpk" + Validator.class.getSimpleName();
 
-    public static interface ValidationListener {
-        public void validationFailed(String msg);
-    }
-
     public static boolean validatePhoneNo(String value, ValidationListener listener) {
         Log.i(TAG, "validating contact VALUE: " + value);
 
@@ -36,6 +32,10 @@ public class Validator {
             return false;
         }
         return true;
+    }
+
+    public static interface ValidationListener {
+        public void validationFailed(String msg);
     }
 
 }

@@ -75,9 +75,7 @@ public class SignupFragment extends Fragment implements AdapterCallback {
     PasswordEditText etPassword;
     @Bind(R.id.btn_continue_signup)
     Button btnContinue;
-    private ProgressDialog pDialog;
     Dialog dialog;
-
     ListView list;
     ListViewAdapter adapter;
     EditText editsearch;
@@ -85,6 +83,11 @@ public class SignupFragment extends Fragment implements AdapterCallback {
     String[] countryName;
     ArrayList<Coutrycode> arraylist = new ArrayList<Coutrycode>();
     String gmail, mFname, mLname, mEmail, mCode, mContactNo, mPassword;
+    private ProgressDialog pDialog;
+
+    private static boolean isValidEmail(String email) {
+        return !TextUtils.isEmpty(email) && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -121,7 +124,6 @@ public class SignupFragment extends Fragment implements AdapterCallback {
 
         return rootView;
     }
-
 
     private void confirmDialog() {
         final Dialog confirm = new Dialog(getActivity());
@@ -431,10 +433,6 @@ public class SignupFragment extends Fragment implements AdapterCallback {
         } else {
             return true;
         }
-    }
-
-    private static boolean isValidEmail(String email) {
-        return !TextUtils.isEmpty(email) && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
     private boolean validateNumber() {

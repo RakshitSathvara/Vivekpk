@@ -1,8 +1,8 @@
 package in.vaksys.vivekpk.activities;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,8 +14,6 @@ import in.vaksys.vivekpk.R;
 
 public class RefferalCodeActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Toolbar toolbar;
-    private ImageView arrowOne, arrowTwo;
     View one, two, three, four, five, six, seven, eight, nine, ten, aa, bb, cc, dd, ee;
     LinearLayout helpClick, myAccountClick, registeringVehicleClick, emergencyContactClick, setReminderClick,
             documentListClick, insuranceReminderClick, reminderEmissionClick, reminderServiceClick,
@@ -29,6 +27,8 @@ public class RefferalCodeActivity extends AppCompatActivity implements View.OnCl
             doc_emission_six, doc_bill_one, doc_bill_two, doc_bill_three, doc_bill_four, doc_bill_five,
             doc_bill_six, documentOne, documentTwo, documentThree, documentFour, documentFive, documentSix;
     TextView txtOne, txtTwo, txtZero;
+    private Toolbar toolbar;
+    private ImageView arrowOne, arrowTwo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
