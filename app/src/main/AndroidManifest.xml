@@ -14,6 +14,7 @@
     <uses-permission android:name="android.hardware.camera" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".extras.MyApplication"
@@ -23,7 +24,9 @@
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.MainActivity">
+        <activity
+            android:name=".activities.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,17 +35,33 @@
         </activity>
         <activity
             android:name=".activities.VerifyOtpActivity"
-            android:label="" />
+            android:label=""
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.HomeActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".activities.NewsActivity" />
-        <activity android:name=".activities.SearchActivity" />
-        <activity android:name=".activities.NotificationActivity" />
-        <activity android:name=".activities.WebViewActivity" />
-        <activity android:name=".activities.DiactivateAccountActivity" />
-        <activity android:name=".activities.MyAccountActivity" />
-        <activity android:name=".activities.RefferalCodeActivity" />
+        <activity
+            android:name=".activities.NewsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.SearchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.NotificationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.WebViewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.DiactivateAccountActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.MyAccountActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.RefferalCodeActivity"
+            android:screenOrientation="portrait" />
 
         <!-- SMS Receiver -->
         <receiver android:name=".extras.SmsReceiver">
@@ -59,7 +78,15 @@
         <activity
             android:name=".activities.Temp"
             android:exported="true" />
-        <activity android:name=".activities.HelpViewActivity" />
+        <activity
+            android:name=".activities.HelpViewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.ForgotPassWordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.ResetPasswordActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

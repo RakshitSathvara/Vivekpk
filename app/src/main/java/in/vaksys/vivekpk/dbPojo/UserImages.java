@@ -6,17 +6,28 @@ import io.realm.RealmObject;
  * Created by Harsh on 20-05-2016.
  */
 public class UserImages extends RealmObject {
-    private String images;
+    public String getImagesurl() {
+        return imagesurl;
+    }
+
+    public void setImagesurl(String imagesurl) {
+        this.imagesurl = imagesurl;
+    }
+
+    private String imagesurl;
     private String id;
     private String ImageName;
 
-    public String getImages() {
-        return images;
+    public String getImageType() {
+        return ImageType;
     }
 
-    public void setImages(String images) {
-        this.images = images;
+    public void setImageType(String imageType) {
+        ImageType = imageType;
     }
+
+    private String ImageType;
+
 
     public String getId() {
         return id;

@@ -2,6 +2,7 @@ package in.vaksys.vivekpk.extras;
 
 import android.app.Activity;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -19,7 +20,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import in.vaksys.vivekpk.adapter.CarBikeRecyclerViewAdapter;
+import in.vaksys.vivekpk.dbPojo.EmergencyContact;
 import in.vaksys.vivekpk.dbPojo.VehicleDetails;
+import in.vaksys.vivekpk.fragments.EmergencyFragment;
 import in.vaksys.vivekpk.model.ClaimMessage;
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -302,7 +305,7 @@ public class VolleyHelper {
         okhttp3.Request request = new okhttp3.Request.Builder()
                 .url(AppConfig.URL_EMERGENY_CONTACT)
                 .delete(formBody)
-                .addHeader("authorization", "99742a0bbcf11b9ac6b10e90b3a76f34")
+                .addHeader("Authorization", "52d8c0efea5039cd0d778db7521889cf")
                 .build();
 
 
@@ -324,34 +327,108 @@ public class VolleyHelper {
                 if (!response.isSuccessful()) {
                     throw new IOException("Unexpected code " + response);
                 } else {
-                    try {
-                        String aa = response.body().string().trim();
-                        JSONObject jObj = new JSONObject(aa);
-                        myApplication.showLog(TAG, jObj.toString());
 
-                        boolean error = jObj.getBoolean("error");
-                        Log.e(TAG, "onResponse: " + jObj.toString());
+//                    MyApplication.getInstance().hideDialog();
 
-                        // Check for error node in json
-                        if (!error) {
-                            Toast.makeText(activity,
-                                    "Delete Successfull... ", Toast.LENGTH_LONG).show();
+                    DelContact(contactid);
 
-                            DeleteIntoDatabase(contactid);
-                        } else {
-                            String errorMsg = jObj.getString("message");
-                            Toast.makeText(activity,
-                                    "Error :" + errorMsg, Toast.LENGTH_LONG).show();
-                        }
-                    } catch (JSONException e) {
-                        // JSON error
-                        e.printStackTrace();
-//                    Toast.makeText(activity, "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                    }
+//                    try {
+                    //  String aa = response.body().string().trim();
+                    //  JSONObject jObj = new JSONObject(aa);
+                    //  myApplication.showLog(TAG, jObj.toString());
+
+                    //  boolean error = jObj.getBoolean("error");
+                    //  Log.e(TAG, "onResponse: " + jObj.toString());
+
+                    // Check for error node in json
+//                        if (!error) {
+//                            Toast.makeText(activity,
+//                                    "Delete Successfull... ", Toast.LENGTH_LONG).show();
+//
+//                            DeleteIntoDatabase(contactid);
+//                        } else {
+//                            String errorMsg = jObj.getString("message");
+//                            Toast.makeText(activity,
+//                                    "Error :" + errorMsg, Toast.LENGTH_LONG).show();
+//                        }
+//                    } catch (JSONException e) {
+//                        // JSON error
+//                        e.printStackTrace();
+////                    Toast.makeText(activity, "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+//                    }
                 }
             }
         });
 
+///*
+//        String tag_string_req = "req_delete_vehicle";
+//
+//        myApplication.DialogMessage("Deleting Vehicle...");
+//        myApplication.showDialog();
+//
+//        StringRequest strReq = new StringRequest(Request.Method.DELETE,
+//                AppConfig.URL_TEMP, new Response.Listener<String>() {
+//
+//            @Override
+//            public void onResponse(String response) {
+//                myApplication.hideDialog();
+//
+//                try {
+//                    JSONObject jObj = new JSONObject(response);
+//                    boolean error = jObj.getBoolean("error");
+//                    Log.e(TAG, "onResponse: " + jObj.toString());
+//
+//                    // Check for error node in json
+//                    if (!error) {
+//                        Toast.makeText(activity,
+//                                "Delete Successfull... ", Toast.LENGTH_LONG).show();
+//
+//                        // parsing the user profile information
+////                        JSONObject profileObj = jObj.getJSONObject("result");
+//
+////                        DeleteIntoDatabase(VehicleId);
+//                    } else {
+//                        // Error in login. Get the error message
+//                        String errorMsg = jObj.getString("message");
+//                        Toast.makeText(activity,
+//                                "Error :" + errorMsg, Toast.LENGTH_LONG).show();
+//                    }
+//                } catch (JSONException e) {
+//                    // JSON error
+//                    e.printStackTrace();
+//                    Toast.makeText(activity, "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+////                Log.e(TAG, "Login Error: " + error.getMessage());
+//                myApplication.ErrorSnackBar(activity);
+//                myApplication.hideDialog();
+//            }
+//        }) {
+//
+//            @Override
+//            protected Map<String, String> getParams() {
+//                // Posting parameters to login url
+//                Map<String, String> params = new HashMap<String, String>();
+//                params.put("id", String.valueOf(81));
+//                myApplication.showLog(TAG, String.valueOf("passed " + VehicleId));
+//                return params;
+//            }
+//
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                HashMap<String, String> headers = new HashMap<String, String>();
+//                headers.put("Authorization", "99742a0bbcf11b9ac6b10e90b3a76f34");
+//                myApplication.showLog(TAG, String.valueOf("passed auth"));
+//                return headers;
+//
+//            }
+//        };
+//        // Adding request to request queue
+//        myApplication.addToRequestQueue(strReq, tag_string_req);
+//*/
 
     }
 
@@ -441,4 +518,76 @@ public class VolleyHelper {
         myApplication.hideDialog();
 
     }
+
+    private void DelContact(final int contactid) {
+
+        realm = Realm.getDefaultInstance();
+
+        realm.beginTransaction();
+        final EmergencyContact emergencyContact1 = realm.where(EmergencyContact.class).equalTo("id", contactid).findFirst();
+
+        emergencyContact1.deleteFromRealm();
+
+        realm.commitTransaction();
+
+
+//        Thread thread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//                realm = Realm.getDefaultInstance();
+////stuff that updates ui
+//                final RealmResults<EmergencyContact> results = realm.where(EmergencyContact.class).findAll();
+//                Log.e(TAG, "SaveIntoDatabase: " + results.size());
+//
+//
+//                if (results.size() == 0) {
+//                    EmergencyFragment.EmergencyRecyclerview.setVisibility(View.GONE);
+//                    EmergencyFragment.btnContactOne.setVisibility(View.VISIBLE);
+//                    EmergencyFragment.btnContactTwo.setVisibility(View.VISIBLE);
+//                }
+//            }
+//        });
+
+        //      thread.start();
+
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                realm = Realm.getDefaultInstance();
+//stuff that updates ui
+                final RealmResults<EmergencyContact> results = realm.where(EmergencyContact.class).findAll();
+                Log.e(TAG, "SaveIntoDatabase: " + results.size());
+                myApplication.hideDialog();
+                if (results.size() == 0) {
+                    EmergencyFragment.EmergencyRecyclerview.setVisibility(View.GONE);
+                    EmergencyFragment.btnContactOne.setVisibility(View.VISIBLE);
+                    EmergencyFragment.btnContactTwo.setVisibility(View.VISIBLE);
+                }
+
+                if (results.size() == 1) {
+                    EmergencyFragment.EmergencyRecyclerview.setVisibility(View.VISIBLE);
+                    EmergencyFragment.btnContactTwo.setVisibility(View.VISIBLE);
+                }
+
+            }
+        });
+
+
+//        data.addChangeListener(new RealmChangeListener<RealmResults<EmergencyContact>>() {
+//            @Override
+//            public void onChange(RealmResults<EmergencyContact> element) {
+//                notifyDataSetChanged();
+//                switchUI();
+//            }
+//        });
+
+
+        //       Toast.makeText(activity, "Setup Complete", Toast.LENGTH_LONG).show();
+//        myApplication.hideDialog();
+
+    }
+
+
 }

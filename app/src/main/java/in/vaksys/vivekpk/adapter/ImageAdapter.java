@@ -12,6 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
+
 import java.util.UUID;
 
 import butterknife.Bind;
@@ -30,9 +33,10 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 
     private final Context context;
     private final RealmResults<UserImages> userImages;
+    private Realm realm;
+
     MyApplication myApplication;
     UserImages userImages1;
-    private Realm realm;
 
     public ImageAdapter(Context context, RealmResults<UserImages> userImages) {
         this.context = context;
@@ -53,12 +57,26 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         UserImages images = userImages.get(position);
-        holder.ImageUser.setImageBitmap(GetImageFromStream(images.getImages()));
+//        holder.ImageUser.setImageBitmap(GetImageFromStream(images.getImages()));
         holder.ImgaeUUID.setText(images.getId());
+        Picasso.with(context).load(images.getImagesurl()).placeholder(R.mipmap.ic_launcher).into(holder.ImageUser, new Callback() {
+            @Override
+            public void onSuccess() {
+
+                Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError() {
+
+                Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         holder.ImageUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(myApplication, "fuck", Toast.LENGTH_SHORT).show();
+                Toast.makeText(myApplication, "click", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -75,20 +93,6 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
         return (null != userImages ? userImages.size() : 0);
     }
 
-    public void saveImageToDatabase(String bitmap, String ImageName) {
-
-        try {
-            realm.beginTransaction();
-            userImages1 = realm.createObject(UserImages.class);
-            userImages1.setId(String.valueOf(UUID.randomUUID()));
-            userImages1.setImages(bitmap);
-            realm.commitTransaction();
-            notifyDataSetChanged();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.single_image_id)
@@ -99,6 +103,22 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
         ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
+        }
+    }
+
+    public void saveImageToDatabase( String ImageId, String ImageUrl, String ImageType) {
+
+        try {
+            realm.beginTransaction();
+            userImages1 = realm.createObject(UserImages.class);
+            userImages1.setId(ImageId);
+            userImages1.setImagesurl(ImageUrl);
+            userImages1.setImageType(ImageType);
+            realm.commitTransaction();
+            notifyDataSetChanged();
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

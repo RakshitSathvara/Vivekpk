@@ -134,7 +134,6 @@ public class VerifyOtpActivity extends AppCompatActivity {
                     // JSON error
                     e.printStackTrace();
                     Toast.makeText(MyApplication.getInstance(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                    return;
                 }
 
             }
@@ -144,7 +143,6 @@ public class VerifyOtpActivity extends AppCompatActivity {
 //                Log.e(TAG, "Login Error: " + error.getMessage());
                 ErrorSnackBar();
                 hideDialog();
-                return;
             }
         }) {
 

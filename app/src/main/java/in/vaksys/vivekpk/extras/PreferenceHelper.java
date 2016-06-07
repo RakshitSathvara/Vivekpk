@@ -29,11 +29,11 @@ public class PreferenceHelper {
     }
 
     public void setConfigure(boolean value) {
-        prefs.edit().putBoolean(PREFS_IS_CONFIGURE, value).commit();
+        prefs.edit().putBoolean(PREFS_IS_CONFIGURE, value).apply();
     }
 
     public void clearAllPrefs() {
-        prefs.edit().clear().commit();
+        prefs.edit().clear().apply();
     }
 
 }

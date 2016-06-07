@@ -55,7 +55,7 @@ public class MyApplication extends Application {
         mInstance = this;
 
         RealmConfiguration configuration = new RealmConfiguration.Builder(this)
-                .name("DaddysRoad2311.realm")
+                .name("DaddysRoad231.realm")
                 .deleteRealmIfMigrationNeeded()
                 .schemaVersion(1)
                 .build();
@@ -115,6 +115,15 @@ public class MyApplication extends Application {
                 })
                 .duration(Snackbar.SnackbarDuration.LENGTH_LONG)
                 .swipeToDismiss(false)
+                .show(activity);
+    }
+
+    public void ExitSnackBar(Activity activity) {
+        Snackbar.with(activity)
+                .type(SnackbarType.MULTI_LINE)
+                .text("Press BACK again to exit")
+                .duration(Snackbar.SnackbarDuration.LENGTH_SHORT)
+                .swipeToDismiss(true)
                 .show(activity);
     }
 
