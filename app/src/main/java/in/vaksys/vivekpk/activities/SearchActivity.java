@@ -48,7 +48,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 //    private ListView listView;
     private Toolbar toolbar;
     private EditText searchVehicle;
-    private Button btnSearchVehicle;
+    private Button btnSearchVehicle, btnInviteFriendSearchActivity;
     private View one, two, three, four;
     private String getDataSearchVehicle;
     MyApplication myApplication;
@@ -82,6 +82,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         tvDetailvehicleNumberGen = (TextView) findViewById(R.id.tv_detailvehicleNumber_gen);
         tvDetailvehicleBrandGen = (TextView) findViewById(R.id.tv_detailvehicleBrand_gen);
         tvDetailvehicleNumberModelGen = (TextView) findViewById(R.id.tv_detailvehicleNumberModel_gen);
+        btnInviteFriendSearchActivity = (Button) findViewById(R.id.btn_inviteFriend_searchActivity);
 
 
         two.setVisibility(View.GONE);
@@ -89,6 +90,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         four.setVisibility(View.GONE);
 
         btnSearchVehicle.setOnClickListener(this);
+        btnInviteFriendSearchActivity.setOnClickListener(this);
 
 //        spinner_select_value = (Spinner) findViewById(R.id.spinner_select_value);
 //        spinner_select_value.setVisibility(View.GONE);
@@ -282,6 +284,15 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 } else {
                     Toast.makeText(SearchActivity.this, "Please enter vehicle number", Toast.LENGTH_SHORT).show();
                 }
+                break;
+
+            case R.id.btn_inviteFriend_searchActivity:
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.\n https://play.google.com/store/apps/details?id=com.whatsapp&hl=en" );
+                //sendIntent.putExtra(Intent.EXTRA_HTML_TEXT, "https://play.google.com/store/apps/details?id=com.whatsapp&hl=en");
+                sendIntent.setType("text/plain");
+                startActivity(sendIntent);
                 break;
         }
     }

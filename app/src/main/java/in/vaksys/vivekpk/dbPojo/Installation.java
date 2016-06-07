@@ -7,7 +7,7 @@ import io.realm.RealmObject;
  */
 public class Installation extends RealmObject {
 
-    private String InstallationId;
+    private int InstallationId;
 
     private String DeviceToken;
 
@@ -17,11 +17,11 @@ public class Installation extends RealmObject {
 
     private String UpdatedAt;
 
-    public String getInstallationId() {
+    public int getInstallationId() {
         return InstallationId;
     }
 
-    public void setInstallationId(String installationId) {
+    public void setInstallationId(int installationId) {
         InstallationId = installationId;
     }
 

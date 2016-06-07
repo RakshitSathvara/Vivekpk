@@ -34,6 +34,7 @@ import java.util.UUID;
 import in.vaksys.vivekpk.R;
 import in.vaksys.vivekpk.activities.HomeActivity;
 import in.vaksys.vivekpk.dbPojo.EmergencyContact;
+import in.vaksys.vivekpk.dbPojo.Installation;
 import in.vaksys.vivekpk.dbPojo.InsuranceCompanies;
 import in.vaksys.vivekpk.dbPojo.Users;
 import in.vaksys.vivekpk.dbPojo.VehicleDetails;
@@ -504,9 +505,9 @@ public class SigninFragment extends Fragment {
                                 realm.beginTransaction();
                                 // Getting JSON Array node
                                 JSONArray results1 = response.getJSONArray("result");
-                                myApplication.showLog(TAG,""+results1.length());
+                                myApplication.showLog(TAG, "" + results1.length());
 
-                                if (results1.length() > 0){
+                                if (results1.length() > 0) {
                                     for (int i = 0; i < results1.length(); i++) {
 
                                         JSONObject jsonObject = results1.getJSONObject(i);
@@ -524,11 +525,11 @@ public class SigninFragment extends Fragment {
                                     realm.commitTransaction();
                                     myApplication.hideDialog();
 
-                                    startActivity(new Intent(getActivity(), HomeActivity.class));
+                                    LoadingInstallation();
 
 
                                 }
-                            }else {
+                            } else {
 
                                 String errorMsg = response.getString("message");
                                 Toast.makeText(getActivity(),
@@ -563,6 +564,170 @@ public class SigninFragment extends Fragment {
         myApplication.addToRequestQueue(request);
     }
 
+
+    private void LoadingInstallation() {
+        myApplication.DialogMessage("Loading Installation...");
+//        myApplication.showDialog();
+        final StringRequest installationRequest = new StringRequest(Request.Method.POST, AppConfig.URL_INSTALLATION, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+                    Log.e(TAG, "onResponse: " + jObj.toString());
+
+                    if (!error) {
+                        Toast.makeText(getActivity(),
+                                "Installation Successfull... ", Toast.LENGTH_LONG).show();
+
+                        // parsing the user profile information
+                        JSONObject installationObj = jObj.getJSONObject("result");
+
+                        int id = installationObj.getInt("id");
+                        String deviceToken = installationObj.getString("deviceToken");
+                        String deviceType = installationObj.getString("deviceType");
+                        String createdAt = installationObj.getString("createdAt");
+                        String updatedAt = installationObj.getString("updatedAt");
+                        realm = Realm.getDefaultInstance();
+
+                        realm.beginTransaction();
+                        Installation installation = realm.createObject(Installation.class);
+
+                        installation.setDeviceType(deviceToken);
+                        installation.setDeviceType(deviceType);
+                        installation.setInstallationId(id);
+                        installation.setCreatedAt(createdAt);
+                        installation.setUpdatedAt(updatedAt);
+
+                        realm.commitTransaction();
+
+                        LoadingSubscription(id);
+                        //startActivity(new Intent(getActivity(), HomeActivity.class));
+
+                    } else {
+                        myApplication.hideDialog();
+
+                        String errorMsg = jObj.getString("message");
+                        Toast.makeText(getActivity(),
+                                "Error :" + errorMsg, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                } catch (JSONException e) {
+                    myApplication.hideDialog();
+                    // JSON error
+                    e.printStackTrace();
+                    Toast.makeText(getActivity(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                myApplication.ErrorSnackBar(getActivity());
+                myApplication.hideDialog();
+                return;
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("deviceToken", "abc");
+
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+                return headers;
+            }
+        };
+        myApplication.addToRequestQueue(installationRequest);
+    }
+
+    private void LoadingSubscription(final int installId) {
+        myApplication.DialogMessage("Loading Subscription...");
+//        myApplication.showDialog();
+        final StringRequest subscriptionRequest = new StringRequest(Request.Method.POST, AppConfig.URL_SUBSCRIPTION, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+                    Log.e(TAG, "onResponse: " + jObj.toString());
+
+                    if (!error) {
+                        Toast.makeText(getActivity(),
+                                "Subscription Successfull... ", Toast.LENGTH_LONG).show();
+
+                        // parsing the user profile information
+                        JSONObject subscriptionObj = jObj.getJSONObject("result");
+
+                        int idSub = subscriptionObj.getInt("userId");
+                        int installationId = subscriptionObj.getInt("installationId");
+                        String createdAtSub = subscriptionObj.getString("createdAt");
+                        String updatedAtSub = subscriptionObj.getString("updatedAt");
+                        /*realm = Realm.getDefaultInstance();
+
+                        realm.beginTransaction();
+                        Installation installation = realm.createObject(Installation.class);
+
+                        installation.setDeviceType(deviceToken);
+                        installation.setDeviceType(deviceType);
+                        installation.setInstallationId(id);
+                        installation.setCreatedAt(createdAt);
+                        installation.setUpdatedAt(updatedAt);
+
+                        realm.commitTransaction();*/
+
+
+                        startActivity(new Intent(getActivity(), HomeActivity.class));
+
+                    } else {
+                        myApplication.hideDialog();
+
+                        String errorMsg = jObj.getString("message");
+                        Toast.makeText(getActivity(),
+                                "Error :" + errorMsg, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                } catch (JSONException e) {
+                    myApplication.hideDialog();
+                    // JSON error
+                    e.printStackTrace();
+                    Toast.makeText(getActivity(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                myApplication.ErrorSnackBar(getActivity());
+                myApplication.hideDialog();
+                return;
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("installationId", String.valueOf(installId));
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+                return headers;
+            }
+        };
+        myApplication.addToRequestQueue(subscriptionRequest);
+    }
 
     @Override
     public void onStop() {

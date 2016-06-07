@@ -40,5 +40,11 @@ public class AppConfig {
 
     public static final String URL_SEARCH_VEHICLE = URL_ROOT + "v1/search";
 
+    public static final String URL_INSTALLATION = URL_ROOT + "v1/installation";
+
+    public static final String URL_SUBSCRIPTION = URL_ROOT + "v1/subscribe";
+
+
+
 
 }
