@@ -118,6 +118,15 @@ public class MyApplication extends Application {
                 .show(activity);
     }
 
+    public void ExitSnackBar(Activity activity) {
+        Snackbar.with(activity)
+                .type(SnackbarType.MULTI_LINE)
+                .text("Press BACK again to exit")
+                .duration(Snackbar.SnackbarDuration.LENGTH_SHORT)
+                .swipeToDismiss(true)
+                .show(activity);
+    }
+
     public void createDialog(Activity activity, boolean cancelable) {
         pDialog = new ProgressDialog(activity);
         pDialog.setCancelable(cancelable);

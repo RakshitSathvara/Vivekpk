@@ -3,6 +3,7 @@ package in.vaksys.vivekpk.activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import in.vaksys.vivekpk.R;
+import in.vaksys.vivekpk.extras.MyApplication;
 import in.vaksys.vivekpk.extras.PreferenceHelper;
 import in.vaksys.vivekpk.fragments.SigninFragment;
 import in.vaksys.vivekpk.fragments.SignupFragment;
@@ -149,5 +151,25 @@ public class MainActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
         }
+    }
+
+    boolean doubleBackToExitPressedOnce = false;
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        MyApplication.getInstance().ExitSnackBar(this);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 2000);
     }
 }

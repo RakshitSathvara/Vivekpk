@@ -1,7 +1,9 @@
 package in.vaksys.vivekpk.service;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -17,8 +19,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import in.vaksys.vivekpk.activities.HomeActivity;
+import in.vaksys.vivekpk.activities.ResetPasswordActivity;
+import in.vaksys.vivekpk.dbPojo.Users;
 import in.vaksys.vivekpk.extras.AppConfig;
 import in.vaksys.vivekpk.extras.MyApplication;
+import io.realm.Realm;
 
 /**
  * Created by Harsh on 07-01-2016.
@@ -26,6 +31,7 @@ import in.vaksys.vivekpk.extras.MyApplication;
 public class HttpService extends IntentService {
 
     private static String TAG = HttpService.class.getSimpleName();
+    private Realm realm;
 
     public HttpService() {
         super(HttpService.class.getSimpleName());
@@ -33,8 +39,6 @@ public class HttpService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-
-
         if (intent != null) {
             String number = intent.getStringExtra("mobile");
             String otp = intent.getStringExtra("otp");
@@ -60,18 +64,28 @@ public class HttpService extends IntentService {
 
                     JSONObject responseObj = new JSONObject(response);
 
-                    // Parsing json object response
-                    // response will be a json object
                     boolean error = responseObj.getBoolean("error");
 
                     if (!error) {
                         Toast.makeText(getApplicationContext(), "Registration Success", Toast.LENGTH_LONG).show();
 
-                        Intent intent = new Intent(HttpService.this, HomeActivity.class);
+                        SharedPreferences sharedPreferences = MyApplication.getInstance().getSharedPreferences("UserDetails", Context.MODE_PRIVATE);
+                        if (sharedPreferences.getBoolean("change", false)) {
+                            UpdateUserIntoDatabase(sharedPreferences.getString("mFname", ""), sharedPreferences.getString("mLname", ""),
+                                    sharedPreferences.getString("mEmail", ""), sharedPreferences.getString("number", ""),
+                                    sharedPreferences.getString("mPassnew", ""), sharedPreferences.getString("mPassold", ""));
+                            sharedPreferences.edit().putBoolean("change", false).apply();
+                            return;
+                        }
+                        if (sharedPreferences.getBoolean("reset", false)) {
+                            sharedPreferences.edit().putBoolean("reset", false).apply();
+                            Intent intent = new Intent(HttpService.this, ResetPasswordActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                            return;
+                        }
 //                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-
-                        Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
+                        SetHome();
 
                     } else {
                         String message = responseObj.getString("message");
@@ -106,9 +120,38 @@ public class HttpService extends IntentService {
             }
 
         };
-
         // Adding request to request queue
         MyApplication.getInstance().addToRequestQueue(strReq);
+    }
+
+    private void SetHome() {
+        Intent intent = new Intent(HttpService.this, HomeActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+
+        Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
+    }
+
+    private void UpdateUserIntoDatabase(String mFname, String mLname, String mEmail, String mNumber, String mPass, String oldPassword) {
+        if (mPass.isEmpty()) {
+            mPass = oldPassword;
+        }
+
+        realm = Realm.getDefaultInstance();
+
+        realm.beginTransaction();
+        Users user = realm.where(Users.class).findFirst();
+
+        user.setFirstName(mFname);
+        user.setLastName(mLname);
+        user.setEmail(mEmail);
+        user.setPhoneNo(mNumber);
+        user.setPassword(mPass);
+
+        realm.commitTransaction();
+        SetHome();
+        Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Setup Complete", Toast.LENGTH_LONG).show();
     }
 
 }

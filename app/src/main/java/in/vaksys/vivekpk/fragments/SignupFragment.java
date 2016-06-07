@@ -24,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -85,9 +86,6 @@ public class SignupFragment extends Fragment implements AdapterCallback {
     String gmail, mFname, mLname, mEmail, mCode, mContactNo, mPassword;
     private ProgressDialog pDialog;
 
-    private static boolean isValidEmail(String email) {
-        return !TextUtils.isEmpty(email) && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -132,6 +130,10 @@ public class SignupFragment extends Fragment implements AdapterCallback {
 
         Button btnEdit = (Button) confirm.findViewById(R.id.et_context_edit);
         Button btnSend = (Button) confirm.findViewById(R.id.et_context_send);
+
+        TextView number = (TextView) confirm.findViewById(R.id.tv_phoneNo);
+
+        number.setText(etContactNo.getText().toString());
 
         btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -198,13 +200,11 @@ public class SignupFragment extends Fragment implements AdapterCallback {
                         String errorMsg = jObj.getString("message");
                         Toast.makeText(getActivity(),
                                 "Unexpected Error Occure... " + errorMsg, Toast.LENGTH_LONG).show();
-                        return;
                     }
                 } catch (JSONException e) {
                     // JSON error
                     e.printStackTrace();
                     Toast.makeText(getActivity(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                    return;
                 }
             }
         }, new Response.ErrorListener() {
@@ -213,7 +213,6 @@ public class SignupFragment extends Fragment implements AdapterCallback {
 //                Log.e(TAG, "Login Error: " + error.getMessage());
                 ErrorSnackBar();
                 hideDialog();
-                return;
             }
         }) {
 
@@ -259,6 +258,10 @@ public class SignupFragment extends Fragment implements AdapterCallback {
                 .duration(Snackbar.SnackbarDuration.LENGTH_INDEFINITE)
                 .swipeToDismiss(false)
                 .show(getActivity());
+    }
+
+    private static boolean isValidEmail(String email) {
+        return !TextUtils.isEmpty(email) && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
     private void getEmailid() {

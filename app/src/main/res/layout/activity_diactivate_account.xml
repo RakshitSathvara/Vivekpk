@@ -87,8 +87,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="+91 456545"
-            android:textColor="#a39f9a"
-            android:textSize="20sp" />
+            android:textColor="#61615C"
+            android:textSize="18sp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -100,10 +100,12 @@
 
         <EditText
             android:id="@+id/et_deactive_my_account"
-            android:layout_width="200dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="150dp"
             android:layout_marginTop="8dp"
-            android:hint="Enter Password" />
+            android:hint="Enter Password"
+            android:inputType="textPassword" />
 
         <View
             android:layout_width="match_parent"

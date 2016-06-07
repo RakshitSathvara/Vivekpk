@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import in.vaksys.vivekpk.R;
+import in.vaksys.vivekpk.activities.ForgotPassWordActivity;
 import in.vaksys.vivekpk.activities.HomeActivity;
 import in.vaksys.vivekpk.dbPojo.EmergencyContact;
 import in.vaksys.vivekpk.dbPojo.InsuranceCompanies;
@@ -54,7 +55,7 @@ public class SigninFragment extends Fragment {
 
     private EditText etPhoneNo;
     private PasswordEditText etPassword;
-    private TextView tvErrorPhoneNo, tvErrorPassword;
+    private TextView tvErrorPhoneNo, tvErrorPassword, forgotPassword;
     private Button btnSignIn;
     boolean isFormValid = true;
     private Realm realm;
@@ -76,8 +77,10 @@ public class SigninFragment extends Fragment {
         tvErrorPhoneNo = (TextView) rootView.findViewById(R.id.tv_errorPhoneNo);
         tvErrorPassword = (TextView) rootView.findViewById(R.id.tv_errorPassword);
         btnSignIn = (Button) rootView.findViewById(R.id.btn_signin);
+        forgotPassword = (TextView) rootView.findViewById(R.id.Forgot_passwrod11);
 
         myApplication = MyApplication.getInstance();
+        realm = Realm.getDefaultInstance();
 
         myApplication.createDialog(getActivity(), false);
 
@@ -86,6 +89,13 @@ public class SigninFragment extends Fragment {
             public void onClick(View v) {
                 myApplication.hideKeyboard(getActivity());
                 submitForm();
+            }
+        });
+
+        forgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), ForgotPassWordActivity.class));
             }
         });
 
@@ -494,7 +504,6 @@ public class SigninFragment extends Fragment {
 //        myApplication.showDialog();
 
 
-
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, AppConfig.URL_EMERGENY_CONTACT,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -507,9 +516,9 @@ public class SigninFragment extends Fragment {
                                 realm.beginTransaction();
                                 // Getting JSON Array node
                                 JSONArray results1 = response.getJSONArray("result");
-                                myApplication.showLog(TAG,""+results1.length());
+                                myApplication.showLog(TAG, "" + results1.length());
 
-                                if (results1.length() > 0){
+                                if (results1.length() > 0) {
                                     for (int i = 0; i < results1.length(); i++) {
 
                                         JSONObject jsonObject = results1.getJSONObject(i);
@@ -528,12 +537,11 @@ public class SigninFragment extends Fragment {
                                     myApplication.hideDialog();
 
 
-
                                 }
                                 startActivity(new Intent(getActivity(), HomeActivity.class));
 
 
-                            }else {
+                            } else {
 
                                 String errorMsg = response.getString("message");
                                 Toast.makeText(getActivity(),
@@ -572,10 +580,11 @@ public class SigninFragment extends Fragment {
 
     @Override
     public void onStop() {
+        realm.close();
+
         super.onStop();
         // Remember to close the Realm instance when done with it.
         // TODO: 19-05-2016 handle realm.close();
-        realm.close();
     }
 
     private boolean validateNumber() {
