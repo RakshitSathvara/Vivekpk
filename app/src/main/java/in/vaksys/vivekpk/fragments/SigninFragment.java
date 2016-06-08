@@ -32,10 +32,8 @@ import java.util.Map;
 import java.util.UUID;
 
 import in.vaksys.vivekpk.R;
-import in.vaksys.vivekpk.activities.ForgotPassWordActivity;
 import in.vaksys.vivekpk.activities.HomeActivity;
 import in.vaksys.vivekpk.dbPojo.EmergencyContact;
-import in.vaksys.vivekpk.dbPojo.Installation;
 import in.vaksys.vivekpk.dbPojo.InsuranceCompanies;
 import in.vaksys.vivekpk.dbPojo.Users;
 import in.vaksys.vivekpk.dbPojo.VehicleDetails;
@@ -505,6 +503,7 @@ public class SigninFragment extends Fragment {
 //        myApplication.showDialog();
 
 
+
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, AppConfig.URL_EMERGENY_CONTACT,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -537,7 +536,6 @@ public class SigninFragment extends Fragment {
                                     realm.commitTransaction();
                                     myApplication.hideDialog();
 
-                                    LoadingInstallation();
 
 
                                 }
@@ -547,6 +545,7 @@ public class SigninFragment extends Fragment {
                                 Toast.makeText(getActivity(),
                                         "Error :" + errorMsg, Toast.LENGTH_LONG).show();
                                 myApplication.hideDialog();
+
                             }
 
 
@@ -727,6 +726,7 @@ public class SigninFragment extends Fragment {
         super.onStop();
         // Remember to close the Realm instance when done with it.
         // TODO: 19-05-2016 handle realm.close();
+
     }
 
     private boolean validateNumber() {

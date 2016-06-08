@@ -251,6 +251,7 @@ public class EmergencyFragment extends Fragment {
 
                 try {
 
+                    myApplication.showLog("inside ","try" );
                     JSONObject jObj = new JSONObject(response);
                     boolean error = jObj.getBoolean("error");
                     int id = jObj.getInt("id");

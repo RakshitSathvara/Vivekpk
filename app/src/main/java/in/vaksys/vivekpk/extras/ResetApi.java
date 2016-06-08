@@ -24,6 +24,9 @@ public interface ResetApi {
   //  Call<DeleteData> getTasks(@Header("Authorization") String auuth,@QueryMap Map<String, String> map);
 
     Call<data> getTasks(@Header("Authorization") String auuth, @Part MultipartBody.Part file);
+
+
+
 }
 
 

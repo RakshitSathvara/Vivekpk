@@ -28,18 +28,18 @@
             android:textSize="14sp"
             android:textStyle="bold" />
 
-        <ImageView
+       <!-- <ImageView
             android:id="@+id/img_addToGallery"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:src="@drawable/add_button_gallery" />
+            android:src="@drawable/add_button_gallery" />-->
 
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/gallery"
+        android:id="@+id/rec_document_image_gallery"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="20dp" />
