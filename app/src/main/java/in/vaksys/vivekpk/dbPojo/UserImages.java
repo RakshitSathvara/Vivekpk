@@ -6,6 +6,17 @@ import io.realm.RealmObject;
  * Created by Harsh on 20-05-2016.
  */
 public class UserImages extends RealmObject {
+
+    public String getVehicleid() {
+        return vehicleid;
+    }
+
+    public void setVehicleid(String vehicleid) {
+        this.vehicleid = vehicleid;
+    }
+
+    public String vehicleid;
+
     public String getImagesurl() {
         return imagesurl;
     }

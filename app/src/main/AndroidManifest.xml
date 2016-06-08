@@ -61,6 +61,7 @@
             android:name=".activities.Temp"
             android:exported="true" />
         <activity android:name=".activities.HelpViewActivity" />
+        <activity android:name=".activities.DocumentImageGallery"/>
     </application>
 
 </manifest>

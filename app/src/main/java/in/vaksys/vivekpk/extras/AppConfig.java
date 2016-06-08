@@ -29,6 +29,10 @@ public class AppConfig {
 
     public static final String URL_UPLOAD_DOC = URL_ROOT + "v1/";
     public static final String URL_ADD_DOC = URL_ROOT + "v1/document";
+    public static final String URL_UPDATE_DOC = URL_ROOT + "v1/document";
+    public static final String URL_DELETE_DOC = URL_ROOT + "v1/document";
+
+
 
     public static final String URL_CLAIM_VEHICLE = URL_ROOT + "v1/claimvehicle";
 

@@ -89,6 +89,8 @@ public class MyAccountActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         loadData();
+
+        etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         etPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

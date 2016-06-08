@@ -76,7 +76,7 @@ public class SigninFragment extends Fragment {
         tvErrorPhoneNo = (TextView) rootView.findViewById(R.id.tv_errorPhoneNo);
         tvErrorPassword = (TextView) rootView.findViewById(R.id.tv_errorPassword);
         btnSignIn = (Button) rootView.findViewById(R.id.btn_signin);
-
+        realm = Realm.getDefaultInstance();
         myApplication = MyApplication.getInstance();
 
         myApplication.createDialog(getActivity(), false);
