@@ -675,26 +675,6 @@ public class SigninFragment extends Fragment {
                         Toast.makeText(getActivity(),
                                 "Subscription Successfull... ", Toast.LENGTH_LONG).show();
 
-                        // parsing the user profile information
-                        JSONObject subscriptionObj = jObj.getJSONObject("result");
-
-                        int idSub = subscriptionObj.getInt("userId");
-                        int installationId = subscriptionObj.getInt("installationId");
-                        String createdAtSub = subscriptionObj.getString("createdAt");
-                        String updatedAtSub = subscriptionObj.getString("updatedAt");
-                        /*realm = Realm.getDefaultInstance();
-
-                        realm.beginTransaction();
-                        Installation installation = realm.createObject(Installation.class);
-
-                        installation.setDeviceType(deviceToken);
-                        installation.setDeviceType(deviceType);
-                        installation.setInstallationId(id);
-                        installation.setCreatedAt(createdAt);
-                        installation.setUpdatedAt(updatedAt);
-
-                        realm.commitTransaction();*/
-
 
                         startActivity(new Intent(getActivity(), HomeActivity.class));
 
@@ -744,7 +724,6 @@ public class SigninFragment extends Fragment {
     @Override
     public void onStop() {
         realm.close();
-
         super.onStop();
         // Remember to close the Realm instance when done with it.
         // TODO: 19-05-2016 handle realm.close();

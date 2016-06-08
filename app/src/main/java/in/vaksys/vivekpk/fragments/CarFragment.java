@@ -76,7 +76,7 @@ public class CarFragment extends Fragment {
     private RealmResults<VehicleDetails> results;
     private CarBikeRecyclerViewAdapter carAdapter;
     String myid;
-
+//    RecyclerFastScroller fastScroller;
 
     public static CarFragment newInstance(int index) {
         CarFragment fragment = new CarFragment();
@@ -98,6 +98,7 @@ public class CarFragment extends Fragment {
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getActivity());
         carDetailRecyclerView.setLayoutManager(manager);
 
+//        fastScroller = (RecyclerFastScroller) rootView.findViewById(R.id.fasttt);
 
         addCarView.setVisibility(View.GONE);
         carDetailRecyclerView.setVisibility(View.GONE);
@@ -206,6 +207,7 @@ public class CarFragment extends Fragment {
     }
 
     private void getData() {
+
         mCarDetail = etCarDetails.getText().toString();
         carAdapter.AddVehicle(getActivity(), "car", Integer.parseInt(myid), mCarDetail);
         carDetailRecyclerView.setVisibility(View.VISIBLE);
@@ -362,7 +364,11 @@ public class CarFragment extends Fragment {
             carDetailRecyclerView.setVisibility(View.VISIBLE);
             AddVehicleBtnLayout.setVisibility(View.VISIBLE);
             carAdapter = new CarBikeRecyclerViewAdapter(getActivity(), results);
+
+
             carDetailRecyclerView.setAdapter(carAdapter);
+//            fastScroller.attachRecyclerView(carDetailRecyclerView);
+
         } else {
             addCarView.setVisibility(View.VISIBLE);
         }
