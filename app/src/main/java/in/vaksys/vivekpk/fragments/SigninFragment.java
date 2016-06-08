@@ -32,10 +32,8 @@ import java.util.Map;
 import java.util.UUID;
 
 import in.vaksys.vivekpk.R;
-import in.vaksys.vivekpk.activities.ForgotPassWordActivity;
 import in.vaksys.vivekpk.activities.HomeActivity;
 import in.vaksys.vivekpk.dbPojo.EmergencyContact;
-import in.vaksys.vivekpk.dbPojo.Installation;
 import in.vaksys.vivekpk.dbPojo.InsuranceCompanies;
 import in.vaksys.vivekpk.dbPojo.Users;
 import in.vaksys.vivekpk.dbPojo.VehicleDetails;
@@ -505,6 +503,7 @@ public class SigninFragment extends Fragment {
 //        myApplication.showDialog();
 
 
+
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, AppConfig.URL_EMERGENY_CONTACT,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -537,7 +536,6 @@ public class SigninFragment extends Fragment {
                                     realm.commitTransaction();
                                     myApplication.hideDialog();
 
-                                    LoadingInstallation();
 
 
                                 }
@@ -547,6 +545,7 @@ public class SigninFragment extends Fragment {
                                 Toast.makeText(getActivity(),
                                         "Error :" + errorMsg, Toast.LENGTH_LONG).show();
                                 myApplication.hideDialog();
+
                             }
 
 
@@ -675,26 +674,6 @@ public class SigninFragment extends Fragment {
                         Toast.makeText(getActivity(),
                                 "Subscription Successfull... ", Toast.LENGTH_LONG).show();
 
-                        // parsing the user profile information
-                        JSONObject subscriptionObj = jObj.getJSONObject("result");
-
-                        int idSub = subscriptionObj.getInt("userId");
-                        int installationId = subscriptionObj.getInt("installationId");
-                        String createdAtSub = subscriptionObj.getString("createdAt");
-                        String updatedAtSub = subscriptionObj.getString("updatedAt");
-                        /*realm = Realm.getDefaultInstance();
-
-                        realm.beginTransaction();
-                        Installation installation = realm.createObject(Installation.class);
-
-                        installation.setDeviceType(deviceToken);
-                        installation.setDeviceType(deviceType);
-                        installation.setInstallationId(id);
-                        installation.setCreatedAt(createdAt);
-                        installation.setUpdatedAt(updatedAt);
-
-                        realm.commitTransaction();*/
-
 
                         startActivity(new Intent(getActivity(), HomeActivity.class));
 
@@ -744,10 +723,10 @@ public class SigninFragment extends Fragment {
     @Override
     public void onStop() {
         realm.close();
-
         super.onStop();
         // Remember to close the Realm instance when done with it.
         // TODO: 19-05-2016 handle realm.close();
+
     }
 
     private boolean validateNumber() {

@@ -1,22 +1,17 @@
 package in.vaksys.vivekpk.activities;
 
 import android.app.Dialog;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -35,17 +30,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import in.vaksys.vivekpk.R;
-import in.vaksys.vivekpk.dbPojo.EmergencyContact;
-import in.vaksys.vivekpk.dbPojo.Installation;
-import in.vaksys.vivekpk.dbPojo.InsuranceCompanies;
-import in.vaksys.vivekpk.dbPojo.UserImages;
 import in.vaksys.vivekpk.dbPojo.Users;
-import in.vaksys.vivekpk.dbPojo.VehicleDetails;
-import in.vaksys.vivekpk.dbPojo.VehicleModels;
 import in.vaksys.vivekpk.extras.AppConfig;
 import in.vaksys.vivekpk.extras.MyApplication;
-import in.vaksys.vivekpk.extras.PreferenceHelper;
-import in.vaksys.vivekpk.extras.VolleyHelper;
 import io.realm.Realm;
 
 public class MyAccountActivity extends AppCompatActivity {
@@ -174,6 +161,7 @@ public class MyAccountActivity extends AppCompatActivity {
     private void loadData() {
         Users user = realm.where(Users.class).findFirst();
 
+        etPassword.setInputType(InputType.TYPE_NULL);
 
         oldPassword = user.getPassword();
         oldFname = user.getFirstName();

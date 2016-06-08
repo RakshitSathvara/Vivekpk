@@ -38,7 +38,7 @@
                     android:textStyle="bold" />
 
                 <ImageView
-                    android:id="@+id/img_edit"
+                    android:id="@+id/img_document_edit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|right"
@@ -69,7 +69,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_detailVehicelNumber"
+                        android:id="@+id/tv_DocumentdetailVehicelNumber"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -77,6 +77,12 @@
                         android:text="KA05j95959"
                         android:textColor="#83837F"
                         android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/vehcileIdHidden_list"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone" />
 
                 </LinearLayout>
 
@@ -103,7 +109,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_detailVehicelBranch"
+                        android:id="@+id/tv_DocumentdetailVehicelBrand"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -137,7 +143,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_detailVehicelModel"
+                        android:id="@+id/tv_DocumentdetailVehicelModel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -174,7 +180,7 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:id="@+id/linear_vehicelDocRcBook"
+                    android:id="@+id/linear_vehicelDoc_RcBook"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -227,7 +233,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/linear_vehicelDocInsurance"
+                    android:id="@+id/linear_vehicelDoc_Insurance"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -280,7 +286,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/linear_vehicelDocEmission"
+                    android:id="@+id/linear_vehicelDoc_Emission"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -334,7 +340,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/linear_vehicelDocBills"
+                    android:id="@+id/linear_vehicelDo_Bills"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

@@ -187,8 +187,6 @@ public class ReminderTabFragment extends Fragment {
 //    }
 
 
-
-
     @Override
     public void onStart() {
         super.onStart();
@@ -202,4 +200,16 @@ public class ReminderTabFragment extends Fragment {
         EventBus.getDefault().unregister(this);
         super.onStop();
     }
+
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        EventBus.getDefault().register(this);
+//    }
+//
+//    @Override
+//    public void onStop() {
+//        EventBus.getDefault().unregister(this);
+//        super.onStop();
+//    }
 }

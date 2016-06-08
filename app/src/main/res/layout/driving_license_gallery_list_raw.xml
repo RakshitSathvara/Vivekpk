@@ -6,9 +6,11 @@
     android:padding="10dp">
 
     <ImageView
-        android:id="@+id/img_galleryImage"
+        android:id="@+id/img_galleryImage_gallery_list"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:layout_marginRight="5dp"
+        android:scaleType="fitXY"
         android:src="@drawable/splashscreen" />
 
     <LinearLayout
@@ -18,12 +20,12 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tv_imageName"
+            android:id="@+id/tv_imageName_gallery_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Photo 1"
             android:textColor="#000000"
-            android:textSize="14sp"
+            android:textSize="12sp"
             android:textStyle="bold" />
 
         <View
@@ -33,47 +35,40 @@
             android:background="#C6C4C5" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:gravity="right"
+            android:gravity="left"
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv_replace"
-                android:layout_width="0dp"
+                android:id="@+id/tv_replace_gallery_list"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_weight="2"
+                android:drawablePadding="10dp"
+                android:drawableRight="@drawable/gallery_replace_icon"
+                android:padding="8dp"
                 android:text="Replace"
                 android:textColor="#ADAAA5"
                 android:textSize="12sp"
                 android:textStyle="bold" />
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:src="@drawable/gallery_replace_icon" />
 
             <TextView
-                android:id="@+id/tv_delete"
-                android:layout_width="0dp"
+                android:id="@+id/tv_delete_gallery_list"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_weight="2"
+                android:drawablePadding="10dp"
+                android:drawableRight="@drawable/gallery_delete_icon"
+                android:padding="8dp"
                 android:text="Delete"
                 android:textColor="#ADAAA5"
                 android:textSize="12sp"
                 android:textStyle="bold" />
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:src="@drawable/gallery_delete_icon" />
 
         </LinearLayout>
 

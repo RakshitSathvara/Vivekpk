@@ -1,13 +1,13 @@
 package in.vaksys.vivekpk.fragments;
 
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,7 +17,6 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +24,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,12 +37,11 @@ import com.android.volley.toolbox.StringRequest;
 
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -54,17 +51,19 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import in.vaksys.vivekpk.BuildConfig;
 import in.vaksys.vivekpk.R;
+import in.vaksys.vivekpk.adapter.DocumentDetailsRecyclerViewAdapter;
 import in.vaksys.vivekpk.adapter.ImageAdapter;
 import in.vaksys.vivekpk.dbPojo.UserImages;
+import in.vaksys.vivekpk.dbPojo.VehicleDetails;
 import in.vaksys.vivekpk.extras.AppConfig;
+import in.vaksys.vivekpk.extras.GetPathImage;
 import in.vaksys.vivekpk.extras.MyApplication;
 import in.vaksys.vivekpk.extras.ResetApi;
+import in.vaksys.vivekpk.model.ImageMessage;
 import in.vaksys.vivekpk.model.data;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -85,7 +84,6 @@ public class DocumentFragment extends Fragment {
     private LinearLayout linearAddCamera;
     private ImageView imgAddCamera;
 
-    private static final String USER_AGENT = "UploadServiceDemo/" + BuildConfig.VERSION_NAME;
     private LinearLayout linearYourDrivingLicense;
     private ImageView imgLicenseImgEdit;
     private ImageView imgLicenseImgOne;
@@ -120,7 +118,7 @@ public class DocumentFragment extends Fragment {
 
     public Uri fileUri;
     private static final String IMAGE_DIRECTORY_NAME = "Photos";
-    public int PICK_IMAGE_REQUEST = 1;
+    public static int PICK_IMAGE_REQUEST = 1;
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static String timeStamp, myImageUrl;
@@ -129,11 +127,13 @@ public class DocumentFragment extends Fragment {
 
     MyApplication myApplication;
     private Realm realm;
-    UserImages userImages;
 
     OkHttpClient client;
     Uri picUri;
-
+    RecyclerView DocumentDetailsRecyclerview;
+    DocumentDetailsRecyclerViewAdapter documentDetailsRecyclerViewAdapter;
+    RealmResults<VehicleDetails> detailsesResults;
+    RealmResults<UserImages> imageDetails;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
 
@@ -147,12 +147,26 @@ public class DocumentFragment extends Fragment {
     private EventBus bus = EventBus.getDefault();
 
 
+    String realPath;
+
+    private String documenttype;
+    private String vehicle_id;
+    private String pic_gallery_camera;
+
+
     public static DocumentFragment newInstance(int index) {
         DocumentFragment fragment = new DocumentFragment();
         Bundle b = new Bundle();
         b.putInt("index", index);
         fragment.setArguments(b);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+
     }
 
 
@@ -163,13 +177,16 @@ public class DocumentFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_document, container, false);
 
 
-        client = new OkHttpClient();
+        DocumentDetailsRecyclerview = (RecyclerView) view.findViewById(R.id.DocumentRecyclerView);
+
 
         BindViews(view);
         SetImagesViews();
+        SetDocumentDetails();
         linearAddGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                documenttype = "licence";
                 showFileChooser();
             }
         });
@@ -181,54 +198,39 @@ public class DocumentFragment extends Fragment {
         });
 //        linearYourDrivingLicense.setVisibility(View.GONE);
         myApplication.showLog(TAG, "create" + results.size());
-      /*  multiStateToggleButton = (MultiStateToggleButton) rootView.findViewById(R.id.mstb_vehicleChoice);
-        multiStateToggleButton.enableMultipleChoice(false);
-        multiStateToggleButton.setValue(0);
-        //multiStateToggleButton.setColorRes(R.color.cardview_dark_background, R.color.cardview_dark_background);
 
-        multiStateToggleButton.setOnValueChangedListener(new ToggleButton.OnValueChangedListener() {
-            @Override
-            public void onValueChanged(int value) {
-                Log.e("MSTB", "onValueChanged: " + value);
-                switch (value) {
-                    case 0:
-                        Toast.makeText(getActivity(), "Car Selected..", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 1:
-                        Toast.makeText(getActivity(), "Bike Selected..", Toast.LENGTH_SHORT).show();
-                        break;
-                    default:
-                        Toast.makeText(getActivity(), "Please S" +
-                                "elect any..", Toast.LENGTH_SHORT).show();
-                        break;
-                }
-            }
-        });
-*/
-
-
-       /* btnRegisterVehicle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                linearAddDrivingLicense.setVisibility(View.GONE);
-                linearYourDrivingLicense.setVisibility(View.GONE);
-                linearRegisterVehicle.setVisibility(View.GONE);
-                linearVehicleDetailsListRaw.setVisibility(View.GONE);
-
-            }
-        });
-
-        imgAddGallery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                linearAddDrivingLicense.setVisibility(View.GONE);
-                linearYourDrivingLicense.setVisibility(View.VISIBLE);
-                linearRegisterVehicle.setVisibility(View.GONE);
-                linearVehicleDetailsListRaw.setVisibility(View.VISIBLE);
-
-            }
-        });*/
         return view;
+    }
+
+
+    private void SetDocumentDetails() {
+        DocumentDetailsRecyclerview.setHasFixedSize(true);
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        DocumentDetailsRecyclerview.setLayoutManager(manager);
+        detailsesResults = realm.where(VehicleDetails.class).findAll();
+        imageDetails = realm.where(UserImages.class).findAll();
+
+        myApplication.showLog(TAG, " check---> " + imageDetails.size() + "  " + detailsesResults.size());
+        myApplication.showLog(TAG, "inside details" + detailsesResults.size());
+        if (results.size() > 0) {
+
+            documentDetailsRecyclerViewAdapter = new DocumentDetailsRecyclerViewAdapter(getActivity(), detailsesResults, imageDetails);
+            DocumentDetailsRecyclerview.setAdapter(documentDetailsRecyclerViewAdapter);
+            documentDetailsRecyclerViewAdapter.notifyDataSetChanged();
+
+
+            detailsesResults.addChangeListener(new RealmChangeListener<RealmResults<VehicleDetails>>() {
+                @Override
+                public void onChange(RealmResults<VehicleDetails> element) {
+                    documentDetailsRecyclerViewAdapter.notifyDataSetChanged();
+
+
+                }
+            });
+
+        } else {
+            myApplication.showLog(TAG, "details");
+        }
     }
 
 
@@ -242,9 +244,15 @@ public class DocumentFragment extends Fragment {
         myApplication.showLog(TAG, "inside viwe" + results.size());
         if (results.size() > -1) {
             myApplication.showLog(TAG, "innerview11111");
+            //     if (documenttype.equalsIgnoreCase("licence")) {
             linearYourDrivingLicense.setVisibility(View.VISIBLE);
             imageAdapter = new ImageAdapter(getActivity(), results);
             ImageRecyclerview.setAdapter(imageAdapter);
+            imageAdapter.notifyDataSetChanged();
+            //    } else {
+            //      imageAdapter = new ImageAdapter(getActivity(), results);
+            // }
+
         } else {
             myApplication.showLog(TAG, "innerview222222");
             linearYourDrivingLicense.setVisibility(View.GONE);
@@ -296,10 +304,12 @@ public class DocumentFragment extends Fragment {
 
     }
 
-    private void showFileChooser() {
+    public void showFileChooser() {
+
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
+
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
@@ -370,7 +380,7 @@ public class DocumentFragment extends Fragment {
         super.onSaveInstanceState(outState);
         // save file url in bundle as it will be null on scren orientation
         // changes
-        outState.putParcelable("file_uri", fileUri);
+        outState.putParcelable("file_uri", filePath);
     }
 
    /* @Override
@@ -388,14 +398,14 @@ public class DocumentFragment extends Fragment {
         if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
             if (resultCode == -1) {
                 // successfully captured the image
-                // display it in image view
-
-
+                // display it in image vie
+                String type = documenttype;
+                String v_id = vehicle_id;
                 Uri uri = picUri;
 
                 String captuepath = uri.getPath();
 
-                uploadwithRetrofit(captuepath);
+                uploadwithRetrofit(captuepath, type, v_id);
 
 
                 myApplication.showLog("camarea image path ", "" + captuepath);
@@ -415,22 +425,52 @@ public class DocumentFragment extends Fragment {
         }
         if (requestCode == PICK_IMAGE_REQUEST && data != null && data.getData() != null) {
             if (resultCode == -1) {
+
+                String type = documenttype;
+                String v_id = vehicle_id;
+
+                myApplication.showLog("type and id----------->", type + v_id);
+
                 filePath = data.getData();
                 myApplication.showLog("file paths", "" + filePath);
 
 
-                String imagePath = getRealPathFromURI(filePath);
+                ///  String imagePath = getRealPathFromURI(filePath);
 
-                myApplication.showLog("file image  paths", imagePath);
+                if (Build.VERSION.SDK_INT < 11) {
 
 
-                uploadwithRetrofit(imagePath);
+                    // String imagePath = getRealPathFromURI(filePath);
 
-                calculateFileSize(imagePath);
+                    realPath = GetPathImage.getRealPathFromURI_BelowAPI11(getActivity(), filePath);
+                    myApplication.showLog("version sdk < 11", realPath);
+                }
+                // SDK >= 11 && SDK < 19
+                else if (Build.VERSION.SDK_INT < 19) {
+
+
+                    realPath = GetPathImage.getRealPathFromURI_API11to18(getActivity(), data.getData());
+                    myApplication.showLog("version SDK >= 11 && SDK < 19", realPath);
+                    // SDK > 19 (Android 4.4)
+                } else {
+
+                    realPath = GetPathImage.getRealPathFromURI_API19(getActivity(), filePath);
+                    myApplication.showLog("versionSDK > 19 (Android 4.4)", realPath);
+
+                }
+                // String imagePath = getRealPathFromURI(filePath);
+
+                //      myApplication.showLog("file image  paths", imagePath);
+
+
+                uploadwithRetrofit(realPath, type, v_id);
+
+                calculateFileSize(realPath);
+
+
                 results = realm.where(UserImages.class).findAll();
                 if (results.size() < 5) {
-                 //   bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), filePath);
-
+                    //   bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), filePath);
 
 
                     // uploadimage(imagePath);
@@ -459,28 +499,25 @@ public class DocumentFragment extends Fragment {
     }
 
 
-
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     private String getRealPathFromURI(Uri contentURI) {
         Uri contentUri = Uri.parse(String.valueOf(contentURI));
 
         String[] projection = {MediaStore.Images.Media.DATA};
         Cursor cursor = null;
         try {
-            if (Build.VERSION.SDK_INT > 19) {
-                // Will return "image:x*"
-                String wholeID = DocumentsContract.getDocumentId(contentUri);
-                // Split at colon, use second item in the array
-                String id = wholeID.split(":")[1];
-                // where id is equal to
-                String sel = MediaStore.Images.Media._ID + "=?";
 
-                cursor = getActivity().getContentResolver().query(
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                        projection, sel, new String[]{id}, null);
-            } else {
-                cursor = getActivity().getContentResolver().query(contentUri,
-                        projection, null, null, null);
-            }
+            // Will return "image:x*"
+            String wholeID = DocumentsContract.getDocumentId(contentUri);
+            // Split at colon, use second item in the array
+            String id = wholeID.split(":")[1];
+            // where id is equal to
+            String sel = MediaStore.Images.Media._ID + "=?";
+
+            cursor = getActivity().getContentResolver().query(
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    projection, sel, new String[]{id}, null);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -512,9 +549,6 @@ public class DocumentFragment extends Fragment {
 
         return calString;
     }
-
-
-
 
 
 //    private void previewCapturedImage() {
@@ -558,61 +592,39 @@ public class DocumentFragment extends Fragment {
     }
 
 
-    class UploadProgressViewHolder {
-        View itemView;
-
-        @Bind(R.id.uploadTitle)
-        TextView uploadTitle;
-        @Bind(R.id.uploadProgress)
-        ProgressBar progressBar;
-
-        String uploadId;
-
-        UploadProgressViewHolder(View view, String filename) {
-            itemView = view;
-            ButterKnife.bind(this, itemView);
-
-            progressBar.setMax(100);
-            progressBar.setProgress(0);
-
-            uploadTitle.setText(getString(R.string.upload_progress, filename));
-        }
-
-        @OnClick(R.id.cancelUploadButton)
-        void onCancelUploadClick() {
-            if (uploadId == null)
-                return;
-
-
-        }
-    }
-
-
-    private void uploadwithRetrofit(String imagePath) {
+    private void uploadwithRetrofit(String imagePath, final String type, final String v_id) {
 
         MyApplication.getInstance().DialogMessage("Upload Documents...");
         MyApplication.getInstance().showDialog();
+
+        final String imgname = imagePath.substring(imagePath.lastIndexOf("/") + 1);
+        myApplication.showLog("name", imgname);
+
+        final String rnd = "Licence" + String.valueOf(GenerteRandomNumber());
 
         RequestBody requestFile =
                 RequestBody.create(MediaType.parse("multipart/form-data"), new File(imagePath));
 
         // MultipartBody.Part is used to send also the actual file name
+
+        //note: file=key , vishal = iamgennnnname(randam) , reuestfile = pick image url
+
         MultipartBody.Part body =
-                MultipartBody.Part.createFormData("file", "vishal", requestFile);
+                MultipartBody.Part.createFormData("file", imgname, requestFile);
 //        MultipartBody.Part body =
 //                MultipartBody.Part.create(requestFile);
 
 //
-//        OkHttpClient okHttpClient1 = new OkHttpClient().newBuilder()
-//                .connectTimeout(120, TimeUnit.SECONDS)
-//                .writeTimeout(120, TimeUnit.SECONDS)
-//                .readTimeout(120, TimeUnit.SECONDS)
-//                .build();
+        OkHttpClient okHttpClient1 = new OkHttpClient().newBuilder()
+                .connectTimeout(120, TimeUnit.SECONDS)
+                .writeTimeout(120, TimeUnit.SECONDS)
+                .readTimeout(120, TimeUnit.SECONDS)
+                .build();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(AppConfig.URL_UPLOAD_DOC)
                 .addConverterFactory(GsonConverterFactory.create())
-//                .client(okHttpClient1)
+                .client(okHttpClient1)
                 .build();
 
         ResetApi resetApi = retrofit.create(ResetApi.class);
@@ -628,7 +640,12 @@ public class DocumentFragment extends Fragment {
                 int code = response.code();
                 myApplication.showLog("code", "" + code);
 
-                Toast.makeText(getActivity(), "Respose Code " + code, Toast.LENGTH_SHORT).show();
+                //    Toast.makeText(getActivity(), "Respose Code " + code, Toast.LENGTH_SHORT).show();
+
+                if (response.code() == 500) {
+
+                    Toast.makeText(getActivity(), "Server Side Error", Toast.LENGTH_SHORT).show();
+                }
 
                 if (response.code() == 200) {
 
@@ -640,9 +657,9 @@ public class DocumentFragment extends Fragment {
                         String imageurl = myResp.getResult();
 
                         myApplication.showLog("respose", imageurl);
-                        Toast.makeText(getActivity(), "Url" + imageurl, Toast.LENGTH_SHORT).show();
+                        //     Toast.makeText(getActivity(), "Url" + imageurl, Toast.LENGTH_SHORT).show();
 
-                        AddVehicalesDocument(imageurl);
+                        AddVehicalesDocument(imageurl, type, v_id, rnd);
 
 
                     } else {
@@ -676,7 +693,7 @@ public class DocumentFragment extends Fragment {
 
     }
 
-    private void AddVehicalesDocument(final String imageurl) {
+    private void AddVehicalesDocument(final String imageurl, final String type, final String v_id, final String imgname) {
 
 
         String tag_string_req = "req_delete_vehicle";
@@ -710,7 +727,7 @@ public class DocumentFragment extends Fragment {
 
                         myApplication.showLog("image id", "" + id);
 
-                        SaveImageIntoDatabase(id, imageurl);
+                        SaveImageIntoDatabase(id, imageurl, type, v_id, imgname);
 
                         // DeleteContactToDatabase(contactid);
                     } else {
@@ -739,10 +756,16 @@ public class DocumentFragment extends Fragment {
 
                 Map<String, String> stringMap = new HashMap<>();
                 stringMap.put("url", imageurl);
-                stringMap.put("type", "licence");
-//               stringMap.put("vehicleId", "21");
+                stringMap.put("type", type);
+                if (documenttype == "licence") {
+
+                } else {
+                    stringMap.put("vehicleId", v_id);
+                }
 
                 return stringMap;
+
+//                vehicleNo
             }
 
             @Override
@@ -762,16 +785,25 @@ public class DocumentFragment extends Fragment {
 
     }
 
-    private void SaveImageIntoDatabase(int id, String imageurl) {
+    private void SaveImageIntoDatabase(int id, String imageurl, String type, String v_id, String imgname) {
 
 
         //       String rnd = "Licence" + GenerteRandomNumber();
 //        SendToServer(encoded, rnd);
 
 
-        imageAdapter.saveImageToDatabase(String.valueOf(id), imageurl, "");
-        imageAdapter.notifyDataSetChanged();
+        imageAdapter.saveImageToDatabase(String.valueOf(id), imageurl, type, v_id, imgname);
+        ImageRecyclerview.setAdapter(imageAdapter);
         results = realm.where(UserImages.class).findAll();
+        imageAdapter.notifyDataSetChanged();
+
+//        imageDetails.addChangeListener(new RealmChangeListener<RealmResults<UserImages>>() {
+//            @Override
+//            public void onChange(RealmResults<UserImages> element) {
+//                imageAdapter.notifyDataSetChanged();
+//            }
+//        });
+
         myApplication.showLog(TAG, "preview " + results.size());
         myApplication.showLog(TAG, "capture");
         if (results.size() == 1) {
@@ -779,5 +811,53 @@ public class DocumentFragment extends Fragment {
         }
 
     }
+
+
+    @Subscribe
+    public void onEvent(ImageMessage message) {
+        Log.e("car datata", message.getDocumenttype() + message.getVehicle_id());
+        Toast.makeText(getActivity(), message.getDocumenttype(), Toast.LENGTH_SHORT).show();
+
+        documenttype = message.getDocumenttype();
+        vehicle_id = message.getVehicle_id();
+
+        pic_gallery_camera = message.getPic_gallery_camera();
+
+        if (pic_gallery_camera.equalsIgnoreCase("gallery")) {
+
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+        }
+
+        if (pic_gallery_camera.equalsIgnoreCase("camera")) {
+
+            Intent i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+
+            File file = getOutputMediaFile(MEDIA_TYPE_IMAGE);
+            picUri = Uri.fromFile(file); // create
+            i.putExtra(MediaStore.EXTRA_OUTPUT, picUri); // set the image file
+
+            startActivityForResult(i, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+        }
+
+
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
 
 }

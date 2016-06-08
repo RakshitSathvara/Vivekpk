@@ -23,6 +23,7 @@ import in.vaksys.vivekpk.R;
 import in.vaksys.vivekpk.dbPojo.UserImages;
 import in.vaksys.vivekpk.extras.MyApplication;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
 /**
@@ -69,14 +70,14 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
             @Override
             public void onError() {
 
-                Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
             }
         });
 
         holder.ImageUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(myApplication, "click", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(myApplication, "click", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -106,7 +107,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
         }
     }
 
-    public void saveImageToDatabase( String ImageId, String ImageUrl, String ImageType) {
+    public void saveImageToDatabase(String ImageId, String ImageUrl, String ImageType, String v_id, String imgname) {
 
         try {
             realm.beginTransaction();
@@ -114,8 +115,18 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
             userImages1.setId(ImageId);
             userImages1.setImagesurl(ImageUrl);
             userImages1.setImageType(ImageType);
+            userImages1.setVehicleid(v_id);
+            userImages1.setImageName(imgname);
             realm.commitTransaction();
-            notifyDataSetChanged();
+
+            userImages.addChangeListener(new RealmChangeListener<RealmResults<UserImages>>() {
+                @Override
+                public void onChange(RealmResults<UserImages> element) {
+                    notifyDataSetChanged();
+                }
+            });
+
+            //   notifyDataSetChanged();
 
         } catch (Exception e) {
             e.printStackTrace();
