@@ -54,7 +54,7 @@ public class SigninFragment extends Fragment {
 
     private EditText etPhoneNo;
     private PasswordEditText etPassword;
-    private TextView tvErrorPhoneNo, tvErrorPassword;
+    private TextView tvErrorPhoneNo, tvErrorPassword, forgotPassword;
     private Button btnSignIn;
     boolean isFormValid = true;
     private Realm realm;
@@ -76,8 +76,10 @@ public class SigninFragment extends Fragment {
         tvErrorPhoneNo = (TextView) rootView.findViewById(R.id.tv_errorPhoneNo);
         tvErrorPassword = (TextView) rootView.findViewById(R.id.tv_errorPassword);
         btnSignIn = (Button) rootView.findViewById(R.id.btn_signin);
-        realm = Realm.getDefaultInstance();
+        forgotPassword = (TextView) rootView.findViewById(R.id.Forgot_passwrod11);
+
         myApplication = MyApplication.getInstance();
+        realm = Realm.getDefaultInstance();
 
         myApplication.createDialog(getActivity(), false);
 
@@ -86,6 +88,13 @@ public class SigninFragment extends Fragment {
             public void onClick(View v) {
                 myApplication.hideKeyboard(getActivity());
                 submitForm();
+            }
+        });
+
+        forgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), ForgotPassWordActivity.class));
             }
         });
 
@@ -507,9 +516,9 @@ public class SigninFragment extends Fragment {
                                 realm.beginTransaction();
                                 // Getting JSON Array node
                                 JSONArray results1 = response.getJSONArray("result");
-                                myApplication.showLog(TAG,""+results1.length());
+                                myApplication.showLog(TAG, "" + results1.length());
 
-                                if (results1.length() > 0){
+                                if (results1.length() > 0) {
                                     for (int i = 0; i < results1.length(); i++) {
 
                                         JSONObject jsonObject = results1.getJSONObject(i);
@@ -530,10 +539,7 @@ public class SigninFragment extends Fragment {
 
 
                                 }
-                                startActivity(new Intent(getActivity(), HomeActivity.class));
-
-
-                            }else {
+                            } else {
 
                                 String errorMsg = response.getString("message");
                                 Toast.makeText(getActivity(),
@@ -570,12 +576,178 @@ public class SigninFragment extends Fragment {
     }
 
 
+    private void LoadingInstallation() {
+        myApplication.DialogMessage("Loading Installation...");
+//        myApplication.showDialog();
+        final StringRequest installationRequest = new StringRequest(Request.Method.POST, AppConfig.URL_INSTALLATION, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+                    Log.e(TAG, "onResponse: " + jObj.toString());
+
+                    if (!error) {
+                        Toast.makeText(getActivity(),
+                                "Installation Successfull... ", Toast.LENGTH_LONG).show();
+
+                        // parsing the user profile information
+                        JSONObject installationObj = jObj.getJSONObject("result");
+
+                        int id = installationObj.getInt("id");
+                        String deviceToken = installationObj.getString("deviceToken");
+                        String deviceType = installationObj.getString("deviceType");
+                        String createdAt = installationObj.getString("createdAt");
+                        String updatedAt = installationObj.getString("updatedAt");
+                        realm = Realm.getDefaultInstance();
+
+                        realm.beginTransaction();
+                        Installation installation = realm.createObject(Installation.class);
+
+                        installation.setDeviceType(deviceToken);
+                        installation.setDeviceType(deviceType);
+                        installation.setInstallationId(id);
+                        installation.setCreatedAt(createdAt);
+                        installation.setUpdatedAt(updatedAt);
+
+                        realm.commitTransaction();
+
+                        LoadingSubscription(id);
+                        //startActivity(new Intent(getActivity(), HomeActivity.class));
+
+                    } else {
+                        myApplication.hideDialog();
+
+                        String errorMsg = jObj.getString("message");
+                        Toast.makeText(getActivity(),
+                                "Error :" + errorMsg, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                } catch (JSONException e) {
+                    myApplication.hideDialog();
+                    // JSON error
+                    e.printStackTrace();
+                    Toast.makeText(getActivity(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                myApplication.ErrorSnackBar(getActivity());
+                myApplication.hideDialog();
+                return;
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("deviceToken", "abc");
+
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+                return headers;
+            }
+        };
+        myApplication.addToRequestQueue(installationRequest);
+    }
+
+    private void LoadingSubscription(final int installId) {
+        myApplication.DialogMessage("Loading Subscription...");
+//        myApplication.showDialog();
+        final StringRequest subscriptionRequest = new StringRequest(Request.Method.POST, AppConfig.URL_SUBSCRIPTION, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+                    Log.e(TAG, "onResponse: " + jObj.toString());
+
+                    if (!error) {
+                        Toast.makeText(getActivity(),
+                                "Subscription Successfull... ", Toast.LENGTH_LONG).show();
+
+                        // parsing the user profile information
+                        JSONObject subscriptionObj = jObj.getJSONObject("result");
+
+                        int idSub = subscriptionObj.getInt("userId");
+                        int installationId = subscriptionObj.getInt("installationId");
+                        String createdAtSub = subscriptionObj.getString("createdAt");
+                        String updatedAtSub = subscriptionObj.getString("updatedAt");
+                        /*realm = Realm.getDefaultInstance();
+
+                        realm.beginTransaction();
+                        Installation installation = realm.createObject(Installation.class);
+
+                        installation.setDeviceType(deviceToken);
+                        installation.setDeviceType(deviceType);
+                        installation.setInstallationId(id);
+                        installation.setCreatedAt(createdAt);
+                        installation.setUpdatedAt(updatedAt);
+
+                        realm.commitTransaction();*/
+
+
+                        startActivity(new Intent(getActivity(), HomeActivity.class));
+
+                    } else {
+                        myApplication.hideDialog();
+
+                        String errorMsg = jObj.getString("message");
+                        Toast.makeText(getActivity(),
+                                "Error :" + errorMsg, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                } catch (JSONException e) {
+                    myApplication.hideDialog();
+                    // JSON error
+                    e.printStackTrace();
+                    Toast.makeText(getActivity(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                myApplication.ErrorSnackBar(getActivity());
+                myApplication.hideDialog();
+                return;
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("installationId", String.valueOf(installId));
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+                return headers;
+            }
+        };
+        myApplication.addToRequestQueue(subscriptionRequest);
+    }
+
     @Override
     public void onStop() {
+        realm.close();
+
         super.onStop();
         // Remember to close the Realm instance when done with it.
         // TODO: 19-05-2016 handle realm.close();
-        realm.close();
+
     }
 
     private boolean validateNumber() {

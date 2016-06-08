@@ -127,7 +127,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="It can take uptp a minute to recive SMS" />
+                android:text="It can take upto a minute to recive SMS" />
 
 
             <LinearLayout

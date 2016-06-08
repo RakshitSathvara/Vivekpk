@@ -56,8 +56,15 @@ public class SmsReceiver extends BroadcastReceiver {
 
     private String getVerificationCode(String message) {
         String code = null;
-        code = message.replaceAll("[^0-9]", "");
-        Log.e(TAG, "getVerificationCode: " + code);
+        int index = message.indexOf("is");
+
+        if (index != -1) {
+            int start = index + 3;
+            int length = 6;
+            code = message.substring(start, start + length);
+            return code;
+        }
+
         return code;
     }
 
