@@ -3,6 +3,7 @@ package in.vaksys.vivekpk.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -77,11 +78,15 @@ public class InsuranceFragment extends Fragment {
         myApplication.showLog(TAG, "inside details" + detailsesResults.size());
         if (results.size() > -1) {
             detailsRecyclerViewAdapter = new InsuranceDetailsRecyclerViewAdapter(getActivity(), detailsesResults);
+            InsuranceDetailsRecyclerview.setHasFixedSize(true);
+            InsuranceDetailsRecyclerview.setItemAnimator(new DefaultItemAnimator());
+            InsuranceDetailsRecyclerview.setNestedScrollingEnabled(false);
             InsuranceDetailsRecyclerview.setAdapter(detailsRecyclerViewAdapter);
         } else {
             myApplication.showLog(TAG, "details");
         }
     }
+
     private void SetInsurance() {
         myApplication.showLog(TAG, "innerview");
 

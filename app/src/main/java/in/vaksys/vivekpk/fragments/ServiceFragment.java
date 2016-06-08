@@ -3,6 +3,7 @@ package in.vaksys.vivekpk.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -75,6 +76,9 @@ public class ServiceFragment extends Fragment {
         myApplication.showLog(TAG, "inside details" + detailsesResults.size());
         if (results.size() > -1) {
             detailsRecyclerViewAdapter = new ServiceDetailsRecyclerViewAdapter(getActivity(), detailsesResults);
+            ServiceDetailsRecyclerview.setHasFixedSize(true);
+            ServiceDetailsRecyclerview.setItemAnimator(new DefaultItemAnimator());
+            ServiceDetailsRecyclerview.setNestedScrollingEnabled(false);
             ServiceDetailsRecyclerview.setAdapter(detailsRecyclerViewAdapter);
         } else {
             myApplication.showLog(TAG, "details");

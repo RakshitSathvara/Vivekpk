@@ -4,6 +4,7 @@ package in.vaksys.vivekpk.fragments;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -198,6 +199,9 @@ public class EmissionFragment extends Fragment {
         myApplication.showLog(TAG, "inside details" + detailsesResults.size());
         if (results.size() > -1) {
             detailsRecyclerViewAdapter = new EmissionDetailsRecyclerViewAdapter(getActivity(), detailsesResults);
+            EmissionDetailsRecyclerview.setHasFixedSize(true);
+            EmissionDetailsRecyclerview.setItemAnimator(new DefaultItemAnimator());
+            EmissionDetailsRecyclerview.setNestedScrollingEnabled(false);
             EmissionDetailsRecyclerview.setAdapter(detailsRecyclerViewAdapter);
         } else {
             myApplication.showLog(TAG, "details");
@@ -214,6 +218,9 @@ public class EmissionFragment extends Fragment {
         myApplication.showLog(TAG, "inside viwe" + results.size());
         if (results.size() > -1) {
             emisssionAdapter = new EmisssionRecyclerViewAdapter(getActivity(), results);
+            EmissionRecyclerview.setHasFixedSize(true);
+            EmissionRecyclerview.setItemAnimator(new DefaultItemAnimator());
+            EmissionRecyclerview.setNestedScrollingEnabled(false);
             EmissionRecyclerview.setAdapter(emisssionAdapter);
         } else {
             myApplication.showLog(TAG, "innerview222222");

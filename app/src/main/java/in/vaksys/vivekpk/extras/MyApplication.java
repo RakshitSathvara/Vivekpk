@@ -9,6 +9,7 @@ import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.support.multidex.MultiDex;
 import android.text.TextUtils;
@@ -23,11 +24,14 @@ import com.nispok.snackbar.Snackbar;
 import com.nispok.snackbar.enums.SnackbarType;
 import com.nispok.snackbar.listeners.ActionClickListener;
 
+import junit.framework.Test;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+import in.vaksys.vivekpk.activities.MainActivity;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 

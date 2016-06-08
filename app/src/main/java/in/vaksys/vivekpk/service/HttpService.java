@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import in.vaksys.vivekpk.activities.HomeActivity;
+import in.vaksys.vivekpk.activities.MainActivity;
 import in.vaksys.vivekpk.activities.ResetPasswordActivity;
 import in.vaksys.vivekpk.dbPojo.Users;
 import in.vaksys.vivekpk.extras.AppConfig;
@@ -125,7 +126,7 @@ public class HttpService extends IntentService {
     }
 
     private void SetHome() {
-        Intent intent = new Intent(HttpService.this, HomeActivity.class);
+        Intent intent = new Intent(HttpService.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
 

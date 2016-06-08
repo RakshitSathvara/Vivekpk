@@ -4,6 +4,7 @@ package in.vaksys.vivekpk.fragments;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -76,6 +77,8 @@ public class CarFragment extends Fragment {
     private RealmResults<VehicleDetails> results;
     private CarBikeRecyclerViewAdapter carAdapter;
     String myid;
+
+    private RecyclerView.LayoutManager mLayoutManager;
 
 
     public static CarFragment newInstance(int index) {
@@ -362,11 +365,17 @@ public class CarFragment extends Fragment {
             carDetailRecyclerView.setVisibility(View.VISIBLE);
             AddVehicleBtnLayout.setVisibility(View.VISIBLE);
             carAdapter = new CarBikeRecyclerViewAdapter(getActivity(), results);
+            carDetailRecyclerView.setHasFixedSize(true);
+            carDetailRecyclerView.setItemAnimator(new DefaultItemAnimator());
+            carDetailRecyclerView.setNestedScrollingEnabled(false);
             carDetailRecyclerView.setAdapter(carAdapter);
+
+
         } else {
             addCarView.setVisibility(View.VISIBLE);
         }
     }
+
 
     @Subscribe
     public void onEvent(ClaimMessage messageCar) {

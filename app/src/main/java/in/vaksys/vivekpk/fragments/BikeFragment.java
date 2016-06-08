@@ -3,6 +3,7 @@ package in.vaksys.vivekpk.fragments;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -355,6 +356,9 @@ public class BikeFragment extends Fragment {
 
         results = realm.where(VehicleDetails.class).equalTo("type", "bike").findAll();
         carAdapter = new CarBikeRecyclerViewAdapter(getActivity(), results);
+        carDetailRecyclerView.setHasFixedSize(true);
+        carDetailRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        carDetailRecyclerView.setNestedScrollingEnabled(false);
         carDetailRecyclerView.setAdapter(carAdapter);
 
         if (results.size() > 0) {

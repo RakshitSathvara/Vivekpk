@@ -1,13 +1,8 @@
 package in.vaksys.vivekpk.adapter;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.os.Handler;
-import android.os.Message;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,18 +12,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,9 +33,7 @@ import in.vaksys.vivekpk.fragments.EmergencyFragment;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
-import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
 
 /**
  * Created by patel on 30-05-2016.
@@ -72,7 +61,7 @@ public class SetContactAdpter extends RecyclerView.Adapter<SetContactAdpter.Adap
 
     @Override
     public AdapterHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.set_contact_number, null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.set_contact_number, parent, false);
         viewHolder = new AdapterHolder(view);
         return viewHolder;
     }
@@ -152,7 +141,6 @@ public class SetContactAdpter extends RecyclerView.Adapter<SetContactAdpter.Adap
         MyApplication.getInstance().showDialog();
 
 
-
         String tag_string_req = "req_delete_vehicle";
 
         myApplication.DialogMessage("Deleting Contact...");
@@ -178,7 +166,7 @@ public class SetContactAdpter extends RecyclerView.Adapter<SetContactAdpter.Adap
                         // parsing the user profile information
 //                        JSONObject profileObj = jObj.getJSONObject("result");
 
-                      DeleteContactToDatabase(contactid);
+                        DeleteContactToDatabase(contactid);
                     } else {
                         // Error in login. Get the error message
                         String errorMsg = jObj.getString("message");

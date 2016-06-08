@@ -19,6 +19,7 @@
             android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:hint="First Name"
+            android:inputType="textCapWords"
             android:maxLength="15"
             android:singleLine="true"
             android:textColor="#000000"
@@ -31,6 +32,7 @@
             android:layout_marginLeft="10dp"
             android:layout_weight="1"
             android:hint="Last Name"
+            android:inputType="textCapWords"
             android:singleLine="true"
             android:textColor="#000000"
             android:textColorHint="#797979" />
@@ -43,9 +45,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:hint="Email ID"
+        android:inputType="textEmailAddress"
         android:singleLine="true"
         android:textColor="#000000"
-        android:inputType="textEmailAddress"
         android:textColorHint="#797979" />
 
     <LinearLayout
@@ -70,9 +72,9 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="4"
-            android:maxLength="10"
             android:hint="Number"
             android:inputType="number"
+            android:maxLength="10"
             android:singleLine="true"
             android:textColor="#000000"
             android:textColorHint="#797979" />

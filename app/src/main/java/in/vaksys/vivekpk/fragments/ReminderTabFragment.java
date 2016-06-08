@@ -187,29 +187,19 @@ public class ReminderTabFragment extends Fragment {
 //    }
 
 
+
+
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart() {
+        super.onStart();
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
     }
 
     @Override
-    public void onPause() {
+    public void onStop() {
         EventBus.getDefault().unregister(this);
-        super.onPause();
+        super.onStop();
     }
-
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        EventBus.getDefault().register(this);
-//    }
-//
-//    @Override
-//    public void onStop() {
-//        EventBus.getDefault().unregister(this);
-//        super.onStop();
-//    }
 }
