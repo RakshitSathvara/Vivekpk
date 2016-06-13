@@ -58,6 +58,7 @@ public class EmissionFragment extends Fragment {
     RealmResults<VehicleDetails> detailsesResults;
     private MyApplication myApplication;
     private Realm realm;
+    private String selection_type = null;
 
 
     public EmissionFragment() {
@@ -194,9 +195,18 @@ public class EmissionFragment extends Fragment {
     private void SetInsuranceDetails() {
         EmissionDetailsRecyclerview.setHasFixedSize(true);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+
         EmissionDetailsRecyclerview.setLayoutManager(manager);
-        detailsesResults = realm.where(VehicleDetails.class).notEqualTo("PollutionExpireDate", "").findAll();
-        myApplication.showLog(TAG, "inside details" + detailsesResults.size());
+
+        if (selection_type == null){
+            detailsesResults = realm.where(VehicleDetails.class).notEqualTo("PollutionExpireDate", "").equalTo("type", "car").findAll();
+            myApplication.showLog(TAG, "inside details" + detailsesResults.size());
+        }else {
+            detailsesResults = realm.where(VehicleDetails.class).notEqualTo("PollutionExpireDate", "").equalTo("type", selection_type).findAll();
+            myApplication.showLog(TAG, "inside details" + detailsesResults.size());
+        }
+
+
         if (results.size() > -1) {
             detailsRecyclerViewAdapter = new EmissionDetailsRecyclerViewAdapter(getActivity(), detailsesResults);
             EmissionDetailsRecyclerview.setHasFixedSize(true);
@@ -214,8 +224,16 @@ public class EmissionFragment extends Fragment {
         EmissionRecyclerview.setHasFixedSize(true);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         EmissionRecyclerview.setLayoutManager(manager);
-        results = realm.where(VehicleDetails.class).equalTo("PollutionExpireDate", "").findAll();
-        myApplication.showLog(TAG, "inside viwe" + results.size());
+
+        if (selection_type == null){
+            results = realm.where(VehicleDetails.class).equalTo("PollutionExpireDate", "").equalTo("type", "car").findAll();
+            myApplication.showLog(TAG, "inside viwe" + results.size());
+        }else {
+            results = realm.where(VehicleDetails.class).equalTo("PollutionExpireDate", "").equalTo("type", selection_type).findAll();
+            myApplication.showLog(TAG, "inside viwe" + results.size());
+        }
+
+
         if (results.size() > -1) {
             emisssionAdapter = new EmisssionRecyclerViewAdapter(getActivity(), results);
             EmissionRecyclerview.setHasFixedSize(true);
@@ -231,7 +249,10 @@ public class EmissionFragment extends Fragment {
     @Subscribe
     public void onEvent(Message messageCar) {
         Log.e("car datata", messageCar.getMsg());
-        Toast.makeText(getActivity(), messageCar.getMsg(), Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(getActivity(), messageCar.getMsg(), Toast.LENGTH_SHORT).show();
+        selection_type = messageCar.getMsg();
+        SetInsurance();
+        SetInsuranceDetails();
     }
 
 
@@ -260,9 +281,5 @@ public class EmissionFragment extends Fragment {
 //    }
 
 
-    public void callbackMethod(View v) {
-//        Toast.makeText(getActivity(),((RadioButton) v).getText(), Toast.LENGTH_SHORT).show();
 
-        Log.e("fdhgyud", "edfhuf");
-    }
 }

@@ -325,7 +325,7 @@ public class VolleyHelper {
         RealmResults<VehicleDetails> results = realm.where(VehicleDetails.class).findAll();
         Log.e(TAG, "SaveIntoDatabase: " + results.size());
 
-        Toast.makeText(activity, "Setup Complete", Toast.LENGTH_LONG).show();
+//        Toast.makeText(activity, "Setup Complete", Toast.LENGTH_LONG).show();
         myApplication.hideDialog();
 //        adapter.notifyDataSetChanged();
 
@@ -356,7 +356,7 @@ public class VolleyHelper {
         RealmResults<VehicleDetails> results = realm.where(VehicleDetails.class).findAll();
         Log.e(TAG, "SaveIntoDatabase: " + results.size());
 
-        Toast.makeText(activity, "Setup Complete", Toast.LENGTH_LONG).show();
+//        Toast.makeText(activity, "Setup Complete", Toast.LENGTH_LONG).show();
         myApplication.hideDialog();
 
     }
@@ -377,7 +377,7 @@ public class VolleyHelper {
         RealmResults<VehicleDetails> results = realm.where(VehicleDetails.class).findAll();
         Log.e(TAG, "SaveIntoDatabase: " + results.size());
 
-        Toast.makeText(activity, "Setup Complete", Toast.LENGTH_LONG).show();
+//        Toast.makeText(activity, "Setup Complete", Toast.LENGTH_LONG).show();
         myApplication.hideDialog();
 
     }

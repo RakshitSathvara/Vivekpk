@@ -4,6 +4,7 @@ package in.vaksys.vivekpk.fragments;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -158,7 +159,7 @@ public class CarFragment extends Fragment {
                 modelSpinnItem = ((TextView) view.findViewById(R.id.rowText)).getText().toString();
                 makePosi = position;
                 myid = ((TextView) view.findViewById(R.id.rowid)).getText().toString();
-                Toast.makeText(getActivity(), "You have selected " + modelSpinnItem + " " + myid, Toast.LENGTH_SHORT).show();
+             //   Toast.makeText(getActivity(), "You have selected " + modelSpinnItem + " " + myid, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -181,7 +182,7 @@ public class CarFragment extends Fragment {
                 carPosi = position;
                 modelSpinnItem = ((TextView) view.findViewById(R.id.rowText)).getText().toString();
                 String myid = ((TextView) view.findViewById(R.id.rowid)).getText().toString();
-                Toast.makeText(getActivity(), "You have selected " + modelSpinnItem + " " + myid, Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getActivity(), "You have selected " + modelSpinnItem + " " + myid, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -221,6 +222,7 @@ public class CarFragment extends Fragment {
 
     private boolean validateCarSpinner() {
         if (carPosi == 0) {
+            Toast.makeText(getActivity(), "Select Brand", Toast.LENGTH_SHORT).show();
             return false;
         } else {
             return true;
@@ -229,6 +231,8 @@ public class CarFragment extends Fragment {
 
     private boolean validateMakeSpinner() {
         if (makePosi == 0) {
+
+            Toast.makeText(getActivity(), "Select Model", Toast.LENGTH_SHORT).show();
             return false;
         } else {
             return true;

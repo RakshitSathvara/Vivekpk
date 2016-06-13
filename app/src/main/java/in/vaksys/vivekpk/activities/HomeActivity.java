@@ -113,11 +113,14 @@ public class HomeActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapter, View v,
                                        int position, long id) {
                 // On selecting a spinner item
-                item = adapter.getItemAtPosition(position).toString();
+                item = adapter.getItemAtPosition(position).toString().toLowerCase();
 
                 // Showing selected spinner item
-                Toast.makeText(getApplicationContext(), "Selected  : " + item,
-                        Toast.LENGTH_LONG).show();
+///// TODO: 09/06/2016 add this line
+                MyApplication.getInstance().showLog("lower case check",item.toLowerCase());
+
+//                Toast.makeText(getApplicationContext(), "Selected  : " + item.toLowerCase(),
+//                        Toast.LENGTH_LONG).show();
                 SharedPreferences sharedPreferences = MyApplication.getInstance().getSharedPreferences("harsh", Context.MODE_PRIVATE);
 
                 SharedPreferences.Editor edit = sharedPreferences.edit();
@@ -126,6 +129,8 @@ public class HomeActivity extends AppCompatActivity {
 
 
                     bus.post(new Message(item));
+
+
 
                    /* edit.putInt("type", 0);
                     edit.apply();
@@ -222,7 +227,7 @@ public class HomeActivity extends AppCompatActivity {
         bottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
             @Override
             public void onTabSelected(int position, boolean wasSelected) {
-                Toast.makeText(HomeActivity.this, " " + position + " " + wasSelected, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(HomeActivity.this, " " + position + " " + wasSelected, Toast.LENGTH_SHORT).show();
                 if (position == 0) {
                     fragmentManager.beginTransaction()
                             .replace(R.id.fragment_container, currentFragment)

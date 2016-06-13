@@ -137,8 +137,6 @@ public class SetContactAdpter extends RecyclerView.Adapter<SetContactAdpter.Adap
 
 
     public void DeleteContact(final int contactid, final Context context) {
-        MyApplication.getInstance().DialogMessage("Deleting Contact...");
-        MyApplication.getInstance().showDialog();
 
 
         String tag_string_req = "req_delete_vehicle";

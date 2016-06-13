@@ -92,14 +92,14 @@ public class GalleryImageAdapter extends RecyclerView.Adapter<GalleryImageAdapte
             @Override
             public void onError() {
 
-                Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
             }
         });
 
         holder.DocumentImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(myApplication, "click", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(myApplication, "click", Toast.LENGTH_SHORT).show();
             }
         });
 

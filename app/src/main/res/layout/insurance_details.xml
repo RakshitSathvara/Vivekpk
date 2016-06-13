@@ -19,7 +19,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:padding="10dp">
 
@@ -186,6 +186,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:text="Oriental Insurance"
+                        android:lines="1"
                         android:textSize="14sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -207,6 +208,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp"
+
                 android:orientation="horizontal">
 
                 <ImageView
@@ -224,7 +226,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:text="Expiry Date"
                         android:textColor="#CAC6C9"
                         android:textSize="12sp"
@@ -233,10 +235,10 @@
                     <TextView
                         android:id="@+id/tv_date_det"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginTop="5dp"
                         android:text="12 Fab 2016"
-                        android:textSize="14sp"
+                        android:textSize="12sp"
                         android:textStyle="bold" />
                 </LinearLayout>
 

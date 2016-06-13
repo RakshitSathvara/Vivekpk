@@ -59,7 +59,7 @@ public class MyApplication extends Application {
         mInstance = this;
 
         RealmConfiguration configuration = new RealmConfiguration.Builder(this)
-                .name("DaddysRoad2311.realm")
+                .name("DaddysRoad23.realm")
                 .deleteRealmIfMigrationNeeded()
                 .schemaVersion(1)
                 .build();

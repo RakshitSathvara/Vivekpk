@@ -152,7 +152,7 @@ public class HttpService extends IntentService {
         realm.commitTransaction();
         SetHome();
         Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
-        Toast.makeText(this, "Setup Complete", Toast.LENGTH_LONG).show();
+   //     Toast.makeText(this, "Setup Complete", Toast.LENGTH_LONG).show();
     }
 
 }

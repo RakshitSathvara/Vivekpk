@@ -284,12 +284,12 @@ public class CarBikeRecyclerViewAdapter extends RecyclerView.Adapter<CarBikeRecy
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 makePosi = position;
                 myid = ((TextView) view.findViewById(R.id.rowid)).getText().toString();
-                Toast.makeText(context, "You have selected " + " " + myid, Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(context, "You have selected " + " " + myid, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                Toast.makeText(context, "You have selected Nothing ..", Toast.LENGTH_SHORT).show();
+            //    Toast.makeText(context, "You have selected Nothing ..", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -306,12 +306,12 @@ public class CarBikeRecyclerViewAdapter extends RecyclerView.Adapter<CarBikeRecy
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 carPosi = position;
                 String myid = ((TextView) view.findViewById(R.id.rowid)).getText().toString();
-                Toast.makeText(context, "You have selected " + " " + myid, Toast.LENGTH_SHORT).show();
+               // Toast.makeText(context, "You have selected " + " " + myid, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                Toast.makeText(context, "You have selected Nothing ..", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(context, "You have selected Nothing ..", Toast.LENGTH_SHORT).show();
             }
         });
     }

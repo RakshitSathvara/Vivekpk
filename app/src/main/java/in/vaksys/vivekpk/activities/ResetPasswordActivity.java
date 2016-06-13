@@ -97,8 +97,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
                     // Check for error node in json
                     if (!error) {
-                        Toast.makeText(ResetPasswordActivity.this,
-                                "Login Successfull... ", Toast.LENGTH_LONG).show();
+
 
                         Toast.makeText(ResetPasswordActivity.this, "Password Successfully Updated", Toast.LENGTH_SHORT).show();
 
@@ -157,7 +156,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
             requestFocus(pass1);
             return false;
         }
-        if (pass1.length() < 6) {
+        if (pass1.length() < 7) {
             pass1.setError(getString(R.string.err_valid_password));
             requestFocus(pass1);
             return false;
@@ -172,7 +171,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
             requestFocus(pass2);
             return false;
         }
-        if (pass2.length() < 6) {
+        if (pass2.length() < 7) {
             pass2.setError(getString(R.string.err_valid_password));
             requestFocus(pass2);
             return false;

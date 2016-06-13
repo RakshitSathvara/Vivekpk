@@ -80,7 +80,7 @@ public class mySpinnerAdapterBrand extends BaseAdapter {
         }
         if (mType.equalsIgnoreCase("bike")) {
 //            Log.e(TAG, "getView:  bike" + item.getType());
-            if (vehicleModels.getType().equalsIgnoreCase("car")) {      // here i have to change bike when real api comes . // TODO: 18-05-2016
+            if (vehicleModels.getType().equalsIgnoreCase("bike")) {      // here i have to change bike when real api comes . // TODO: 18-05-2016
 //                Log.e(TAG, "getView:  bike 1111 " + item.getType());
 
                 holder.mytext.setText(vehicleModels.getManufacturerName());

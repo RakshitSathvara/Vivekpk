@@ -81,7 +81,7 @@ public class InsuranceDetailsRecyclerViewAdapter extends RecyclerView.Adapter<In
 
     @Override
     public AdapterHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.insurance_details, null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.insurance_details, parent,false);
         viewHolder = new AdapterHolder(view);
         return viewHolder;
     }
@@ -141,7 +141,7 @@ public class InsuranceDetailsRecyclerViewAdapter extends RecyclerView.Adapter<In
                     @Override
                     public void onClick(View v) {
                         setId = 5;
-                        if ((Integer.parseInt(myid) == 0) || DatePicker.getText().toString().equalsIgnoreCase("Expiry Date")) {
+                        if ((Integer.parseInt(myid) == -1) || DatePicker.getText().toString().equalsIgnoreCase("Expiry Date")) {
                             Toast.makeText(context, "Please fill the data", Toast.LENGTH_SHORT).show();
                         } else {
                             confirm1 = new Dialog(context);
@@ -162,16 +162,16 @@ public class InsuranceDetailsRecyclerViewAdapter extends RecyclerView.Adapter<In
                                 public void onCheckedChanged(RadioGroup group, int checkedId) {
                                     if (checkedId == R.id.radio1) {
                                         setId = 1;
-                                        Toast.makeText(context, "radio1",
-                                                Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(context, "radio1",
+//                                                Toast.LENGTH_SHORT).show();
                                     } else if (checkedId == R.id.radio2) {
                                         setId = 2;
-                                        Toast.makeText(context, "radio2",
-                                                Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(context, "radio2",
+//                                                Toast.LENGTH_SHORT).show();
                                     } else if (checkedId == R.id.radio3) {
                                         setId = 3;
-                                        Toast.makeText(context, "radio3",
-                                                Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(context, "radio3",
+//                                                Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
@@ -193,6 +193,9 @@ public class InsuranceDetailsRecyclerViewAdapter extends RecyclerView.Adapter<In
                                         Toast.makeText(context, "Please Select Reminder.", Toast.LENGTH_SHORT).show();
                                         return;
                                     }
+
+                                    myApplication.showLog("date------------->",DatePicker.getText().toString());
+
                                     AddUpdateReminder(holder.VehicleIDHiddden.getText().toString(),
                                             details.getVehicleModelID(), myid, DatePicker.getText().toString()
                                             , BLANK, BLANK, BLANK, NotificationDate);

@@ -52,6 +52,7 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import in.vaksys.vivekpk.R;
+import in.vaksys.vivekpk.activities.DocumentImageGallery;
 import in.vaksys.vivekpk.adapter.DocumentDetailsRecyclerViewAdapter;
 import in.vaksys.vivekpk.adapter.ImageAdapter;
 import in.vaksys.vivekpk.dbPojo.UserImages;
@@ -61,6 +62,7 @@ import in.vaksys.vivekpk.extras.GetPathImage;
 import in.vaksys.vivekpk.extras.MyApplication;
 import in.vaksys.vivekpk.extras.ResetApi;
 import in.vaksys.vivekpk.model.ImageMessage;
+import in.vaksys.vivekpk.model.Message;
 import in.vaksys.vivekpk.model.data;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -152,6 +154,7 @@ public class DocumentFragment extends Fragment {
     private String documenttype;
     private String vehicle_id;
     private String pic_gallery_camera;
+    private String selection_type;
 
 
     public static DocumentFragment newInstance(int index) {
@@ -207,7 +210,7 @@ public class DocumentFragment extends Fragment {
         DocumentDetailsRecyclerview.setHasFixedSize(true);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         DocumentDetailsRecyclerview.setLayoutManager(manager);
-        detailsesResults = realm.where(VehicleDetails.class).findAll();
+        detailsesResults = realm.where(VehicleDetails.class).equalTo("type",selection_type).findAll();
         imageDetails = realm.where(UserImages.class).findAll();
 
         myApplication.showLog(TAG, " check---> " + imageDetails.size() + "  " + detailsesResults.size());
@@ -240,7 +243,7 @@ public class DocumentFragment extends Fragment {
         ImageRecyclerview.setHasFixedSize(true);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         ImageRecyclerview.setLayoutManager(manager);
-        results = realm.where(UserImages.class).findAll();
+        results = realm.where(UserImages.class).equalTo("ImageType","licence").findAll();
         myApplication.showLog(TAG, "inside viwe" + results.size());
         if (results.size() > -1) {
             myApplication.showLog(TAG, "innerview11111");
@@ -302,15 +305,38 @@ public class DocumentFragment extends Fragment {
         myApplication = MyApplication.getInstance();
         realm = Realm.getDefaultInstance();
 
+        imgLicenseImgEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent h = new Intent(getActivity(), DocumentImageGallery.class);
+                getActivity().startActivity(h);
+            }
+        });
+
     }
 
     public void showFileChooser() {
 
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
+        results = realm.where(UserImages.class).equalTo("ImageType","licence").findAll();
 
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+        myApplication.showLog("total images --->",""+ results.size());
+
+        if (results.size() == 4){
+
+            Toast.makeText(getActivity(),
+                    "Sorry! You can't add more then 4 Driving Licences.", Toast.LENGTH_SHORT)
+                    .show();
+
+        }else {
+
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+        }
+
     }
 
     private void captureImage() {
@@ -322,14 +348,26 @@ public class DocumentFragment extends Fragment {
 //        fileUri = Uri.fromFile(f);
 //        startActivityForResult(chooserIntent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
 
+        results = realm.where(UserImages.class).equalTo("ImageType","licence").findAll();
 
-        Intent i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        myApplication.showLog("total images --->",""+ results.size());
 
-        File file = getOutputMediaFile(MEDIA_TYPE_IMAGE);
-        picUri = Uri.fromFile(file); // create
-        i.putExtra(MediaStore.EXTRA_OUTPUT, picUri); // set the image file
+        if (results.size() == 4){
 
-        startActivityForResult(i, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+            Toast.makeText(getActivity(),
+                    "Sorry! You can't add more then 4 Driving Licences.", Toast.LENGTH_SHORT)
+                    .show();
+
+        }else {
+
+            Intent i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+
+            File file = getOutputMediaFile(MEDIA_TYPE_IMAGE);
+            picUri = Uri.fromFile(file); // create
+            i.putExtra(MediaStore.EXTRA_OUTPUT, picUri); // set the image file
+
+            startActivityForResult(i, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+        }
 
 
 //        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -395,6 +433,10 @@ public class DocumentFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // if the result is capturing Image
         //   myApplication.showLog(TAG, " " + resultCode + " " + requestCode + " " + data.toString());
+
+
+
+
         if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
             if (resultCode == -1) {
                 // successfully captured the image
@@ -426,6 +468,8 @@ public class DocumentFragment extends Fragment {
         if (requestCode == PICK_IMAGE_REQUEST && data != null && data.getData() != null) {
             if (resultCode == -1) {
 
+
+
                 String type = documenttype;
                 String v_id = vehicle_id;
 
@@ -454,7 +498,7 @@ public class DocumentFragment extends Fragment {
                     // SDK > 19 (Android 4.4)
                 } else {
 
-                    realPath = GetPathImage.getRealPathFromURI_API19(getActivity(), filePath);
+                    realPath = getRealPathFromURI(filePath);
                     myApplication.showLog("versionSDK > 19 (Android 4.4)", realPath);
 
                 }
@@ -465,75 +509,91 @@ public class DocumentFragment extends Fragment {
 
                 uploadwithRetrofit(realPath, type, v_id);
 
-                calculateFileSize(realPath);
+              //  calculateFileSize(realPath);
 
 
-                results = realm.where(UserImages.class).findAll();
-                if (results.size() < 5) {
-                    //   bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), filePath);
-
-
-                    // uploadimage(imagePath);
-
-                    //   Send(bitmap);
-                    /*String encoded = BitmapToString(bitmap);
-
-                    SendToServer(encoded);
-                    imageAdapter.saveImageToDatabase(encoded);
-//                        myApplication.showLog(TAG, "preview " + results.size());
-//                        myApplication.showLog(TAG, "pick");
-                    if (results.size() == 1) {
-                        SetImagesViews();
-                    }*/
-                } else {
-                    Toast.makeText(getActivity(),
-                            "Sorry! You can't add more then 4 Driving Licences.", Toast.LENGTH_SHORT)
-                            .show();
-                }
+//                results = realm.where(UserImages.class).findAll();
+//                if (results.size() < 5) {
+//                    //   bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), filePath);
+//
+//
+//                    // uploadimage(imagePath);
+//
+//                    //   Send(bitmap);
+//                    /*String encoded = BitmapToString(bitmap);
+//
+//                    SendToServer(encoded);
+//                    imageAdapter.saveImageToDatabase(encoded);
+////                        myApplication.showLog(TAG, "preview " + results.size());
+////                        myApplication.showLog(TAG, "pick");
+//                    if (results.size() == 1) {
+//                        SetImagesViews();
+//                    }*/
+//                } else {
+//                    Toast.makeText(getActivity(),
+//                            "Sorry! You can't add more then 4 Driving Licences.", Toast.LENGTH_SHORT)
+//                            .show();
+//                }
             } else if (resultCode == 0) {
                 Toast.makeText(getActivity(),
                         "You cancelled image Selcetion", Toast.LENGTH_SHORT)
                         .show();
             }
         }
+
+
     }
 
-
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     private String getRealPathFromURI(Uri contentURI) {
-        Uri contentUri = Uri.parse(String.valueOf(contentURI));
-
-        String[] projection = {MediaStore.Images.Media.DATA};
-        Cursor cursor = null;
-        try {
-
-            // Will return "image:x*"
-            String wholeID = DocumentsContract.getDocumentId(contentUri);
-            // Split at colon, use second item in the array
-            String id = wholeID.split(":")[1];
-            // where id is equal to
-            String sel = MediaStore.Images.Media._ID + "=?";
-
-            cursor = getActivity().getContentResolver().query(
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    projection, sel, new String[]{id}, null);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        String path = null;
-        try {
-            int column_index = cursor
-                    .getColumnIndex(MediaStore.Images.Media.DATA);
+        String result;
+        Cursor cursor = getActivity().getContentResolver().query(contentURI, null, null, null, null);
+        if (cursor == null) { // Source is Dropbox or other similar local file path
+            result = contentURI.getPath();
+        } else {
             cursor.moveToFirst();
-            path = cursor.getString(column_index).toString();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            result = cursor.getString(idx);
             cursor.close();
-        } catch (NullPointerException e) {
-            e.printStackTrace();
         }
-        return path;
+        return result;
     }
+
+
+//    @TargetApi(Build.VERSION_CODES.KITKAT)
+//    private String getRealPathFromURI(Uri contentURI) {
+//        Uri contentUri = Uri.parse(String.valueOf(contentURI));
+//
+//        String[] projection = {MediaStore.Images.Media.DATA};
+//        Cursor cursor = null;
+//        try {
+//
+//            // Will return "image:x*"
+//            String wholeID = DocumentsContract.getDocumentId(contentUri);
+//            // Split at colon, use second item in the array
+//            String id = wholeID.split(":")[1];
+//            // where id is equal to
+//            String sel = MediaStore.Images.Media._ID + "=?";
+//
+//            cursor = getActivity().getContentResolver().query(
+//                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+//                    projection, sel, new String[]{id}, null);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        String path = null;
+//        try {
+//            int column_index = cursor
+//                    .getColumnIndex(MediaStore.Images.Media.DATA);
+//            cursor.moveToFirst();
+//            path = cursor.getString(column_index).toString();
+//            cursor.close();
+//        } catch (NullPointerException e) {
+//            e.printStackTrace();
+//        }
+//        return path;
+//    }
 
     public String calculateFileSize(String filePath) {
         //String filepathstr=filepath.toString();
@@ -718,7 +778,7 @@ public class DocumentFragment extends Fragment {
                     // Check for error node in json
                     if (!error) {
                         Toast.makeText(getActivity(),
-                                "add Successfull... ", Toast.LENGTH_LONG).show();
+                                "Add Document Successfull... ", Toast.LENGTH_LONG).show();
 
                         // parsing the user profile information
                         JSONObject profileObj = jObj.getJSONObject("result");
@@ -797,26 +857,41 @@ public class DocumentFragment extends Fragment {
         results = realm.where(UserImages.class).findAll();
         imageAdapter.notifyDataSetChanged();
 
-//        imageDetails.addChangeListener(new RealmChangeListener<RealmResults<UserImages>>() {
-//            @Override
-//            public void onChange(RealmResults<UserImages> element) {
-//                imageAdapter.notifyDataSetChanged();
-//            }
-//        });
+        imageDetails.addChangeListener(new RealmChangeListener<RealmResults<UserImages>>() {
+            @Override
+            public void onChange(RealmResults<UserImages> element) {
+                imageAdapter.notifyDataSetChanged();
+            }
+        });
 
         myApplication.showLog(TAG, "preview " + results.size());
         myApplication.showLog(TAG, "capture");
         if (results.size() == 1) {
             SetImagesViews();
+            SetDocumentDetails();
         }
 
     }
+
+    @Subscribe
+    public void onEvent(Message messageCar) {
+        Log.e("car datata", messageCar.getMsg());
+      //  Toast.makeText(getActivity(), messageCar.getMsg(), Toast.LENGTH_SHORT).show();
+
+        selection_type = messageCar.getMsg();
+
+        SetImagesViews();
+        SetDocumentDetails();
+
+    }
+
+
 
 
     @Subscribe
     public void onEvent(ImageMessage message) {
         Log.e("car datata", message.getDocumenttype() + message.getVehicle_id());
-        Toast.makeText(getActivity(), message.getDocumenttype(), Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(getActivity(), message.getDocumenttype(), Toast.LENGTH_SHORT).show();
 
         documenttype = message.getDocumenttype();
         vehicle_id = message.getVehicle_id();
@@ -859,5 +934,9 @@ public class DocumentFragment extends Fragment {
         super.onStop();
     }
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        imageAdapter.notifyDataSetChanged();
+    }
 }

@@ -16,10 +16,12 @@ import android.provider.MediaStore;
 public class GetPathImage {
 
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     public static String getRealPathFromURI_API19(Context context, Uri uri){
         String filePath = "";
-        String wholeID = DocumentsContract.getDocumentId(uri);
+        String wholeID = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+            wholeID = DocumentsContract.getDocumentId(uri);
+        }
 
         // Split at colon, use second item in the array
         String id = wholeID.split(":")[1];

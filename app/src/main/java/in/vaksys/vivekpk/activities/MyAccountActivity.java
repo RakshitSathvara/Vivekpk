@@ -1,17 +1,23 @@
 package in.vaksys.vivekpk.activities;
 
 import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -30,9 +36,17 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import in.vaksys.vivekpk.R;
+import in.vaksys.vivekpk.dbPojo.EmergencyContact;
+import in.vaksys.vivekpk.dbPojo.Installation;
+import in.vaksys.vivekpk.dbPojo.InsuranceCompanies;
+import in.vaksys.vivekpk.dbPojo.UserImages;
 import in.vaksys.vivekpk.dbPojo.Users;
+import in.vaksys.vivekpk.dbPojo.VehicleDetails;
+import in.vaksys.vivekpk.dbPojo.VehicleModels;
 import in.vaksys.vivekpk.extras.AppConfig;
 import in.vaksys.vivekpk.extras.MyApplication;
+import in.vaksys.vivekpk.extras.PreferenceHelper;
+import in.vaksys.vivekpk.extras.VolleyHelper;
 import io.realm.Realm;
 
 public class MyAccountActivity extends AppCompatActivity {
@@ -95,7 +109,7 @@ public class MyAccountActivity extends AppCompatActivity {
         i = 0;
         j = 0;
         loadData();
-        etPassword.setInputType(InputType.TYPE_NULL);
+        etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         sharedPreferences = getSharedPreferences("UserDetails", Context.MODE_PRIVATE);
 
 /*
@@ -135,6 +149,16 @@ public class MyAccountActivity extends AppCompatActivity {
         confirm.show();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case android.R.id.home:
+                // ProjectsActivity is my 'home' activity
+                finish();
+                return true;
+        }
+        return (super.onOptionsItemSelected(menuItem));
+    }
 
     private void VerifyPasswrod(String old, String NewPass, String CPass) {
 
@@ -182,6 +206,7 @@ public class MyAccountActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_myaccount_cancel:
+                finish();
                 break;
             case R.id.btn_myaccount_save:
                 submitForm();
@@ -372,7 +397,7 @@ public class MyAccountActivity extends AppCompatActivity {
 
         realm.commitTransaction();
 
-        Toast.makeText(this, "Setup Complete", Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, "Setup Complete", Toast.LENGTH_LONG).show();
         myApplication.hideDialog();
         onBackPressed();
     }
@@ -480,7 +505,7 @@ public class MyAccountActivity extends AppCompatActivity {
                     if (!error) {
                         Toast.makeText(getApplicationContext(), "Registration Success", Toast.LENGTH_LONG).show();
 
-                        Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
                         confirm.dismiss();
                     } else {
                         String message = responseObj.getString("message");
@@ -616,7 +641,7 @@ public class MyAccountActivity extends AppCompatActivity {
             requestFocus(etPassword);
             return false;
         }
-        if (etPassword.length() < 6) {
+        if (etPassword.length() < 7) {
             etPassword.setError(getString(R.string.err_valid_password));
             requestFocus(etPassword);
             return false;

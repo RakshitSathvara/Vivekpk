@@ -17,7 +17,7 @@
     <string name="err_msg_number">Provide Contact Number</string>
     <string name="err_msg_valid_number">Phone Number Must Contain 10 Digits</string>
     <string name="err_msg_password">Provide Password</string>
-    <string name="err_valid_password">Password Must Contain 6 Characters</string>
+    <string name="err_valid_password">Password Must Contain 7 Characters</string>
     <string name="upload_progress">Upload progress: %s</string>
 
     <string-array name="vehicle">

@@ -154,7 +154,7 @@ public class BikeFragment extends Fragment {
                 modelSpinnItem = ((TextView) view.findViewById(R.id.rowText)).getText().toString();
                 makePosi = position;
                 myid = ((TextView) view.findViewById(R.id.rowid)).getText().toString();
-                Toast.makeText(getActivity(), "You have selected " + modelSpinnItem + " " + myid, Toast.LENGTH_SHORT).show();
+            //    Toast.makeText(getActivity(), "You have selected " + modelSpinnItem + " " + myid, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -177,7 +177,7 @@ public class BikeFragment extends Fragment {
                 carPosi = position;
                 modelSpinnItem = ((TextView) view.findViewById(R.id.rowText)).getText().toString();
                 String myid = ((TextView) view.findViewById(R.id.rowid)).getText().toString();
-                Toast.makeText(getActivity(), "You have selected " + modelSpinnItem + " " + myid, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "You have selected " + modelSpinnItem + " " + myid, Toast.LENGTH_SHORT).show();
             }
 
             @Override

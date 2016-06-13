@@ -32,6 +32,7 @@ public class AppConfig {
     public static final String URL_ADD_DOC = URL_ROOT + "v1/document";
     public static final String URL_UPDATE_DOC = URL_ROOT + "v1/document";
     public static final String URL_DELETE_DOC = URL_ROOT + "v1/document";
+    public static final String URL_LIST_DOC = URL_ROOT + "v1/document";
 
 
 

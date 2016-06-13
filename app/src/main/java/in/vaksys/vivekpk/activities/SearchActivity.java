@@ -238,7 +238,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
         switch (item.getItemId()) {
             case android.R.id.home:
-                startActivity(new Intent(SearchActivity.this, HomeActivity.class));
+               finish();
                 return true;
             case R.id.navSearchToolbar:
                 // Single menu item is selected do something
@@ -366,4 +366,6 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
         myApplication.addToRequestQueue(stringRequest);
     }
+
+
 }

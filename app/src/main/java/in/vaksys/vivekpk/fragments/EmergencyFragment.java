@@ -258,8 +258,8 @@ public class EmergencyFragment extends Fragment {
 
                     if (!error) {
 
-                        Toast.makeText(getActivity(),
-                                "" + error, Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getActivity(),
+//                                "" + error, Toast.LENGTH_LONG).show();
 
                         myApplication.showLog("if in ander jay"," se  with " + error );
 
@@ -271,7 +271,7 @@ public class EmergencyFragment extends Fragment {
                     } else {
 
                         Toast.makeText(getActivity(),
-                                "No Add Contenct", Toast.LENGTH_LONG).show();
+                                "No Contact Add", Toast.LENGTH_LONG).show();
                         myApplication.hideDialog();
                     }
 

@@ -203,6 +203,7 @@ public class DocumentImageGallery extends AppCompatActivity {
                     // SDK > 19 (Android 4.4)
                 } else {
 
+                    //// TODO: 10/06/2016 change real path
                     realPath = GetPathImage.getRealPathFromURI_API19(DocumentImageGallery.this, filePath);
                     //  myApplication.showLog("versionSDK > 19 (Android 4.4)", realPath);
 

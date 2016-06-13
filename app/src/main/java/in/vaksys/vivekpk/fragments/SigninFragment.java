@@ -32,8 +32,10 @@ import java.util.Map;
 import java.util.UUID;
 
 import in.vaksys.vivekpk.R;
+import in.vaksys.vivekpk.activities.ForgotPassWordActivity;
 import in.vaksys.vivekpk.activities.HomeActivity;
 import in.vaksys.vivekpk.dbPojo.EmergencyContact;
+import in.vaksys.vivekpk.dbPojo.Installation;
 import in.vaksys.vivekpk.dbPojo.InsuranceCompanies;
 import in.vaksys.vivekpk.dbPojo.Users;
 import in.vaksys.vivekpk.dbPojo.VehicleDetails;
@@ -247,13 +249,16 @@ public class SigninFragment extends Fragment {
 
         getActivity().startService(new Intent(getActivity(), RegistrationIntentService.class));
 
-        Toast.makeText(getActivity(), "Setup Complete", Toast.LENGTH_LONG).show();
+       // Toast.makeText(getActivity(), "Setup Complete", Toast.LENGTH_LONG).show();
 //        myApplication.hideDialog();
         LodingModels();
 
     }
 
     private void LodingModels() {
+
+        myApplication.showLog(TAG, "Loading Model");
+
         myApplication.DialogMessage("Loading Models...");
 //        myApplication.showDialog();
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, AppConfig.URL_SPINNER_VEHICLE_MODELS, new Response.Listener<JSONObject>() {
@@ -335,6 +340,9 @@ public class SigninFragment extends Fragment {
     }
 
     private void LoadingInsuranceCompanies() {
+
+        myApplication.showLog(TAG, "Loading Insurance Companies");
+
         myApplication.DialogMessage("Loading Insurance Companies...");
 //        myApplication.showDialog();
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, AppConfig.URL_GET_INSURANCE_COMPANY,
@@ -352,7 +360,7 @@ public class SigninFragment extends Fragment {
 
                                 insuranceCompanies = realm.createObject(InsuranceCompanies.class);
 
-                                insuranceCompanies.setInsuranceId(0);
+                                insuranceCompanies.setInsuranceId(-1);
                                 insuranceCompanies.setInsuranceName("Select Company");
                                 insuranceCompanies.setInsuranceCreatedAt("31131");
                                 insuranceCompanies.setInsuranceUpdatedAt("21232");
@@ -413,6 +421,8 @@ public class SigninFragment extends Fragment {
     }
 
     private void LoadingUserVehicles() {
+
+        myApplication.showLog(TAG, "Loading  User Vehicles");
         myApplication.DialogMessage("Loading User Vehicles...");
 //        myApplication.showDialog();
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, AppConfig.URL_GET_USER_VEHICLE,
@@ -499,9 +509,9 @@ public class SigninFragment extends Fragment {
     }
 
     private void LoadingEmergenyContact() {
+        myApplication.showLog(TAG, "Loading Emergency Contact");
         myApplication.DialogMessage("Loading Emergency Contact...");
-//        myApplication.showDialog();
-
+  //      myApplication.showDialog();
 
 
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, AppConfig.URL_EMERGENY_CONTACT,
@@ -513,12 +523,15 @@ public class SigninFragment extends Fragment {
 
                             boolean error = response.getBoolean("error");
                             if (!error) {
-                                realm.beginTransaction();
+
                                 // Getting JSON Array node
                                 JSONArray results1 = response.getJSONArray("result");
                                 myApplication.showLog(TAG, "" + results1.length());
 
                                 if (results1.length() > 0) {
+
+                                    realm.beginTransaction();
+
                                     for (int i = 0; i < results1.length(); i++) {
 
                                         JSONObject jsonObject = results1.getJSONObject(i);
@@ -535,10 +548,11 @@ public class SigninFragment extends Fragment {
                                     }
                                     realm.commitTransaction();
                                     myApplication.hideDialog();
-
-
-
                                 }
+
+
+                                LoadingInstallation();
+                                myApplication.showLog("call--->","Insattalton");
                             } else {
 
                                 String errorMsg = response.getString("message");
@@ -547,6 +561,8 @@ public class SigninFragment extends Fragment {
                                 myApplication.hideDialog();
 
                             }
+
+
 
 
                         } catch (JSONException e) {
@@ -577,8 +593,9 @@ public class SigninFragment extends Fragment {
 
 
     private void LoadingInstallation() {
+        myApplication.showLog(TAG, "Loading Installation");
         myApplication.DialogMessage("Loading Installation...");
-//        myApplication.showDialog();
+    //    myApplication.showDialog();
         final StringRequest installationRequest = new StringRequest(Request.Method.POST, AppConfig.URL_INSTALLATION, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -588,8 +605,10 @@ public class SigninFragment extends Fragment {
                     Log.e(TAG, "onResponse: " + jObj.toString());
 
                     if (!error) {
-                        Toast.makeText(getActivity(),
-                                "Installation Successfull... ", Toast.LENGTH_LONG).show();
+                        realm = Realm.getDefaultInstance();
+                        realm.beginTransaction();
+//                        Toast.makeText(getActivity(),
+//                                "Installation Successfull... ", Toast.LENGTH_LONG).show();
 
                         // parsing the user profile information
                         JSONObject installationObj = jObj.getJSONObject("result");
@@ -599,9 +618,9 @@ public class SigninFragment extends Fragment {
                         String deviceType = installationObj.getString("deviceType");
                         String createdAt = installationObj.getString("createdAt");
                         String updatedAt = installationObj.getString("updatedAt");
-                        realm = Realm.getDefaultInstance();
 
-                        realm.beginTransaction();
+
+
                         Installation installation = realm.createObject(Installation.class);
 
                         installation.setDeviceType(deviceToken);
@@ -611,6 +630,7 @@ public class SigninFragment extends Fragment {
                         installation.setUpdatedAt(updatedAt);
 
                         realm.commitTransaction();
+                        myApplication.hideDialog();
 
                         LoadingSubscription(id);
                         //startActivity(new Intent(getActivity(), HomeActivity.class));
@@ -660,8 +680,9 @@ public class SigninFragment extends Fragment {
     }
 
     private void LoadingSubscription(final int installId) {
+        myApplication.showLog(TAG, "Loading Subscription");
         myApplication.DialogMessage("Loading Subscription...");
-//        myApplication.showDialog();
+    //    myApplication.showDialog();
         final StringRequest subscriptionRequest = new StringRequest(Request.Method.POST, AppConfig.URL_SUBSCRIPTION, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -671,11 +692,10 @@ public class SigninFragment extends Fragment {
                     Log.e(TAG, "onResponse: " + jObj.toString());
 
                     if (!error) {
-                        Toast.makeText(getActivity(),
-                                "Subscription Successfull... ", Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getActivity(),
+//                                "Subscription Successfull... ", Toast.LENGTH_LONG).show();
 
-
-                        startActivity(new Intent(getActivity(), HomeActivity.class));
+                        LoadingListDocument();
 
                     } else {
                         myApplication.hideDialog();
@@ -709,6 +729,65 @@ public class SigninFragment extends Fragment {
                 params.put("installationId", String.valueOf(installId));
                 return params;
             }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+                return headers;
+            }
+        };
+        myApplication.addToRequestQueue(subscriptionRequest);
+    }
+
+
+    private void LoadingListDocument() {
+        myApplication.DialogMessage("Loading ListDocument...");
+     //   myApplication.showDialog();
+        final StringRequest subscriptionRequest = new StringRequest(Request.Method.GET, AppConfig.URL_LIST_DOC, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+
+                    myApplication.hideDialog();
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+                    Log.e(TAG, "onResponse: " + jObj.toString());
+
+                    if (!error) {
+//                        Toast.makeText(getActivity(),
+//                                "ListDocument Successfull... ", Toast.LENGTH_LONG).show();
+
+
+                        startActivity(new Intent(getActivity(), HomeActivity.class));
+                        getActivity().finish();
+
+                    } else {
+                        myApplication.hideDialog();
+
+                        String errorMsg = jObj.getString("message");
+                        Toast.makeText(getActivity(),
+                                "Error :" + errorMsg, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                } catch (JSONException e) {
+                    myApplication.hideDialog();
+                    // JSON error
+                    e.printStackTrace();
+                    Toast.makeText(getActivity(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                myApplication.ErrorSnackBar(getActivity());
+                myApplication.hideDialog();
+                return;
+            }
+        }) {
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {

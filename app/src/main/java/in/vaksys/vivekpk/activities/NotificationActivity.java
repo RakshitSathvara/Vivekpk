@@ -49,7 +49,7 @@ public class NotificationActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case android.R.id.home:
-                startActivity(new Intent(NotificationActivity.this, HomeActivity.class));
+                finish();
                 return true;
 
             case R.id.navToolbar:

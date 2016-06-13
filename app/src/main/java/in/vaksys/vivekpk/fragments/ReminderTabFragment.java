@@ -88,17 +88,17 @@ public class ReminderTabFragment extends Fragment {
             public void onPageSelected(int position) {
 
                 if (position == 0) {
-                    Log.e("Positon fregment 1", spinnnerValue);
+                //    Log.e("Positon fregment 1", spinnnerValue);
                     bus.post(new Message(spinnnerValue));
                 }
                 if (position == 1) {
-                    Log.e("Positon fregment 2", spinnnerValue);
+                 //   Log.e("Positon fregment 2", spinnnerValue);
                     bus.post(new Message(spinnnerValue));
 
                 }
 
                 if (position == 2) {
-                    Log.e("Positon fregment 3", spinnnerValue);
+                 //   Log.e("Positon fregment 3", spinnnerValue);
                     bus.post(new Message(spinnnerValue));
 
                 }
@@ -136,7 +136,7 @@ public class ReminderTabFragment extends Fragment {
     @Subscribe
     public void onEvent(Message messageCar) {
         Log.e("car datata", messageCar.getMsg());
-        Toast.makeText(getActivity(), messageCar.getMsg(), Toast.LENGTH_SHORT).show();
+    //    Toast.makeText(getActivity(), messageCar.getMsg(), Toast.LENGTH_SHORT).show();
         spinnnerValue = messageCar.getMsg();
 
     }

@@ -42,6 +42,7 @@ public class ServiceFragment extends Fragment {
     RealmResults<VehicleDetails> detailsesResults;
     private MyApplication myApplication;
     private Realm realm;
+    private String selection_type = null;
 
     public ServiceFragment() {
         // Required empty public constructor
@@ -72,8 +73,15 @@ public class ServiceFragment extends Fragment {
         ServiceDetailsRecyclerview.setHasFixedSize(true);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         ServiceDetailsRecyclerview.setLayoutManager(manager);
-        detailsesResults = realm.where(VehicleDetails.class).notEqualTo("ServiceExpireDate", "").findAll();
-        myApplication.showLog(TAG, "inside details" + detailsesResults.size());
+        if (selection_type == null){
+
+            detailsesResults = realm.where(VehicleDetails.class).notEqualTo("ServiceExpireDate", "").equalTo("type", "car").findAll();
+            myApplication.showLog(TAG, "inside details" + detailsesResults.size());
+        }else {
+            detailsesResults = realm.where(VehicleDetails.class).notEqualTo("ServiceExpireDate", "").equalTo("type", selection_type).findAll();
+            myApplication.showLog(TAG, "inside details" + detailsesResults.size());
+        }
+
         if (results.size() > -1) {
             detailsRecyclerViewAdapter = new ServiceDetailsRecyclerViewAdapter(getActivity(), detailsesResults);
             ServiceDetailsRecyclerview.setHasFixedSize(true);
@@ -91,8 +99,16 @@ public class ServiceFragment extends Fragment {
         ServiceRecyclerview.setHasFixedSize(true);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         ServiceRecyclerview.setLayoutManager(manager);
-        results = realm.where(VehicleDetails.class).equalTo("ServiceExpireDate", "").findAll();
-        myApplication.showLog(TAG, "inside viwe" + results.size());
+
+        if (selection_type == null){
+            results = realm.where(VehicleDetails.class).equalTo("ServiceExpireDate", "").equalTo("type", "car").findAll();
+            myApplication.showLog(TAG, "inside viwe" + results.size());
+        }else {
+            results = realm.where(VehicleDetails.class).equalTo("ServiceExpireDate", "").equalTo("type", selection_type).findAll();
+            myApplication.showLog(TAG, "inside viwe" + results.size());
+        }
+
+
         if (results.size() > -1) {
             serviceRecyclerViewAdapter = new ServiceRecyclerViewAdapter(getActivity(), results);
             ServiceRecyclerview.setAdapter(serviceRecyclerViewAdapter);
@@ -104,7 +120,10 @@ public class ServiceFragment extends Fragment {
     @Subscribe
     public void onEvent(Message messageCar) {
         Log.e("car datata", messageCar.getMsg());
-        Toast.makeText(getActivity(), messageCar.getMsg(), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), messageCar.getMsg(), Toast.LENGTH_SHORT).show();
+        selection_type = messageCar.getMsg();
+        SetInsurance();
+        SetInsuranceDetails();
     }
 
     @Override

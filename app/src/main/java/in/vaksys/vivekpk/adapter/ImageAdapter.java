@@ -1,5 +1,6 @@
 package in.vaksys.vivekpk.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,20 +66,24 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
             @Override
             public void onSuccess() {
 
-                Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
-            }
+                //   Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
+                holder.progressBar.setVisibility(View.GONE);
+                            }
 
             @Override
             public void onError() {
 
-              //  Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
+                holder.progressBar.setVisibility(View.GONE);
+               // myApplication.ErrorSnackBar((Activity) context);
+                //  Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
+
             }
         });
 
         holder.ImageUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              //  Toast.makeText(myApplication, "click", Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(myApplication, "click", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -100,6 +106,8 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
         TextView ImgaeUUID;
         @Bind(R.id.single_image)
         ImageView ImageUser;
+        @Bind(R.id.progressBar_img)
+        ProgressBar progressBar;
 
         ViewHolder(View view) {
             super(view);

@@ -78,7 +78,7 @@ public class ServiceDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Serv
 
     @Override
     public AdapterHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.service_details, null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.service_details, parent,false);
         viewHolder = new AdapterHolder(view);
         return viewHolder;
     }
@@ -157,16 +157,16 @@ public class ServiceDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Serv
                                 public void onCheckedChanged(RadioGroup group, int checkedId) {
                                     if (checkedId == R.id.radio1) {
                                         setId = 1;
-                                        Toast.makeText(context, "radio1",
-                                                Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(context, "radio1",
+//                                                Toast.LENGTH_SHORT).show();
                                     } else if (checkedId == R.id.radio2) {
                                         setId = 2;
-                                        Toast.makeText(context, "radio2",
-                                                Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(context, "radio2",
+//                                                Toast.LENGTH_SHORT).show();
                                     } else if (checkedId == R.id.radio3) {
                                         setId = 3;
-                                        Toast.makeText(context, "radio3",
-                                                Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(context, "radio3",
+//                                                Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });

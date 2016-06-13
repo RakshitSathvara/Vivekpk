@@ -15,8 +15,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.NetworkResponse;
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
@@ -38,9 +41,9 @@ import in.vaksys.vivekpk.extras.MyApplication;
  */
 public class ForgotPassWordActivity extends AppCompatActivity {
 
-    @Bind(R.id.et_code)
+    @Bind(R.id.et_code_forgot)
     EditText etCode;
-    @Bind(R.id.et_contactNo)
+    @Bind(R.id.et_contactNo_forgot)
     EditText etContactNo;
     @Bind(R.id.btn_continue_forgot_pass)
     Button btnContinueForgotPass;
@@ -59,7 +62,34 @@ public class ForgotPassWordActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn_continue_forgot_pass)
     public void onClick() {
+
+        submitForm();
+
+
+    }
+
+    private void submitForm() {
+
+        if (!validateNumber()) {
+            return;
+        }
+
         confirmDialog(etContactNo.getText().toString());
+    }
+
+    private boolean validateNumber() {
+        if (etCode.getText().toString().trim().isEmpty()) {
+            etCode.setError(getString(R.string.err_msg_code));
+            requestFocus(etCode);
+            return false;
+        }
+        if (etContactNo.length() != 10) {
+            etContactNo.setError(getString(R.string.err_msg_valid_number));
+            requestFocus(etContactNo);
+            return false;
+        } else {
+            return true;
+        }
     }
 
     private void resendOTP(final String number) {
@@ -86,6 +116,7 @@ public class ForgotPassWordActivity extends AppCompatActivity {
                     editor.apply();
 
                     startActivity(new Intent(ForgotPassWordActivity.this, VerifyOtpActivity.class));
+                    finish();
                     /*boolean error = jObj.getBoolean("error");
 
                     // Check for error node in json
@@ -109,11 +140,38 @@ public class ForgotPassWordActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-//                Log.e(TAG, "Login Error: " + error.getMessage());
-                myApplication.ErrorSnackBar(ForgotPassWordActivity.this);
+
+                NetworkResponse response = error.networkResponse;
+                int i = response.statusCode;
+                MyApplication.getInstance().showLog("Respsose code ", "error" + i);
+
+                if ( i == 400){
+
+                    Toast.makeText(ForgotPassWordActivity.this, "please enter registered numbers", Toast.LENGTH_SHORT).show();
+                }
+                // Log.e(TAG, "Login Error: " + error.getMessage());
+
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                    myApplication.ErrorSnackBar(ForgotPassWordActivity.this);
+                }
+
+
                 myApplication.hideDialog();
             }
         }) {
+
+//            @Override
+//            protected VolleyError parseNetworkError(VolleyError volleyError) {
+//                MyApplication.getInstance().showLog("400", "error");
+//                if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
+//                    VolleyError error = new VolleyError(new String(volleyError.networkResponse.data));
+//                    volleyError = error;
+//                    MyApplication.getInstance().showLog("400", "error");
+//                }
+//
+//                return volleyError;
+//            }
+
 
             @Override
             protected Map<String, String> getParams() {
@@ -123,6 +181,14 @@ public class ForgotPassWordActivity extends AppCompatActivity {
 
                 return params;
             }
+//
+//            @Override
+//            public String getBodyContentType() {
+//                Toast.makeText(ForgotPassWordActivity.this, "please ", Toast.LENGTH_SHORT).show();
+//                MyApplication.getInstance().showLog("400","error");
+//                return "application/json; charset=utf-8";
+//
+//            }
         };
         // Adding request to request queue
         myApplication.addToRequestQueue(strReq, tag_string_req);
@@ -139,7 +205,7 @@ public class ForgotPassWordActivity extends AppCompatActivity {
 
         final TextView number = (TextView) confirm.findViewById(R.id.tv_phoneNo);
 
-        number.setText(etContactNo.getText().toString());
+        number.setText(etContactNo.getText().toString().trim());
 
         btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
