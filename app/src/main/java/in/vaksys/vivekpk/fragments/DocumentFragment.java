@@ -215,7 +215,7 @@ public class DocumentFragment extends Fragment {
 
         myApplication.showLog(TAG, " check---> " + imageDetails.size() + "  " + detailsesResults.size());
         myApplication.showLog(TAG, "inside details" + detailsesResults.size());
-        if (results.size() > 0) {
+        if (detailsesResults.size() > 0) {
 
             documentDetailsRecyclerViewAdapter = new DocumentDetailsRecyclerViewAdapter(getActivity(), detailsesResults, imageDetails);
             DocumentDetailsRecyclerview.setAdapter(documentDetailsRecyclerViewAdapter);
@@ -281,7 +281,7 @@ public class DocumentFragment extends Fragment {
         linearEmission = (LinearLayout) view.findViewById(R.id.linear_emission);
         linearRcBills = (LinearLayout) view.findViewById(R.id.linear_rcBills);
         linearVehicleDeatilsListRaw = (LinearLayout) view.findViewById(R.id.linearVehicleDeatilsListRaw);
-        imgEdit = (ImageView) view.findViewById(R.id.img_edit);
+       // imgEdit = (ImageView) view.findViewById(R.id.img_edit);
         tvDetailVehicelNumber = (TextView) view.findViewById(R.id.tv_detailVehicelNumber);
         tvDetailVehicelBranch = (TextView) view.findViewById(R.id.tv_detailVehicelBranch);
         tvDetailVehicelModel = (TextView) view.findViewById(R.id.tv_detailVehicelModel);
@@ -744,9 +744,9 @@ public class DocumentFragment extends Fragment {
 
                 MyApplication.getInstance().hideDialog();
 
-                if (t instanceof TimeoutError || t instanceof NoConnectionError) {
+              //  if (t instanceof TimeoutError || t instanceof NoConnectionError) {
                     myApplication.ErrorSnackBar(getActivity());
-                }
+              //  }
 
             }
         });

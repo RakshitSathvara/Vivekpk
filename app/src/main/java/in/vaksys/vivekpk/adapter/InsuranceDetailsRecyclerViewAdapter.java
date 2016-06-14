@@ -21,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -81,7 +82,7 @@ public class InsuranceDetailsRecyclerViewAdapter extends RecyclerView.Adapter<In
 
     @Override
     public AdapterHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.insurance_details, parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.insurance_details, parent, false);
         viewHolder = new AdapterHolder(view);
         return viewHolder;
     }
@@ -183,18 +184,74 @@ public class InsuranceDetailsRecyclerViewAdapter extends RecyclerView.Adapter<In
                                 public void onClick(View v) {
                                     if (!(setId == 0)) {
                                         if (setId == 1) {
+                                            String seldate = DatePicker.getText().toString();
+                                            myApplication.showLog("set daet------------>", seldate);
                                             NotificationDate = myApplication.ChanageDate(DatePicker.getText().toString(), 5);
+                                            myApplication.showLog("reminder date 5------------->", NotificationDate);
                                         } else if (setId == 2) {
                                             NotificationDate = myApplication.ChanageDate(DatePicker.getText().toString(), 15);
+                                            myApplication.showLog("reminder date 15------------->", NotificationDate);
+
                                         } else if (setId == 3) {
                                             NotificationDate = myApplication.ChanageDate(DatePicker.getText().toString(), 25);
+                                            myApplication.showLog("reminder date 25------------->", NotificationDate);
                                         }
                                     } else {
                                         Toast.makeText(context, "Please Select Reminder.", Toast.LENGTH_SHORT).show();
                                         return;
                                     }
 
-                                    myApplication.showLog("date------------->",DatePicker.getText().toString());
+                                    myApplication.showLog("date------------->", DatePicker.getText().toString());
+
+                                    myApplication.showLog("reminder date------------->", NotificationDate);
+
+                                    notificationsend(NotificationDate);
+
+//                                    String date = NotificationDate;
+//                                    String[] items1 = date.split("-");
+//                                    String date1 = (items1[0]);
+//                                    String month = (items1[1]);
+//                                    String year = (items1[2]);
+//
+//                                    String dateInString = NotificationDate;  // Start date
+//                                    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+//                                    Calendar c = Calendar.getInstance();
+//                                    try {
+//                                        c.setTime(sdf.parse(dateInString));
+//                                    } catch (ParseException e) {
+//                                        e.printStackTrace();
+//                                    }
+//                                    c.add(Calendar.DATE, -7);
+//                                    sdf = new SimpleDateFormat("dd/MM/yyyy");
+//                                    Date resultdate = new Date(c.getTimeInMillis());
+//                                    dateInString = sdf.format(resultdate);
+//                                    System.out.println("String date:"+dateInString);
+//                                    myApplication.showLog("split date-->", String.valueOf(dateInString));
+
+//                                    myApplication.showLog("split date-->", "" + date1 + month + year);
+//                                    Calendar endar = Calendar.getInstance();
+//                                    endar.add(, -5);
+//
+//                                    String dtStart = NotificationDate;
+//                                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+//                                    try {
+//                                        Date datew = format.parse(dtStart);
+//                                        endar.add(endar.d, 0);
+//                                        System.out.println(datew);
+//                                    } catch (ParseException e) {
+//                                        // TODO Auto-generated catch block
+//                                        e.printStackTrace();
+//                                    }
+//                                    endar.add(Calendar.DAY_OF_MONTH, 0);
+//                                    endar.add(Calendar.YEAR, 0);
+//                                    SimpleDateFormat d =  new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+//                                    String dddd = d.format(endar.getTime());
+//                                    myApplication.showLog("split date -->", dddd);
+
+//                                    Calendar c = Calendar.getInstance();
+//                                    // Set the calendar NOTE: this will not change the hour, minute, second
+//                                    c.add(Calendar.DATE, -5);
+
 
                                     AddUpdateReminder(holder.VehicleIDHiddden.getText().toString(),
                                             details.getVehicleModelID(), myid, DatePicker.getText().toString()
@@ -209,6 +266,11 @@ public class InsuranceDetailsRecyclerViewAdapter extends RecyclerView.Adapter<In
                 confirm.show();
             }
         });
+
+    }
+
+    private void notificationsend(String notificationDate) {
+
 
     }
 
@@ -228,6 +290,7 @@ public class InsuranceDetailsRecyclerViewAdapter extends RecyclerView.Adapter<In
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 //                Calendar newDate = Calendar.getInstance();
                 newCalendar.set(year, monthOfYear, dayOfMonth);
+                //  newCalendar.add(Calendar.DATE, -5);
                 date.setText(dateFormatter.format(newCalendar.getTime()));
             }
 

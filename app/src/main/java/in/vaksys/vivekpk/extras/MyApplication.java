@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.provider.Settings;
 import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 import android.util.Log;
@@ -29,6 +30,7 @@ import junit.framework.Test;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import in.vaksys.vivekpk.activities.MainActivity;
@@ -41,6 +43,9 @@ public class MyApplication extends Application {
     private static MyApplication mInstance;
     private RequestQueue mRequestQueue;
     private ProgressDialog pDialog;
+
+    public static Calendar c;
+    Intent i;
 
     public int getValue() {
         return value;
@@ -105,7 +110,7 @@ public class MyApplication extends Application {
         MultiDex.install(this);
     }
 
-    public void ErrorSnackBar(Activity activity) {
+    public void ErrorSnackBar(final Activity activity) {
         Snackbar.with(activity)
                 .type(SnackbarType.MULTI_LINE)
                 .text("Check Internet Connection")
@@ -114,7 +119,16 @@ public class MyApplication extends Application {
                 .actionListener(new ActionClickListener() {
                     @Override
                     public void onActionClicked(Snackbar snackbar) {
-                        startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
+
+                        try {
+                            i = new Intent(activity, Class.forName(Settings.ACTION_WIRELESS_SETTINGS));
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(i);
+                            activity.finish();
+                        } catch (ClassNotFoundException e) {
+                            e.printStackTrace();
+                        }
+
                     }
                 })
                 .duration(Snackbar.SnackbarDuration.LENGTH_LONG)
@@ -169,16 +183,33 @@ public class MyApplication extends Application {
     }
 
     public String ChanageDate(String CurrentDate, int days) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
-        Calendar c = Calendar.getInstance();
+//        SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy", Locale.US);
+//        Calendar c = Calendar.getInstance();
+//        try {
+//            c.setTime(sdf.parse(CurrentDate));
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        c.add(Calendar.DATE, -days);  // number of days to add
+//        sdf.format(c.getTime());  // dt is now the new date
+
+//// TODO: 14/06/2016  this code for change date
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        c = Calendar.getInstance();
         try {
             c.setTime(sdf.parse(CurrentDate));
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        c.add(Calendar.DATE, days);  // number of days to add
-        sdf.format(c.getTime());  // dt is now the new date
-        return CurrentDate;
+        c.add(Calendar.DATE, -days); /// -days mens 5 day befor reminder set
+        sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Date resultdate = new Date(c.getTimeInMillis());
+        String dateInString = sdf.format(resultdate);
+        System.out.println("String date:" + dateInString);
+        //  myApplication.showLog("split date-->", String.valueOf(dateInString));
+
+
+        return dateInString;
     }
 
     public String getmDate() {
@@ -188,4 +219,6 @@ public class MyApplication extends Application {
     public void setmDate(String mDate) {
         this.mDate = mDate;
     }
+
+
 }

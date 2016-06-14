@@ -23,18 +23,30 @@
         android:textColor="@color/textErrorColor"
         android:visibility="gone" />
 
-    <com.maksim88.passwordedittext.PasswordEditText
+    <com.xwray.passwordview.PasswordView
         android:id="@+id/et_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:hint="Password"
+        app:useStrikeThrough="true"
         android:inputType="textPassword"
         android:singleLine="true"
         android:textColor="#000000"
-        android:textColorHint="#797979"
-        app:pet_hoverShowsPw="true"
-        app:pet_nonMonospaceFont="true" />
+        android:textColorHint="#797979" />
+
+    <!--<com.maksim88.passwordedittext.PasswordEditText-->
+        <!--android:id="@+id/et_password"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:hint="Password"-->
+        <!--android:inputType="textPassword"-->
+        <!--android:singleLine="true"-->
+        <!--android:textColor="#000000"-->
+        <!--android:textColorHint="#797979"-->
+        <!--app:pet_hoverShowsPw="true"-->
+        <!--app:pet_nonMonospaceFont="true" />-->
 
     <TextView
         android:id="@+id/tv_errorPassword"

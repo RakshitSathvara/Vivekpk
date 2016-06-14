@@ -92,7 +92,7 @@
                         android:id="@+id/et_optionalField_serv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Optional Field" />
+                        android:hint="Note" />
                 </LinearLayout>
 
                 <FrameLayout

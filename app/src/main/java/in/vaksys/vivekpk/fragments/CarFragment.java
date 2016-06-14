@@ -222,7 +222,7 @@ public class CarFragment extends Fragment {
 
     private boolean validateCarSpinner() {
         if (carPosi == 0) {
-            Toast.makeText(getActivity(), "Select Brand", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Select Brand and Model", Toast.LENGTH_SHORT).show();
             return false;
         } else {
             return true;
@@ -232,7 +232,7 @@ public class CarFragment extends Fragment {
     private boolean validateMakeSpinner() {
         if (makePosi == 0) {
 
-            Toast.makeText(getActivity(), "Select Model", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Select Model and Brand", Toast.LENGTH_SHORT).show();
             return false;
         } else {
             return true;

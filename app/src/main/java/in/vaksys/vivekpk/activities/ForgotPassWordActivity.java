@@ -78,11 +78,11 @@ public class ForgotPassWordActivity extends AppCompatActivity {
     }
 
     private boolean validateNumber() {
-        if (etCode.getText().toString().trim().isEmpty()) {
-            etCode.setError(getString(R.string.err_msg_code));
-            requestFocus(etCode);
-            return false;
-        }
+//        if (etCode.getText().toString().trim().isEmpty()) {
+//            etCode.setError(getString(R.string.err_msg_code));
+//            requestFocus(etCode);
+//            return false;
+//        }
         if (etContactNo.length() != 10) {
             etContactNo.setError(getString(R.string.err_msg_valid_number));
             requestFocus(etContactNo);

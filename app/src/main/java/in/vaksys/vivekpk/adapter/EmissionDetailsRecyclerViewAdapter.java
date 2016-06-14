@@ -266,6 +266,8 @@ public class EmissionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Emi
         });
         confirm.dismiss();
 
+
+
     }
    /* private void SelectfromDate() {
 

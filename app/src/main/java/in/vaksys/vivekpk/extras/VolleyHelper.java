@@ -1,8 +1,12 @@
 package in.vaksys.vivekpk.extras;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -15,20 +19,20 @@ import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import in.vaksys.vivekpk.adapter.CarBikeRecyclerViewAdapter;
-import in.vaksys.vivekpk.dbPojo.EmergencyContact;
 import in.vaksys.vivekpk.dbPojo.VehicleDetails;
-import in.vaksys.vivekpk.fragments.EmergencyFragment;
 import in.vaksys.vivekpk.model.ClaimMessage;
+import in.vaksys.vivekpk.service.NotifyService;
 import io.realm.Realm;
 import io.realm.RealmResults;
-import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
 
 /**
  * Created by Harsh on 26-05-2016.
@@ -40,8 +44,9 @@ public class VolleyHelper {
     private Realm realm;
     private String BLANK = "";
     CarBikeRecyclerViewAdapter adapter;
-
+    Date date;
     OkHttpClient client;
+    String nofidate, typr, vehicalno, nId;
 
     public VolleyHelper(Activity context) {
 
@@ -172,7 +177,7 @@ public class VolleyHelper {
                     // Check for error node in json
                     if (!error) {
                         Toast.makeText(activity,
-                                "Login Successfull... ", Toast.LENGTH_LONG).show();
+                                "Update Successfull... ", Toast.LENGTH_LONG).show();
 
                         // parsing the user profile information
 
@@ -294,8 +299,6 @@ public class VolleyHelper {
     }
 
 
-
-
     private void SaveIntoDatabase(final String name, final int vehicleId, final int modelID, final String VehicleNumber,
                                   final String type, String insuranceCompany, String ins_exp_date, String poll_exp_date,
                                   String serv_exp_date) {
@@ -354,10 +357,129 @@ public class VolleyHelper {
         realm.commitTransaction();
 
         RealmResults<VehicleDetails> results = realm.where(VehicleDetails.class).findAll();
+
+
+
+
         Log.e(TAG, "SaveIntoDatabase: " + results.size());
 
 //        Toast.makeText(activity, "Setup Complete", Toast.LENGTH_LONG).show();
         myApplication.hideDialog();
+        SetNotification(vehicleId);
+
+    }
+
+    private void SetNotification(int vehicleId) {
+
+
+        realm = Realm.getDefaultInstance();
+
+        realm.beginTransaction();
+
+        RealmResults<VehicleDetails> results = realm.where(VehicleDetails.class).equalTo("VehicleId", vehicleId).findAll();
+
+        //  VehicleDetails userw = realm.where(VehicleDetails.class).findFirst();
+
+        for (VehicleDetails c : results) {
+
+//            Log.d("results1", c.getName());
+
+            nofidate = c.getNotificationDate();
+            //
+            typr = c.getType();
+            vehicalno = c.getVehicleNo();
+            nId = String.valueOf(c.getVehicleId());
+
+        }
+
+
+        realm.commitTransaction();
+        myApplication.showLog("nofidate=====>", nofidate);
+
+        SendNotification(typr, vehicalno, nofidate, nId);
+
+    }
+
+    private void SendNotification(String typr, String vehicalno, String nofidate, String nId) {
+
+      //  myApplication.showLog("nofidate=====>", nofidate);
+
+        String myStrDate = nofidate;
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+           date = format.parse(myStrDate);
+            System.out.println(date);
+            System.out.println(format.format(date));
+
+            myApplication.showLog("ddjhgdyhcg",format.format(date));
+
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+
+//        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+//        Calendar c = Calendar.getInstance();
+//        try {
+//            c.setTime(sdf.parse(nofidate));
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//       /// -days mens 5 day befor reminder set
+//        sdf = new SimpleDateFormat("dd-MM-yyyy");
+//        Date resultdate = new Date(c.getTimeInMillis());
+//
+//        System.out.println(resultdate);
+
+//        String dtStart = nofidate;
+//        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+//        try {
+//            date = format.parse(dtStart);
+//            System.out.println(date);
+//        } catch (ParseException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+
+        Calendar cc = dateToCalendar(date);
+        System.out.println("nofi date"+cc.getTimeInMillis());
+
+        myApplication.showLog("not;;;;;;;;;;--->",""+ cc.getTimeInMillis());
+
+
+//
+//        Calendar current  = Calendar.getInstance();
+//        System.out.println("Current time => " + current .getTime());
+//
+//        SimpleDateFormat df = new SimpleDateFormat("dd/MMM/yyyy");
+//        String formattedDate = df.format(current .getTime());
+//        System.out.println("curerrrent date" +formattedDate);
+
+//        if(cc.compareTo(current) <= 0){
+//            //The set Date/Time already passed
+//            myApplication.showLog("notification date",""+ cc.getTime());
+
+//        }else{
+            AlarmManager alarmManager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
+
+            Intent intent = new Intent(activity, NotifyService.class);
+            PendingIntent pIntent = PendingIntent.getBroadcast(activity, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            alarmManager.set(AlarmManager.RTC_WAKEUP, MyApplication.c.getTimeInMillis(), pIntent);
+
+            Bundle bundle = new Bundle();
+            bundle.putString("type", typr);
+            bundle.putString("vehicalno", vehicalno);
+            bundle.putString("nofidate", nofidate);
+            bundle.putString("nId", nId);
+            intent.putExtras(bundle);
+            activity.startService(intent);
+
+
+
+
+
 
     }
 
@@ -382,7 +504,12 @@ public class VolleyHelper {
 
     }
 
+    private Calendar dateToCalendar(Date date) {
+//        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar;
 
-
+    }
 
 }

@@ -1,5 +1,6 @@
 package in.vaksys.vivekpk.service;
 
+import android.app.Activity;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
@@ -33,9 +34,12 @@ public class HttpService extends IntentService {
 
     private static String TAG = HttpService.class.getSimpleName();
     private Realm realm;
+    private Object mContext;
 
     public HttpService() {
+
         super(HttpService.class.getSimpleName());
+        this.mContext = mContext;
     }
 
     @Override
@@ -129,6 +133,7 @@ public class HttpService extends IntentService {
         Intent intent = new Intent(HttpService.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+        ((Activity) mContext).finish();
 
         Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
     }

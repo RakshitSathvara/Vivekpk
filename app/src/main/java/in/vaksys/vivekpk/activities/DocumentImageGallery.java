@@ -2,6 +2,7 @@ package in.vaksys.vivekpk.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -204,7 +205,7 @@ public class DocumentImageGallery extends AppCompatActivity {
                 } else {
 
                     //// TODO: 10/06/2016 change real path
-                    realPath = GetPathImage.getRealPathFromURI_API19(DocumentImageGallery.this, filePath);
+                    realPath = getRealPathFromURI(filePath);
                     //  myApplication.showLog("versionSDK > 19 (Android 4.4)", realPath);
 
                 }
@@ -246,6 +247,20 @@ public class DocumentImageGallery extends AppCompatActivity {
 //                        .show();
             }
         }
+    }
+
+    private String getRealPathFromURI(Uri contentURI) {
+        String result;
+        Cursor cursor = getContentResolver().query(contentURI, null, null, null, null);
+        if (cursor == null) { // Source is Dropbox or other similar local file path
+            result = contentURI.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            result = cursor.getString(idx);
+            cursor.close();
+        }
+        return result;
     }
 
     private void uploadwithRetrofit(String realPath, final String documenttype, final String img_id, final String v_id) {

@@ -92,6 +92,7 @@ public class DiactivateAccountActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 startActivity(new Intent(DiactivateAccountActivity.this, HomeActivity.class));
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -187,8 +188,9 @@ public class DiactivateAccountActivity extends AppCompatActivity {
                 Toast.makeText(DiactivateAccountActivity.this, "Account Deactivate Succesfully ...", Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(DiactivateAccountActivity.this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+               // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+                finish();
             }
         }, new Realm.Transaction.OnError() {
             @Override

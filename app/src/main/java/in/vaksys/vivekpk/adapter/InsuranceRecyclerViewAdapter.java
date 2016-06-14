@@ -107,7 +107,7 @@ public class InsuranceRecyclerViewAdapter extends RecyclerView.Adapter<Insurance
 
     @Override
     public AdapterHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.insurance_policy_with_vihicle, parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.insurance_policy_with_vihicle, parent, false);
         viewHolder = new AdapterHolder(view);
         return viewHolder;
     }
@@ -127,7 +127,7 @@ public class InsuranceRecyclerViewAdapter extends RecyclerView.Adapter<Insurance
             @Override
             public void onClick(View v) {
                 setId = 0;
-                if ((Integer.parseInt(myid) <-1) || holder.date.getText().toString().equalsIgnoreCase("Expiry Date")) {
+                if ((Integer.parseInt(myid) < -1) || holder.date.getText().toString().equalsIgnoreCase("Expiry Date")) {
                     Toast.makeText(context, "Please fill the data", Toast.LENGTH_SHORT).show();
                 } else {
                     confirm1 = new Dialog(context);
@@ -168,17 +168,26 @@ public class InsuranceRecyclerViewAdapter extends RecyclerView.Adapter<Insurance
                         @Override
                         public void onClick(View v) {
                             if (!(setId == 0)) {
+
                                 if (setId == 1) {
                                     NotificationDate = myApplication.ChanageDate(holder.date.getText().toString(), 5);
+                                    MyApplication.getInstance().showLog("nofication date 5", NotificationDate);
+
                                 } else if (setId == 2) {
                                     NotificationDate = myApplication.ChanageDate(holder.date.getText().toString(), 15);
+                                    MyApplication.getInstance().showLog("nofication date 15", NotificationDate);
                                 } else if (setId == 3) {
                                     NotificationDate = myApplication.ChanageDate(holder.date.getText().toString(), 25);
+                                    MyApplication.getInstance().showLog("nofication date 25", NotificationDate);
+
                                 }
                             } else {
                                 Toast.makeText(context, "Please Select Reminder.", Toast.LENGTH_SHORT).show();
                                 return;
                             }
+                            MyApplication.getInstance().showLog("nofication date 5", NotificationDate);
+
+
                             AddUpdateReminder(holder.VehicleIDHiddden.getText().toString(),
                                     details.getVehicleModelID(), myid, holder.date.getText().toString()
                                     , BLANK, BLANK, BLANK, NotificationDate);
@@ -205,7 +214,6 @@ public class InsuranceRecyclerViewAdapter extends RecyclerView.Adapter<Insurance
         setupInsuranceSpinner(holder.mSpinner);
         //   holder.date.setText(myApplication.getmDate());
     }
-
 
 
     private void AddUpdateReminder(String VehicleId, int vehicleModelID, String InsuranceCompany,

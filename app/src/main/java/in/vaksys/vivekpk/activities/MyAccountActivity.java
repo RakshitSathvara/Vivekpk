@@ -109,6 +109,7 @@ public class MyAccountActivity extends AppCompatActivity {
         i = 0;
         j = 0;
         loadData();
+        etPassword.setInputType(InputType.TYPE_NULL);
         etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         sharedPreferences = getSharedPreferences("UserDetails", Context.MODE_PRIVATE);
 
@@ -120,13 +121,21 @@ public class MyAccountActivity extends AppCompatActivity {
             }
         });
 */
-        etPassword.setOnTouchListener(new View.OnTouchListener() {
+//        etPassword.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                confirmDialogPassWord();
+//                return true;
+//            }
+//        });
+
+        etPassword.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public void onClick(View v) {
                 confirmDialogPassWord();
-                return true;
             }
         });
+
     }
 
     private void confirmDialogPassWord() {
@@ -143,6 +152,7 @@ public class MyAccountActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 VerifyPasswrod(oldPass.getText().toString(), pass.getText().toString(), ConfirmPass.getText().toString());
+                confirm.dismiss();
             }
         });
 
@@ -150,10 +160,20 @@ public class MyAccountActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent n = new Intent(MyAccountActivity.this, HomeActivity.class);
+        startActivity(n);
+        finish();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case android.R.id.home:
                 // ProjectsActivity is my 'home' activity
+                Intent n = new Intent(MyAccountActivity.this, HomeActivity.class);
+                startActivity(n);
                 finish();
                 return true;
         }
@@ -163,7 +183,7 @@ public class MyAccountActivity extends AppCompatActivity {
     private void VerifyPasswrod(String old, String NewPass, String CPass) {
 
         if (old.equals(oldPassword)) {
-            if (NewPass.length() > 6) {
+            if (NewPass.length() > 7) {
                 if (NewPass.equals(CPass)) {
                     if (!old.equals(NewPass)) {
                         etPassword.setText(NewPass);
@@ -206,6 +226,8 @@ public class MyAccountActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_myaccount_cancel:
+                Intent n = new Intent(MyAccountActivity.this, HomeActivity.class);
+                startActivity(n);
                 finish();
                 break;
             case R.id.btn_myaccount_save:
@@ -216,6 +238,7 @@ public class MyAccountActivity extends AppCompatActivity {
                 break;
             case R.id.btn_myaccount_deactiveAccount:
                 startActivity(new Intent(MyAccountActivity.this, DiactivateAccountActivity.class));
+                finish();
                 break;
         }
     }
@@ -244,8 +267,8 @@ public class MyAccountActivity extends AppCompatActivity {
                 Toast.makeText(MyAccountActivity.this, "Logout.", Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(MyAccountActivity.this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+                finish();
             }
         }, new Realm.Transaction.OnError() {
             @Override
@@ -655,4 +678,6 @@ public class MyAccountActivity extends AppCompatActivity {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
+
+
 }

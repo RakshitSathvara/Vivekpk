@@ -385,6 +385,7 @@ public class HomeActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         dialog.dismiss();
                         startActivity(new Intent(HomeActivity.this, MyAccountActivity.class));
+                        finish();
                     }
                 });
 

@@ -120,7 +120,7 @@ public class CarBikeRecyclerViewAdapter extends RecyclerView.Adapter<CarBikeRecy
                     @Override
                     public void onClick(View v) {
                         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-                        alertDialogBuilder.setTitle("Sure Want to Delete this vehicle ??")
+                        alertDialogBuilder.setTitle("Sure want to Delete this vehicle ??")
                                 .setCancelable(false)
                                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
@@ -189,7 +189,7 @@ public class CarBikeRecyclerViewAdapter extends RecyclerView.Adapter<CarBikeRecy
 
     private void ProceedData(final String s) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-        alertDialogBuilder.setTitle("Sure Want to Delete this vehicle ??")
+        alertDialogBuilder.setTitle("Sure want to Update this vehicle ??")
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {

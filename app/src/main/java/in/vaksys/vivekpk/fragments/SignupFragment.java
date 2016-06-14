@@ -105,7 +105,7 @@ public class SignupFragment extends Fragment implements AdapterCallback {
         etCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShowAlertDialogWithListview();
+              //  ShowAlertDialogWithListview();
             }
         });
 
@@ -193,6 +193,7 @@ public class SignupFragment extends Fragment implements AdapterCallback {
                         editor.putString("mobile", mContactNo);
                         editor.apply();
                         startActivity(new Intent(getActivity(), VerifyOtpActivity.class));
+                        getActivity().finish();
 
 
                     } else {
@@ -358,9 +359,9 @@ public class SignupFragment extends Fragment implements AdapterCallback {
         if (!validateEmail()) {
             return;
         }
-        if (!validateCode()) {
-            return;
-        }
+//        if (!validateCode()) {
+//            return;
+//        }
         if (!validateNumber()) {
             return;
         }
@@ -459,7 +460,7 @@ public class SignupFragment extends Fragment implements AdapterCallback {
             requestFocus(etPassword);
             return false;
         }
-        if (etPassword.length() < 6) {
+        if (etPassword.length() < 7) {
             etPassword.setError(getString(R.string.err_valid_password));
             requestFocus(etPassword);
             return false;

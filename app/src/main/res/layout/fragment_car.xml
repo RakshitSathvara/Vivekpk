@@ -44,6 +44,7 @@
                 android:drawableLeft="@drawable/add_button_gallery"
                 android:drawablePadding="15dp"
                 android:gravity="center"
+
                 android:text="Add Vehicle"
                 android:textAllCaps="false" />
         </LinearLayout>
