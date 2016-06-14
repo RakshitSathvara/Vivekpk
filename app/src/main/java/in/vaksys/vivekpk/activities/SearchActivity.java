@@ -289,8 +289,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.btn_inviteFriend_searchActivity:
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.\n https://play.google.com/store/apps/details?id=com.whatsapp&hl=en" );
-                //sendIntent.putExtra(Intent.EXTRA_HTML_TEXT, "https://play.google.com/store/apps/details?id=com.whatsapp&hl=en");
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.\n https://play.google.com/store/apps/details?id=com.whatsapp&hl=en");
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
                 break;

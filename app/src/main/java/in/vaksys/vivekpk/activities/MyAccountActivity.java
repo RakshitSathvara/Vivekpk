@@ -11,7 +11,6 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -109,6 +108,7 @@ public class MyAccountActivity extends AppCompatActivity {
         i = 0;
         j = 0;
         loadData();
+        etPassword.setInputType(InputType.TYPE_NULL);
         etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         sharedPreferences = getSharedPreferences("UserDetails", Context.MODE_PRIVATE);
 
@@ -120,11 +120,18 @@ public class MyAccountActivity extends AppCompatActivity {
             }
         });
 */
-        etPassword.setOnTouchListener(new View.OnTouchListener() {
+//        etPassword.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                confirmDialogPassWord();
+//                return true;
+//            }
+//        });
+
+        etPassword.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public void onClick(View v) {
                 confirmDialogPassWord();
-                return true;
             }
         });
     }
@@ -142,7 +149,9 @@ public class MyAccountActivity extends AppCompatActivity {
         BtnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VerifyPasswrod(oldPass.getText().toString(), pass.getText().toString(), ConfirmPass.getText().toString());
+                VerifyPasswrod(oldPass.getText().toString(), pass.getText().toString(),
+                        ConfirmPass.getText().toString());
+                confirm.dismiss();
             }
         });
 
@@ -219,6 +228,7 @@ public class MyAccountActivity extends AppCompatActivity {
                 break;
         }
     }
+
 
     private void DeleteDataBase() {
         realm = Realm.getDefaultInstance();
@@ -505,7 +515,7 @@ public class MyAccountActivity extends AppCompatActivity {
                     if (!error) {
                         Toast.makeText(getApplicationContext(), "Registration Success", Toast.LENGTH_LONG).show();
 
-//                        Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
                         confirm.dismiss();
                     } else {
                         String message = responseObj.getString("message");

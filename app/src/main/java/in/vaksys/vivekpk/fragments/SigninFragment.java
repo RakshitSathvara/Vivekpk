@@ -21,7 +21,7 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.maksim88.passwordedittext.PasswordEditText;
+import com.xwray.passwordview.PasswordView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,7 +55,7 @@ public class SigninFragment extends Fragment {
     private static final String TAG = "Vivekpk" + SigninFragment.class.getSimpleName();
 
     private EditText etPhoneNo;
-    private PasswordEditText etPassword;
+    // private PasswordEditText etPassword;
     private TextView tvErrorPhoneNo, tvErrorPassword, forgotPassword;
     private Button btnSignIn;
     boolean isFormValid = true;
@@ -67,6 +67,9 @@ public class SigninFragment extends Fragment {
     InsuranceCompanies insuranceCompanies;
     VehicleDetails vehicleDetails;
     EmergencyContact emergencyContact;
+    // private EditText etPassword;
+    private PasswordView etPassword;
+    //private TextView tvShowPassword, tvHidePassword;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,11 +77,34 @@ public class SigninFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_signin, container, false);
 
         etPhoneNo = (EditText) rootView.findViewById(R.id.et_phoneNo);
-        etPassword = (PasswordEditText) rootView.findViewById(R.id.et_password);
+        etPassword = (PasswordView) rootView.findViewById(R.id.et_password);
         tvErrorPhoneNo = (TextView) rootView.findViewById(R.id.tv_errorPhoneNo);
         tvErrorPassword = (TextView) rootView.findViewById(R.id.tv_errorPassword);
         btnSignIn = (Button) rootView.findViewById(R.id.btn_signin);
         forgotPassword = (TextView) rootView.findViewById(R.id.Forgot_passwrod11);
+//        tvShowPassword = (TextView) rootView.findViewById(R.id.tv_showPassword);
+//        tvHidePassword = (TextView) rootView.findViewById(R.id.tv_hidePassword);
+//
+//        tvHidePassword.setVisibility(View.GONE);
+//
+//
+//        tvShowPassword.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                etPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+//                tvHidePassword.setVisibility(View.VISIBLE);
+//                tvShowPassword.setVisibility(View.GONE);
+//            }
+//        });
+//
+//        tvHidePassword.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                etPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+//                tvHidePassword.setVisibility(View.GONE);
+//                tvShowPassword.setVisibility(View.VISIBLE);
+//            }
+//        });
 
         myApplication = MyApplication.getInstance();
         realm = Realm.getDefaultInstance();
@@ -249,7 +275,7 @@ public class SigninFragment extends Fragment {
 
         getActivity().startService(new Intent(getActivity(), RegistrationIntentService.class));
 
-       // Toast.makeText(getActivity(), "Setup Complete", Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), "Setup Complete", Toast.LENGTH_LONG).show();
 //        myApplication.hideDialog();
         LodingModels();
 
@@ -360,7 +386,7 @@ public class SigninFragment extends Fragment {
 
                                 insuranceCompanies = realm.createObject(InsuranceCompanies.class);
 
-                                insuranceCompanies.setInsuranceId(-1);
+                                insuranceCompanies.setInsuranceId(0);
                                 insuranceCompanies.setInsuranceName("Select Company");
                                 insuranceCompanies.setInsuranceCreatedAt("31131");
                                 insuranceCompanies.setInsuranceUpdatedAt("21232");
@@ -511,7 +537,7 @@ public class SigninFragment extends Fragment {
     private void LoadingEmergenyContact() {
         myApplication.showLog(TAG, "Loading Emergency Contact");
         myApplication.DialogMessage("Loading Emergency Contact...");
-  //      myApplication.showDialog();
+        //      myApplication.showDialog();
 
 
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, AppConfig.URL_EMERGENY_CONTACT,
@@ -551,8 +577,10 @@ public class SigninFragment extends Fragment {
                                 }
 
 
-                                LoadingInstallation();
-                                myApplication.showLog("call--->","Insattalton");
+                                //LoadingInstallation();
+                                startActivity(new Intent(getActivity(), HomeActivity.class));
+                                getActivity().finish();
+                                myApplication.showLog("call--->", "Insattalton");
                             } else {
 
                                 String errorMsg = response.getString("message");
@@ -561,8 +589,6 @@ public class SigninFragment extends Fragment {
                                 myApplication.hideDialog();
 
                             }
-
-
 
 
                         } catch (JSONException e) {
@@ -595,7 +621,7 @@ public class SigninFragment extends Fragment {
     private void LoadingInstallation() {
         myApplication.showLog(TAG, "Loading Installation");
         myApplication.DialogMessage("Loading Installation...");
-    //    myApplication.showDialog();
+        //    myApplication.showDialog();
         final StringRequest installationRequest = new StringRequest(Request.Method.POST, AppConfig.URL_INSTALLATION, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -618,7 +644,6 @@ public class SigninFragment extends Fragment {
                         String deviceType = installationObj.getString("deviceType");
                         String createdAt = installationObj.getString("createdAt");
                         String updatedAt = installationObj.getString("updatedAt");
-
 
 
                         Installation installation = realm.createObject(Installation.class);
@@ -682,7 +707,7 @@ public class SigninFragment extends Fragment {
     private void LoadingSubscription(final int installId) {
         myApplication.showLog(TAG, "Loading Subscription");
         myApplication.DialogMessage("Loading Subscription...");
-    //    myApplication.showDialog();
+        //    myApplication.showDialog();
         final StringRequest subscriptionRequest = new StringRequest(Request.Method.POST, AppConfig.URL_SUBSCRIPTION, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -743,7 +768,7 @@ public class SigninFragment extends Fragment {
 
     private void LoadingListDocument() {
         myApplication.DialogMessage("Loading ListDocument...");
-     //   myApplication.showDialog();
+        //   myApplication.showDialog();
         final StringRequest subscriptionRequest = new StringRequest(Request.Method.GET, AppConfig.URL_LIST_DOC, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

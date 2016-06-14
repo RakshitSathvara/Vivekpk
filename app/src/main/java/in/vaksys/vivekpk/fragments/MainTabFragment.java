@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import in.vaksys.vivekpk.R;
 import in.vaksys.vivekpk.adapter.ViewPagerAdapter;
@@ -26,6 +27,7 @@ public class MainTabFragment extends Fragment {
     ViewPager viewPager;
     int status = 0;
     int a = 0;
+    private EditText etSearchMain;
 
     /**
      * Create a new instance of the fragment
@@ -51,6 +53,7 @@ public class MainTabFragment extends Fragment {
 //        a = 1;
         tabLayout = (TabLayout) view.findViewById(R.id.tabs1);
         viewPager = (ViewPager) view.findViewById(R.id.viewpager1);
+        etSearchMain = (EditText) view.findViewById(R.id.et_search_main);
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
         viewPager.setCurrentItem(0);

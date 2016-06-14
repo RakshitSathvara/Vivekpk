@@ -118,7 +118,7 @@ public class CarFragment extends Fragment {
         MyApplication.getInstance().createDialog(getActivity(), false);
         results = realm.where(VehicleDetails.class).equalTo("type", "car").findAll();
         myApplication.showLog(TAG, "count : " + results.size());
-        SetCarDetailsList();
+        SetCarDetailsList("");
 
 
         btnContinue.setOnClickListener(new View.OnClickListener() {
@@ -357,7 +357,7 @@ public class CarFragment extends Fragment {
     }
 
 
-    private void SetCarDetailsList() {
+    private void SetCarDetailsList(String ab) {
 
 //        carDetailRecyclerView.setHasFixedSize(true);
 
