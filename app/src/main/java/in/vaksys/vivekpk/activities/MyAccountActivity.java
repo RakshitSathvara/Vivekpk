@@ -135,7 +135,6 @@ public class MyAccountActivity extends AppCompatActivity {
                 confirmDialogPassWord();
             }
         });
-
     }
 
     private void confirmDialogPassWord() {
@@ -151,7 +150,8 @@ public class MyAccountActivity extends AppCompatActivity {
         BtnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VerifyPasswrod(oldPass.getText().toString(), pass.getText().toString(), ConfirmPass.getText().toString());
+                VerifyPasswrod(oldPass.getText().toString(), pass.getText().toString(),
+                        ConfirmPass.getText().toString());
                 confirm.dismiss();
             }
         });
@@ -528,7 +528,7 @@ public class MyAccountActivity extends AppCompatActivity {
                     if (!error) {
                         Toast.makeText(getApplicationContext(), "Registration Success", Toast.LENGTH_LONG).show();
 
-//                        Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
+                       // Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
                         confirm.dismiss();
                     } else {
                         String message = responseObj.getString("message");
@@ -678,6 +678,4 @@ public class MyAccountActivity extends AppCompatActivity {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
-
-
 }

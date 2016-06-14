@@ -185,8 +185,9 @@ public class SignupFragment extends Fragment implements AdapterCallback {
                     // Check for error node in json
                     if (!error) {
                         Log.e(TAG, "onResponse: " + jObj.toString());
+                        String successMessage = jObj.getString("message");
                         Toast.makeText(getActivity(),
-                                "User Registering Successfull... ", Toast.LENGTH_LONG).show();
+                                successMessage, Toast.LENGTH_LONG).show();
 
                         SharedPreferences sharedPreferences = MyApplication.getInstance().getSharedPreferences("UserDetails", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -200,7 +201,7 @@ public class SignupFragment extends Fragment implements AdapterCallback {
                         // Error in login. Get the error message
                         String errorMsg = jObj.getString("message");
                         Toast.makeText(getActivity(),
-                                "Unexpected Error Occure... " + errorMsg, Toast.LENGTH_LONG).show();
+                                errorMsg, Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
                     // JSON error

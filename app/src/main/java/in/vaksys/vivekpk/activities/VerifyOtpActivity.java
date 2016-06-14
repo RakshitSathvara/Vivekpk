@@ -84,7 +84,7 @@ public class VerifyOtpActivity extends AppCompatActivity {
 
     }
 
-    @OnClick({R.id.tv_resend, R.id.btn_verify ,R.id.tv_editNumber})
+    @OnClick({R.id.tv_resend, R.id.btn_verify, R.id.tv_editNumber})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_resend:
@@ -100,7 +100,7 @@ public class VerifyOtpActivity extends AppCompatActivity {
 
             case R.id.tv_editNumber:
 
-                startActivity(new Intent( VerifyOtpActivity.this,ForgotPassWordActivity.class));
+                startActivity(new Intent(VerifyOtpActivity.this, MainActivity.class));
                 this.finish();
 
                 break;

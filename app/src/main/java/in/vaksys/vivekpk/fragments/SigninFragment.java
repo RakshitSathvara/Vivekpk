@@ -21,7 +21,6 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.maksim88.passwordedittext.PasswordEditText;
 import com.xwray.passwordview.PasswordView;
 
 import org.json.JSONArray;
@@ -56,7 +55,7 @@ public class SigninFragment extends Fragment {
     private static final String TAG = "Vivekpk" + SigninFragment.class.getSimpleName();
 
     private EditText etPhoneNo;
-   // private PasswordEditText etPassword;
+    private PasswordEditText etPassword;
     private TextView tvErrorPhoneNo, tvErrorPassword, forgotPassword;
     private Button btnSignIn;
     boolean isFormValid = true;
@@ -68,7 +67,6 @@ public class SigninFragment extends Fragment {
     InsuranceCompanies insuranceCompanies;
     VehicleDetails vehicleDetails;
     EmergencyContact emergencyContact;
-    private PasswordView etPassword;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,9 +74,7 @@ public class SigninFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_signin, container, false);
 
         etPhoneNo = (EditText) rootView.findViewById(R.id.et_phoneNo);
-      //  etPassword = (PasswordEditText) rootView.findViewById(R.id.et_password);
-
-        etPassword = (PasswordView) rootView.findViewById(R.id.et_password);
+        etPassword = (PasswordEditText) rootView.findViewById(R.id.et_password);
         tvErrorPhoneNo = (TextView) rootView.findViewById(R.id.tv_errorPhoneNo);
         tvErrorPassword = (TextView) rootView.findViewById(R.id.tv_errorPassword);
         btnSignIn = (Button) rootView.findViewById(R.id.btn_signin);

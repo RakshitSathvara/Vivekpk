@@ -12,8 +12,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private CheckBox checkBox;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private TextView tvTerms;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +78,15 @@ public class MainActivity extends AppCompatActivity {
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        tvTerms = (TextView) findViewById(R.id.tv_terms);
+
+        tvTerms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, TermOfUseActivity.class));
+            }
+        });
 
         Log.e(TAG, "onCreate: " + checkPlayServices());
     }

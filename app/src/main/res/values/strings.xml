@@ -25,7 +25,7 @@
         <item>Bike</item>
     </string-array>
 
-    <string name="troubleshooting_one">Please check the following if you\'re having trouble signing up:\n\n
+    <string name="troubleshooting_one">Please check the following if you are having trouble signing up:\n\n
 - Please make sure you are connected to the internet.\n
 - If your email ID or mobile number is already registered on DaddysRoad, please Sign-In instead of Sign-Up.\n
 - If you do not remember your password, you can tap Forgot Password? link on the Sign-In page.\n
@@ -35,7 +35,7 @@ If you are still unable to sign up, please tell us about it:\n</string>
 
     <string name="troubleshooting_two">If you are having trouble verifying your mobile number, please check the following:
 \n\n
-- Make sure that you have the latest DaddysRoad app installed from your phone\'s app store.\n
+- Make sure that you have the latest DaddysRoad app installed from your phones app store.\n
 - Check that the mobile number that you have entered is correct.\n
 - The mobile number is active and is receiving SMS messages from other numbers.
 \n\n
@@ -69,12 +69,12 @@ Please mention:\n
 
 If you are still not receiving SMS messages, please tell us about it:</string>
 
-    <string name="troubleshooting_seven">If your account is blocked, You will not be able to use DaddysRoad app.
+    <string name="troubleshooting_seven">If your account is blocked, You will not be able to use DaddyRoad app.
 Your account might get temporarily blocked if you send wrong notifications to other vehicle contacts. However, in this case, your account will be unblocked after 24 hours and you will be able to use the app.
 \n\n
 Your account might be permanently blocked if:\n
 - We suspect that your DaddysRoad account is being misused.\n
-- There has been a violation of DaddysRoad\'s Terms of Service.\n\n
+- There has been a violation of DaddysRoads Terms of Service.\n\n
 
 If you think that your account has been incorrectly blocked, please tell us about it:</string>
 
@@ -541,5 +541,354 @@ Go to MY account under app menu.\n
 - Tap Save. You will be asked to verify your new mobile number with a One Time Password (OTP) which we will SMS to the new number.\n
 - Once you provide the OTP in the app, your mobile number will be updated.
 </string>
+
+    <string name="terms">
+        1. GENERAL CONDITION OF USE \n\n
+
+
+
+1.1 Scope and Definitions\n
+
+This website is owned and operated by OneWay. Information supplied via this website is obtained based on user inputs. Use of this website by a user, hereafter referred to as &quot;You&quot;, (and &quot;You&quot; shall be construed accordingly) is subject to the terms and conditions set out below (\'Website Terms\'). DaddysRoad reserves the right to modify the Conditions at any time. In addition, DaddysRoad may vary or amend the Services provided through the Site, the Site functionality and/ or the &quot;look and feel&quot; of the Site at any time without notice and without liability to Members.\n\n
+
+
+
+1.2 Acceptance of Conditions\n
+
+Every time You use this website You must re-read and accept these Website Terms and by performing a data check using this website, You agree to be legally bound by them. If You do not agree to be bound by these Website Terms, You should not carry out a vehicle check on this website and should not attempt to contact via notifications.\n
+
+All Members agree to comply with the Conditions and accept that their personal data may be processed in accordance with the Privacy Policy.\n
+
+In using this App you agree not to gather, extract, reproduce and/or display any vehicle data on or from this App by the use of spiders or other
+
+        screen scraping software or system used to extract data automatically unless otherwise agreed in writing.\n
+
+All personal data about you will be treated in accordance with our Privacy Policy.\n
+
+In the event that any Member fails to comply with any of the Conditions, DaddysRoad reserves the right, but not the obligation at its own discretion, to withdraw the User Account in question and suspend or withdraw all Services to that Member without notice. These Conditions are intended to create binding rights and obligations between Members and DaddysRoad in accordance with the Indian Contract Act, 1872\n\n
+
+
+
+ 1.3 Variation of the Conditions, Site and Service\n
+
+DaddysRoad reserves the right to modify the Conditions at any time. In addition, DaddysRoad may vary or amend the Services provided through the App, the App functionality and or the &quot;You&quot; of the App at any time without notice and without liability to Users.\n
+
+Any modification to the App, Services or Conditions will take effect as soon as such changes are published on the App, subject to communication of any material change to the Conditions to the Users in an e-mail.\n
+
+Users will be deemed to have accepted any varied Conditions in the event that they use any Services offered through the App following publication of the varied Conditions.\n\n
+
+
+
+2. USE OF THE SERVICE\n
+
+2.1 User Account and Accuracy of Information\n
+
+In order to use the Services each User must create a User Account and agrees to provide any personal information requested by DaddysRoad. In particular, Users will be required to provide their first name, last name, email and valid mobile.\n
+
+Members agree and accept that all of the information they provide to BlaBlaCar when setting up their User Account and at any other time shall be true, correct, complete and accurate in all respects. Members also agree that any information supplied to BlaBlaCar or posted on the Site in connection with any Trip, Vehicle or Car Sharing will be true, accurate and complete.\n
+
+Users agree and accept that all of the information they provide to DaddysRoad when setting up their User Account and at any other time shall be true, correct, complete and accurate in all respects. Users also agree that any information supplied to DaddysRoad will be true, accurate and complete.\n
+
+Unless expressly agreed by DaddysRoad, Users are limited to one User Account per User. No User Account may be created on behalf of or in order to impersonate another person or with a wrong vehicle registration which doesnt not belong to you.
+\n\n
+
+
+2.2 No Commercial Activity and Status of BlaBlaCar\n
+
+The App and the Services are strictly limited to providing a Service for car owners/drivers and public people in a private capacity. The Services may not be used in any commercial or professional context. The Services may be used only for the purpose of registering your OWN vehicle details and to upload documents related to the vehicles along with your valid driving licence. And also only to search and contact vehicle owners/contacts in the case of any valid reasons/emergencies.\n\n
+
+
+
+2.3 Contacting Users\n
+
+By accepting the terms and conditions contained herein, every User hereby agrees and gives consent to DaddysRoad to communicate via phone calls, SMS, email, notifications and such other means as DaddysRoad may deem fit. Such communications to Users may be recorded through technical support provided by third parties for the purpose of training, quality and for regularly updating the Users about the services of DaddysRoad.\n\n
+
+
+
+3. INDEMNITY AND RELEASE\n
+
+Users will indemnify and hold harmless DaddysRoad, its subsidiaries, affiliates and their respective officers, directors, agents and employees, from any claim or demand, or actions including reasonable attorneys fees, made by any third party or penalty imposed due to or arising out of your breach of these Conditions or any document incorporated by reference, or your violation of any law, rules, regulations or the rights of a third party.\n
+
+Users release DaddysRoad and/or its affiliates and/or any of its officers and representatives from any cost, damage, liability or other consequence of any of the actions/inactions of the Users and specifically waiver any claims or demands that they may have in this behalf under any statute, contract or otherwise.\n
+\n
+
+
+4. GENERAL TERMS\n\n
+
+
+
+4.1 Relationship\n
+
+No arrangement between the Users and DaddysRoad shall constitute or be deemed to constitute an agency, partnership, joint venture or the like between the Users and DaddysRoad.\n\n
+
+
+
+4.2 Suspension or Withdrawal of Site Access\n
+
+In the event of non-compliance on your part with all or some of the Conditions, you acknowledge and accept that DaddysRoad can at any time, without prior notification, interrupt or suspend, temporarily or permanently, all or part of the service or your access to the App (including in particular your User Account).\n
+\n
+
+
+4.3 Intellectual Property\n
+
+The format and content included on the App, such as text, graphics, logos, button icons, images, audio clips, digital downloads, data compilations, and software, is the property of DaddysRoad, its affiliates or its content suppliers and is protected by Indian copyright, authors\' rights and database right laws.\n
+
+All rights are reserved in relation to any registered and unregistered trademarks (whether owned or licensed to DaddysRoad) which appear on the App.\n
+
+The App or any portion of the App may not be reproduced, duplicated, copied, sold, resold, visited, or otherwise exploited for any commercial purpose without the express written consent of DaddysRoad. No person is entitled to systematically extract and/or re-utilise parts of the contents of the App without the express written consent of DaddysRoad. In particular, the use of data mining, robots, or similar data gathering and extraction tools to extract (whether once or many times) for re-utilisation of any substantial parts of this App is strictly prohibited.\n
+\n
+
+
+4.4 Content of the Site Provided by the Members\n
+
+By displaying content on this Site, Members expressly grant a license to BlaBlaCar to display the content and to use it for any of our other business purposes.\n
+
+By displaying content on this App, Users expressly grant a license to DaddysRoad to display the content and to use it for any of our other business purposes. Users of this App are expressly asked not to publish any defamatory, misleading or offensive content or any content which infringes any other persons intellectual property rights (e.g. copyright). Any such content which is contrary to DaddysRoad’s policy and DaddysRoad does not accept liability in respect of such content, and the User responsible will be personally liable for any damages or other liability arising and agrees to indemnify DaddysRoad in relation to any liability it may suffer as a result of any such content. However as soon as DaddysRoad becomes aware of infringing content, DaddysRoad shall do everything it can to remove such content from the App as soon as possible.\n
+\n\n
+
+
+4.5 Partner Sites\n
+
+DaddysRoad reserves the right to reproduce any information that appears on the App or on the partner Apps.\n
+
+In particular, ads published on one of the Apps maintained or co-maintained by DaddysRoad may be reproduced on other Apps maintained or co-maintained by DaddysRoad or third parties.\n
+
+
+
+5. LAW AND JURISDICTION\n
+
+These terms shall be governed by the law of India and any disputes arising in relation to these terms shall be subject to the jurisdiction of the Courts of Bangalore.\n
+    </string>
+
+    <string name="privacy">
+
+        1. General\n\n
+
+1.1.    DaddysRoad take the privacy of your information very seriously. Our Privacy Policy is designed to tell you about our practices regarding the collection, use and disclosure of information that you may provide via the DaddysRoad App and other associated partner websites, micro sites and sub-sites (the &quot;App&quot;).\n
+
+1.2.    By using this App or any services we offer, you are consenting to the collection, use, and disclosure of that information about you in accordance with, and are agreeing to be bound by, this Privacy Policy.\n
+
+\n
+
+2. Ways that we collect information\n
+
+2.1.    We may collect and process the following information or data (including personal
+        information and information that can be uniquely identified with you) about you:\n\n
+
+2.1.1.  Vehicle RC, Driving License, Insurance Policy and such other
+        documents and information that may be required from time to time including your name,
+        address(including postcodes), date of birth and if you are a Car Owner certain information about your Vehicle to register with the App or to access other services provided by us;\n\n
+
+2.1.2.    Your e-mail address and a password;\n
+
+2.1.3.    You mobile phone number along with 2 other mobile numbers which you may seem appropriate to
+        assign under Emergency Contact feature of the App;\n
+
+2.1.4.    A record of any correspondence between you and us;\n
+
+2.1.5.   A record of any communication/notification you have made through the App;\n
+
+2.1.6.    Your replies to any surveys or questionnaires that we may use for research purposes;\n
+
+2.1.7.    Details of accounting or financial transactions including transactions carried out through the Site
+        or otherwise. This may include information such as your credit card, debit card or bank account details,
+        details of Trips(as described in our Conditions) you have booked or offered through the Site;\n
+
+2.1.8.    Details of your visits to the App and the resources that you access;\n
+
+2.1.9.    Information we may require from you when you report a problem with the App.\n
+
+2.1.10.    Information about you which we may receive from other sources.\n\n
+
+
+
+2.2.    We only collect such information when you choose to supply it to us. You do not have to supply
+        any personal information to us but you may not be able to take advantage of all the services we
+        offer without doing so.\n
+
+2.3.    Information is also gathered without you actively providing it, through the use of various
+        technologies and methods such as Internet Protocol (IP) addresses and cookies.
+        These methods do not collect or store personal information.\n
+
+2.4.    An IP address is a number assigned to your computer by your Internet Service
+        Provider (ISP), so you can access the Internet. It is generally considered to be
+        non-personally identifiable information, because in most cases an IP address can only
+        be traced back to your ISP or the large company or organisation that provides your internet access
+        (such as your employer if you are at work).\n
+
+2.5.    We use your IP address to diagnose problems with our server, report
+        aggregate information, and determine the fastest route for your computer to
+        use in connecting to our site, and to administer and improve the site.\n\n
+
+
+
+3. Use\n
+
+3.1.    We may use this information to:\n
+
+3.1.1.    ensure that the content of the App is presented in the most effective manner for
+        you and for your mobile phone and customise the App to your preferences;\n
+
+3.1.2.    assist in making general improvements to the App;\n
+
+3.1.3.    carry out and administer any obligations arising between you and us;\n
+
+3.1.4.    allow you to participate in features of the App and other services;\n
+
+3.1.5.    contact you and notify you about changes to the App or the services we offer
+        (except where you have asked us not to do this);\n
+
+3.1.6.    analyse how users are making use of the App and for internal marketing and research purposes.\n\n
+
+
+
+3.2.    We will not resell your information to any third party nor use it for any third party marketing.\n
+
+
+\n
+4. Sharing your information\n
+
+4.1.    We do not disclose any information you provide via the Site to any third parties except:\n
+
+4.1.1.    your mobile number ONLY in the case when you are performing a search action using the vehicle
+        number in the DaddysRoad App and thus using the search result to report an Emergency/Accident.
+        Your mobile number is only shared with the people who are assigned under the App Emergency Contact
+        of the vehicle you did report and to the vehicle owner to contact back and know the whereabouts of the
+        incidents you did report through the App.\n
+
+4.1.2.    if we are under a duty to disclose or share your personal data in order
+        to comply with any legal obligation (for example, if required to do so by a
+        court order or for the purposes of prevention of fraud or other crime or upon
+        requisition made by government agencies);\n
+
+4.1.3.    in order to enforce any terms of use that apply to any of the App,
+        or to enforce any other terms and conditions or agreements for our Services that may apply;\n
+
+4.1.4.    we may transfer your personal information to a third party as part of a sale of some or
+        all of our business and assets to any third party or as part of any business restructuring
+        or reorganisation, but we will take steps with the aim of ensuring that your privacy rights
+        continue to be protected;\n
+
+4.1.5.    to protect the rights, property,
+        or safety of OneWay, the Apps users, or any other third parties.
+        This includes exchanging information with other companies and organisations for
+        the purposes of fraud protection and credit risk reduction.\n
+
+4.1.6   for the purpose of verification by third party service providers
+        of the information contained in the IDs and other documents that may
+        be collected from the Members at the time of registration, claim of vehicle or
+        at any other time during their use of the App as may be required. Third party service
+        providers will process data under DaddysRoad’s control and will be bound by the same degree
+        of security and care as DaddysRoad’s under this Privacy and Data Protection Policy.\n
+
+Notwithstanding anything contained herein or the terms &amp; conditions,
+        DaddysRoad hereby disclaims any liability arising from the verification of
+        the IDs and other documents by third party service providers including but not
+        limited to its accuracy, reliability, and originality;\n
+
+4.1.7    for the purpose of maintaining internal quality,
+        training and updating the customers about the Services of DaddysRoad.\n
+
+4.2.    Other than as set out above, we shall not disclose any of your
+        personal information unless you give us permission to do so.\n\n
+
+
+
+5. Cookies\n
+
+5.1.    A cookie is a piece of data stored locally on your computer, mobile and contains
+        information about your activities on the Internet. The information in a cookie
+        does not contain any personally identifiable information you submit to our site.\n
+
+5.2.    On the App, we may use cookies to track users progress through the App,
+        allowing us to make improvements based on usage data. We may also use cookies
+        if you log in to one of our online services to enable you to remain logged in to
+        that service. A cookie helps you get the best out of the App and helps us to provide
+        you with a more customised service.\n
+
+5.3.    You have the ability to accept or decline cookies.\n
+
+5.4.    By you using the App we assume you are happy for us to use the cookies described above.\n
+
+5.5.    If you choose not to accept the cookies, this will not affect your access to the
+        majority of information available on the App. However, you may not be able to
+        make full use of our online services.\n\n
+
+
+
+6. Access to and correction of personal information\n
+
+6.1.    We will take all reasonable steps in accordance with our
+        legal obligations to update or correct personally identifiable
+        information in our possession that you submit via this App.\n
+
+6.2.    The Act gives you the right to access information held about you.
+        Your right of access can be exercised in accordance with the Act.
+        If you wish to see details of any personal information that we hold
+        about you please contact us by way of our contact page.\n
+
+6.3.    We take all appropriate steps to protect your personally
+        identifiable information as you transmit your information from
+        your mobile phone to our App and to protect such information for loss,
+        misuse, and unauthorised access, disclosure, alteration, or destruction.
+        We may use leading technologies and encryption software to safeguard your data,
+        and operate strict security standards to prevent any unauthorised access to it.\n
+
+6.4.    Where you use passwords, usernames,
+        or other special access features on this site,
+        you also have a responsibility to take reasonable steps to safeguard them.\n\n
+
+
+
+7. Other websites\n
+
+7.1.    This App may contain links and references to other websites.
+        Please be aware that this Privacy Policy does not apply to those websites.\n
+
+7.2.    We cannot be responsible for the privacy policies
+        and practices of sites that are not operated by us, even if
+        you access them via the App. We recommend that you check the policy
+        of each site you visit and contact its owner or operator if you have any concerns or questions.\n
+
+7.3.    In addition, if you came to this App via a third party site,
+        we cannot be responsible for the privacy policies and practices of the
+        owners or operators of that third party site and recommend that you check the
+        policy of that third party site and contact its owner or operator if you have any concerns or questions.\n
+
+\n
+
+8. Transferring your information outside of India\n
+
+8.1.    As part of the services offered to you through the App,
+        the information you provide to us may be transferred to,
+        and stored at, countries outside of India. By way of example,
+        this may happen if any of our servers are from time to time located
+        in a country outside of India or one of our service providers is located in a
+        country outside of India. We may also share information with other equivalent national bodies,
+        which may be located in countries worldwide. The information provided by you may
+        be transferred to a third party if it is necessary for the performance of any
+        contract between us and the said third party or upon receipt of your consent
+        to data transfer. If we transfer your information outside of India
+        in this way, we will take steps with the aim of ensuring that your
+        privacy rights continue to be protected as outlined in this privacy
+        policy and in accordance with applicable laws including but not
+        limited to Information Technology Act, 2000 and the rules framed there under.\n
+
+8.2.    By submitting your personal information to us you agree to the transfer,
+        storing or processing of your information outside India in the manner described above.\n\n
+
+
+
+9. Notification of changes to our Privacy Policy\n
+We will post details of any changes to our Privacy Policy on the website
+        to help ensure you are always aware of the information we collect,
+        how we use it, and in what circumstances, if any, we share it with other parties.\n\n
+
+
+10. Contact us\n
+If at any time you would like to contact us with your views about our privacy practices,
+        or with any enquiry relating to your personal information, you can do so by way of our contact page.\n
+
+    </string>
 
 </resources>

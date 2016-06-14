@@ -89,8 +89,10 @@
         <activity
             android:name=".activities.ResetPasswordActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activities.DocumentImageGallery"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activities.DocumentImageGallery"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activities.TermOfUseActivity"></activity>
     </application>
 
 </manifest>

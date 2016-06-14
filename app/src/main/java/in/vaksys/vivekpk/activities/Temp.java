@@ -1,5 +1,6 @@
 package in.vaksys.vivekpk.activities;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -36,6 +37,11 @@ public class Temp extends AppCompatActivity {
 
             String token = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
                     GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+
+            SharedPreferences sharedPreferences = getSharedPreferences("device_token", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("token", token);
+            editor.commit();
 
             Log.i(TAG, "GCM Registration Token: " + token);
 
