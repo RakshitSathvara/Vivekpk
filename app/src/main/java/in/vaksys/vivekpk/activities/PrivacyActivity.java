@@ -8,17 +8,17 @@ import android.view.MenuItem;
 
 import in.vaksys.vivekpk.R;
 
-public class TermOfUseActivity extends AppCompatActivity {
+public class PrivacyActivity extends AppCompatActivity {
 
-    private Toolbar termToolbar;
+    private Toolbar privacyToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_term_of_use);
+        setContentView(R.layout.activity_privacy);
 
-        termToolbar = (Toolbar) findViewById(R.id.termToolbar);
-        setSupportActionBar(termToolbar);
+        privacyToolbar = (Toolbar) findViewById(R.id.privacyToolbar);
+        setSupportActionBar(privacyToolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -29,7 +29,7 @@ public class TermOfUseActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case android.R.id.home:
-                startActivity(new Intent(TermOfUseActivity.this, MainActivity.class));
+                startActivity(new Intent(PrivacyActivity.this, VerifyOtpActivity.class));
                 finish();
                 return true;
             default:

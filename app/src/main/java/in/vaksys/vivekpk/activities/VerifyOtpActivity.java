@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -60,6 +61,8 @@ public class VerifyOtpActivity extends AppCompatActivity {
     @Bind(R.id.tv_editNumber)
     TextView tvEditNumber;
     String number;
+    @Bind(R.id.tv_privacy)
+    TextView tvPrivacy;
     private Toolbar mToolbar;
     private ProgressDialog pDialog;
 
@@ -84,7 +87,7 @@ public class VerifyOtpActivity extends AppCompatActivity {
 
     }
 
-    @OnClick({R.id.tv_resend, R.id.btn_verify, R.id.tv_editNumber})
+    @OnClick({R.id.tv_resend, R.id.btn_verify, R.id.tv_editNumber, R.id.tv_privacy})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_resend:
@@ -104,6 +107,9 @@ public class VerifyOtpActivity extends AppCompatActivity {
                 this.finish();
 
                 break;
+            case R.id.tv_privacy:
+                startActivity(new Intent(VerifyOtpActivity.this, PrivacyActivity.class));
+                this.finish();
         }
     }
 
@@ -199,7 +205,7 @@ public class VerifyOtpActivity extends AppCompatActivity {
                 .actionListener(new ActionClickListener() {
                     @Override
                     public void onActionClicked(Snackbar snackbar) {
-                        startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
+                        startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
                     }
                 })
                 .duration(Snackbar.SnackbarDuration.LENGTH_LONG)

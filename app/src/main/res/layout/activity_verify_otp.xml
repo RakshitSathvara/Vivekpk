@@ -153,11 +153,14 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/tv_privacy"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center|bottom"
                 android:gravity="bottom"
-                android:text="©2015 DaddysRoad Privacy Policy"/>
+                android:text="©2015 DaddysRoad Privacy Policy"
+                android:textColor="#767671"
+                android:textSize="14sp" />
 
 
         </LinearLayout>
