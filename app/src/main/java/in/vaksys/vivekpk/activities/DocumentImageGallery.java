@@ -13,6 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -46,6 +48,7 @@ import in.vaksys.vivekpk.extras.AppConfig;
 import in.vaksys.vivekpk.extras.GetPathImage;
 import in.vaksys.vivekpk.extras.MyApplication;
 import in.vaksys.vivekpk.extras.ResetApi;
+import in.vaksys.vivekpk.extras.VolleyHelper;
 import in.vaksys.vivekpk.model.ImageMessage;
 import in.vaksys.vivekpk.model.ReplaceImage;
 import in.vaksys.vivekpk.model.data;
@@ -66,6 +69,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class DocumentImageGallery extends AppCompatActivity {
     @Bind(R.id.rec_document_image_gallery)
     RecyclerView document_image_gallery;
+    @Bind(R.id.img_cancelGallery)
+    ImageView img_cancelGallery;
     private Realm realm;
     private RealmResults<UserImages> results;
     private GalleryImageAdapter imageAdapter;
@@ -103,7 +108,25 @@ public class DocumentImageGallery extends AppCompatActivity {
         document_image_gallery.setAdapter(imageAdapter);
         imageAdapter.notifyDataSetChanged();
 
+        results.addChangeListener(new RealmChangeListener<RealmResults<UserImages>>() {
+            @Override
+            public void onChange(RealmResults<UserImages> element) {
+                imageAdapter.notifyDataSetChanged();
+            }
+        });
+
+
+        img_cancelGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
     }
+
+
+
 
 
     @Subscribe
@@ -149,15 +172,18 @@ public class DocumentImageGallery extends AppCompatActivity {
             if (resultCode == -1) {
                 // successfully captured the image
                 // display it in image vie
-//                String type = documenttype;
-//                String v_id = vehicle_id;
+                String type = documenttype;
+                String v_idd = v_id ;
                 Uri uri = picUri;
+                String imgid = img_id;
 
                 String captuepath = uri.getPath();
 
-                //   uploadwithRetrofit(captuepath, type, v_id);
+//                  uploadwithRetrofit(captuepath, type,imgid, v_id);
+            // uploadwithRetrofit(captuepath, documenttype, img_id, v_id);
 
-
+                VolleyHelper helper = new VolleyHelper(this);
+                helper.uploadwithRetrofit(captuepath, documenttype, img_id, v_id);
                 //   myApplication.showLog("camarea image path ", "" + captuepath);
 
 
@@ -214,7 +240,11 @@ public class DocumentImageGallery extends AppCompatActivity {
                 //      myApplication.showLog("file image  paths", imagePath);
 
 
-                uploadwithRetrofit(realPath, documenttype, img_id, v_id);
+                VolleyHelper helper = new VolleyHelper(this);
+                helper.uploadwithRetrofit(realPath, documenttype, img_id, v_id);
+
+
+              //  uploadwithRetrofit(realPath, documenttype, img_id, v_id);
 
                 //   calculateFileSize(realPath);
 
@@ -263,211 +293,211 @@ public class DocumentImageGallery extends AppCompatActivity {
         return result;
     }
 
-    private void uploadwithRetrofit(String realPath, final String documenttype, final String img_id, final String v_id) {
-
-        MyApplication.getInstance().DialogMessage("Upload Documents...");
-        MyApplication.getInstance().showDialog();
-
-        final String imgname = realPath.substring(realPath.lastIndexOf("/") + 1);
-        MyApplication.getInstance().showLog("name", imgname);
-
-        final String rnd = "Licence" + String.valueOf(GenerteRandomNumber());
-
-        RequestBody requestFile =
-                RequestBody.create(MediaType.parse("multipart/form-data"), new File(realPath));
-
-        // MultipartBody.Part is used to send also the actual file name
-
-        //note: file=key , vishal = iamgennnnname(randam) , reuestfile = pick image url
-
-        MultipartBody.Part body =
-                MultipartBody.Part.createFormData("file", rnd, requestFile);
-//        MultipartBody.Part body =
-//                MultipartBody.Part.create(requestFile);
-
+//    private void uploadwithRetrofit(String realPath, final String documenttype, final String img_id, final String v_id) {
 //
-        OkHttpClient okHttpClient1 = new OkHttpClient().newBuilder()
-                .connectTimeout(120, TimeUnit.SECONDS)
-                .writeTimeout(120, TimeUnit.SECONDS)
-                .readTimeout(120, TimeUnit.SECONDS)
-                .build();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(AppConfig.URL_UPLOAD_DOC)
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(okHttpClient1)
-                .build();
-
-        ResetApi resetApi = retrofit.create(ResetApi.class);
-
-        retrofit2.Call<data> call = resetApi.getTasks("52d8c0efea5039cd0d778db7521889cf", body);
-
-        call.enqueue(new retrofit2.Callback<data>() {
-            @Override
-            public void onResponse(retrofit2.Call<data> call, Response<data> response) {
-
-                MyApplication.getInstance().hideDialog();
-
-                int code = response.code();
-                MyApplication.getInstance().showLog("code", "" + code);
-
-                //    Toast.makeText(getActivity(), "Respose Code " + code, Toast.LENGTH_SHORT).show();
-
-                if (response.code() == 500) {
-
-                    Toast.makeText(DocumentImageGallery.this, "Server Side Error", Toast.LENGTH_SHORT).show();
-                }
-
-                if (response.code() == 200) {
-
-                    data myResp = response.body();
-                    boolean error = myResp.isError();
-
-                    if (!error) {
-
-                        String imageurl = myResp.getResult();
-
-                        MyApplication.getInstance().showLog("respose", imageurl);
-                        //     Toast.makeText(getActivity(), "Url" + imageurl, Toast.LENGTH_SHORT).show();
-
-                        AddVehicalesDocument(imageurl, documenttype, img_id, rnd, v_id);
-
-
-                    } else {
-                        MyApplication.getInstance().hideDialog();
-
-                        Toast.makeText(DocumentImageGallery.this, "Error For Uploading Documnent", Toast.LENGTH_SHORT).show();
-                    }
-
-
-                } else {
-
-                    MyApplication.getInstance().hideDialog();
-
-                    Toast.makeText(DocumentImageGallery.this, "Error Some Fatch Data", Toast.LENGTH_SHORT).show();
-                }
-
-
-            }
-
-            @Override
-            public void onFailure(retrofit2.Call<data> call, Throwable t) {
-
-                MyApplication.getInstance().hideDialog();
-
-                if (t instanceof TimeoutError || t instanceof NoConnectionError) {
-                    MyApplication.getInstance().ErrorSnackBar(DocumentImageGallery.this);
-                }
-
-            }
-        });
-
-    }
-
-
-    private void AddVehicalesDocument(final String imageurl, final String documenttype, final String img_id, final String imgname, final String v_id) {
-
-
-        String tag_string_req = "req_delete_vehicle";
-
-        MyApplication.getInstance().DialogMessage("Update  Document...");
-        MyApplication.getInstance().showDialog();
-
-        StringRequest strReq = new StringRequest(Request.Method.PUT,
-                AppConfig.URL_UPDATE_DOC, new com.android.volley.Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                MyApplication.getInstance().hideDialog();
-
-                MyApplication.getInstance().showLog("respodse", response);
-
-                try {
-                    JSONObject jObj = new JSONObject(response);
-                    boolean error = jObj.getBoolean("error");
-                    Log.e(TAG, "onResponse: " + jObj.toString());
-
-                    // Check for error node in json
-                    if (!error) {
-                        Toast.makeText(DocumentImageGallery.this,
-                                "Document updated... ", Toast.LENGTH_LONG).show();
-
-                        // parsing the user profile information
-
-
-                        UpdateImageIntoDatabase(img_id, imageurl, imgname);
-
-                        // DeleteContactToDatabase(contactid);
-                    } else {
-                        // Error in login. Get the error message
-                        String errorMsg = jObj.getString("message");
-                        Toast.makeText(DocumentImageGallery.this,
-                                "Error :" + errorMsg, Toast.LENGTH_LONG).show();
-                    }
-                } catch (JSONException e) {
-                    // JSON error
-                    e.printStackTrace();
-                    Toast.makeText(DocumentImageGallery.this, "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            }
-        }, new com.android.volley.Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-//                Log.e(TAG, "Login Error: " + error.getMessage());
-                MyApplication.getInstance().ErrorSnackBar((Activity) DocumentImageGallery.this);
-                MyApplication.getInstance().hideDialog();
-            }
-        }) {
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-
-                Map<String, String> stringMap = new HashMap<>();
-                stringMap.put("id", img_id);
-                stringMap.put("url", imageurl);
-
-
-                return stringMap;
-
-//                vehicleNo
-            }
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
-                MyApplication.getInstance().showLog(TAG, String.valueOf("passed auth"));
-                return headers;
-
-            }
-
-
-        };
-        // Adding request to request queue
-        MyApplication.getInstance().addToRequestQueue(strReq, tag_string_req);
-
-
-    }
-
-    private void UpdateImageIntoDatabase(String img_id, String imageurl, String name) {
-        realm = Realm.getDefaultInstance();
-
-        realm.beginTransaction();
-        UserImages userImages = realm.where(UserImages.class).equalTo("id", img_id).findFirst();
-
-        userImages.setImageName(name);
-        userImages.setImagesurl(imageurl);
-
-        realm.commitTransaction();
-
-        results.addChangeListener(new RealmChangeListener<RealmResults<UserImages>>() {
-            @Override
-            public void onChange(RealmResults<UserImages> element) {
-                imageAdapter.notifyDataSetChanged();
-            }
-        });
-
-    }
+//        MyApplication.getInstance().DialogMessage("Upload Documents...");
+//        MyApplication.getInstance().showDialog();
+//
+//        final String imgname = realPath.substring(realPath.lastIndexOf("/") + 1);
+//        MyApplication.getInstance().showLog("name", imgname);
+//
+//        final String rnd = "Licence" + String.valueOf(GenerteRandomNumber());
+//
+//        RequestBody requestFile =
+//                RequestBody.create(MediaType.parse("multipart/form-data"), new File(realPath));
+//
+//        // MultipartBody.Part is used to send also the actual file name
+//
+//        //note: file=key , vishal = iamgennnnname(randam) , reuestfile = pick image url
+//
+//        MultipartBody.Part body =
+//                MultipartBody.Part.createFormData("file", rnd, requestFile);
+////        MultipartBody.Part body =
+////                MultipartBody.Part.create(requestFile);
+//
+////
+//        OkHttpClient okHttpClient1 = new OkHttpClient().newBuilder()
+//                .connectTimeout(120, TimeUnit.SECONDS)
+//                .writeTimeout(120, TimeUnit.SECONDS)
+//                .readTimeout(120, TimeUnit.SECONDS)
+//                .build();
+//
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl(AppConfig.URL_UPLOAD_DOC)
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .client(okHttpClient1)
+//                .build();
+//
+//        ResetApi resetApi = retrofit.create(ResetApi.class);
+//
+//        retrofit2.Call<data> call = resetApi.getTasks("52d8c0efea5039cd0d778db7521889cf", body);
+//
+//        call.enqueue(new retrofit2.Callback<data>() {
+//            @Override
+//            public void onResponse(retrofit2.Call<data> call, Response<data> response) {
+//
+//                MyApplication.getInstance().hideDialog();
+//
+//                int code = response.code();
+//                MyApplication.getInstance().showLog("code", "" + code);
+//
+//                //    Toast.makeText(getActivity(), "Respose Code " + code, Toast.LENGTH_SHORT).show();
+//
+//                if (response.code() == 500) {
+//
+//                    Toast.makeText(DocumentImageGallery.this, "Server Side Error", Toast.LENGTH_SHORT).show();
+//                }
+//
+//                if (response.code() == 200) {
+//
+//                    data myResp = response.body();
+//                    boolean error = myResp.isError();
+//
+//                    if (!error) {
+//
+//                        String imageurl = myResp.getResult();
+//
+//                        MyApplication.getInstance().showLog("respose", imageurl);
+//                        //     Toast.makeText(getActivity(), "Url" + imageurl, Toast.LENGTH_SHORT).show();
+//
+//                        AddVehicalesDocument(imageurl, documenttype, img_id, rnd, v_id);
+//
+//
+//                    } else {
+//                        MyApplication.getInstance().hideDialog();
+//
+//                        Toast.makeText(DocumentImageGallery.this, "Error For Uploading Documnent", Toast.LENGTH_SHORT).show();
+//                    }
+//
+//
+//                } else {
+//
+//                    MyApplication.getInstance().hideDialog();
+//
+//                    Toast.makeText(DocumentImageGallery.this, "Error Some Fatch Data", Toast.LENGTH_SHORT).show();
+//                }
+//
+//
+//            }
+//
+//            @Override
+//            public void onFailure(retrofit2.Call<data> call, Throwable t) {
+//
+//                MyApplication.getInstance().hideDialog();
+//
+//                if (t instanceof TimeoutError || t instanceof NoConnectionError) {
+//                    MyApplication.getInstance().ErrorSnackBar(DocumentImageGallery.this);
+//                }
+//
+//            }
+//        });
+//
+//    }
+//
+//
+//    private void AddVehicalesDocument(final String imageurl, final String documenttype, final String img_id, final String imgname, final String v_id) {
+//
+//
+//        String tag_string_req = "req_delete_vehicle";
+//
+//        MyApplication.getInstance().DialogMessage("Update  Document...");
+//        MyApplication.getInstance().showDialog();
+//
+//        StringRequest strReq = new StringRequest(Request.Method.PUT,
+//                AppConfig.URL_UPDATE_DOC, new com.android.volley.Response.Listener<String>() {
+//
+//            @Override
+//            public void onResponse(String response) {
+//                MyApplication.getInstance().hideDialog();
+//
+//                MyApplication.getInstance().showLog("respodse", response);
+//
+//                try {
+//                    JSONObject jObj = new JSONObject(response);
+//                    boolean error = jObj.getBoolean("error");
+//                    Log.e(TAG, "onResponse: " + jObj.toString());
+//
+//                    // Check for error node in json
+//                    if (!error) {
+//                        Toast.makeText(DocumentImageGallery.this,
+//                                "Document updated... ", Toast.LENGTH_LONG).show();
+//
+//                        // parsing the user profile information
+//
+//
+//                        UpdateImageIntoDatabase(img_id, imageurl, imgname);
+//
+//                        // DeleteContactToDatabase(contactid);
+//                    } else {
+//                        // Error in login. Get the error message
+//                        String errorMsg = jObj.getString("message");
+//                        Toast.makeText(DocumentImageGallery.this,
+//                                "Error :" + errorMsg, Toast.LENGTH_LONG).show();
+//                    }
+//                } catch (JSONException e) {
+//                    // JSON error
+//                    e.printStackTrace();
+//                    Toast.makeText(DocumentImageGallery.this, "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        }, new com.android.volley.Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+////                Log.e(TAG, "Login Error: " + error.getMessage());
+//                MyApplication.getInstance().ErrorSnackBar((Activity) DocumentImageGallery.this);
+//                MyApplication.getInstance().hideDialog();
+//            }
+//        }) {
+//
+//            @Override
+//            protected Map<String, String> getParams() throws AuthFailureError {
+//
+//                Map<String, String> stringMap = new HashMap<>();
+//                stringMap.put("id", img_id);
+//                stringMap.put("url", imageurl);
+//
+//
+//                return stringMap;
+//
+////                vehicleNo
+//            }
+//
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                HashMap<String, String> headers = new HashMap<String, String>();
+//                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+//                MyApplication.getInstance().showLog(TAG, String.valueOf("passed auth"));
+//                return headers;
+//
+//            }
+//
+//
+//        };
+//        // Adding request to request queue
+//        MyApplication.getInstance().addToRequestQueue(strReq, tag_string_req);
+//
+//
+//    }
+//
+//    private void UpdateImageIntoDatabase(String img_id, String imageurl, String name) {
+//        realm = Realm.getDefaultInstance();
+//
+//        realm.beginTransaction();
+//        UserImages userImages = realm.where(UserImages.class).equalTo("id", img_id).findFirst();
+//
+//        userImages.setImageName(name);
+//        userImages.setImagesurl(imageurl);
+//
+//        realm.commitTransaction();
+//
+//        results.addChangeListener(new RealmChangeListener<RealmResults<UserImages>>() {
+//            @Override
+//            public void onChange(RealmResults<UserImages> element) {
+//                imageAdapter.notifyDataSetChanged();
+//            }
+//        });
+//
+//    }
 
     private static File getOutputMediaFile(int type) {
 
@@ -524,5 +554,9 @@ public class DocumentImageGallery extends AppCompatActivity {
         outState.putParcelable("file_uri", filePath);
     }
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

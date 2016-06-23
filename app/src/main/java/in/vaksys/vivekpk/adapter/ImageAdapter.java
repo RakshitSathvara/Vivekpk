@@ -2,6 +2,7 @@ package in.vaksys.vivekpk.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
@@ -22,6 +23,8 @@ import java.util.UUID;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import in.vaksys.vivekpk.R;
+import in.vaksys.vivekpk.activities.FullDocumentImage;
+import in.vaksys.vivekpk.activities.LicenseFullDocumentImage;
 import in.vaksys.vivekpk.dbPojo.UserImages;
 import in.vaksys.vivekpk.extras.MyApplication;
 import io.realm.Realm;
@@ -62,7 +65,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
         UserImages images = userImages.get(position);
 //        holder.ImageUser.setImageBitmap(GetImageFromStream(images.getImages()));
         holder.ImgaeUUID.setText(images.getId());
-        Picasso.with(context).load(images.getImagesurl()).placeholder(R.mipmap.ic_launcher).into(holder.ImageUser, new Callback() {
+        Picasso.with(context).load(images.getImagesurl()).placeholder(R.drawable.splashscreen).into(holder.ImageUser, new Callback() {
             @Override
             public void onSuccess() {
 
@@ -80,10 +83,21 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
             }
         });
 
+//        holder.ImageUser.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //  Toast.makeText(myApplication, "click", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
         holder.ImageUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //  Toast.makeText(myApplication, "click", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(myApplication, "click", Toast.LENGTH_SHORT).show();
+                Intent f = new Intent(context, LicenseFullDocumentImage.class);
+                context.startActivity(f);
+
+
             }
         });
     }

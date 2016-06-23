@@ -6,8 +6,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.SoundPool;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import in.vaksys.vivekpk.R;
@@ -27,6 +33,7 @@ import in.vaksys.vivekpk.dbPojo.VehicleDetails;
 import in.vaksys.vivekpk.dbPojo.VehicleModels;
 import in.vaksys.vivekpk.extras.MyApplication;
 import in.vaksys.vivekpk.extras.VolleyHelper;
+import in.vaksys.vivekpk.pojo.Coutrycode;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
@@ -38,6 +45,7 @@ public class CarBikeRecyclerViewAdapter extends RecyclerView.Adapter<CarBikeRecy
 
     private static final String BLANK = "";
     private final Context context;
+    // private ArrayList<VehicleDetails> worldpopulationlist = null;
     private RealmResults<VehicleDetails> detailses = null;
     MyApplication myApplication;
     private Realm realm;
@@ -49,7 +57,11 @@ public class CarBikeRecyclerViewAdapter extends RecyclerView.Adapter<CarBikeRecy
     private int makePosi;
     String myid;
     Dialog confirm;
+    private String brandspinneritem,modelspinneritem;
+    private int Brandposi, Modelposi;
 
+
+    int id;
 
     public CarBikeRecyclerViewAdapter(Context context, RealmResults<VehicleDetails> detailses) {
 
@@ -58,6 +70,7 @@ public class CarBikeRecyclerViewAdapter extends RecyclerView.Adapter<CarBikeRecy
         this.context = context;
         this.detailses = detailses;
         myApplication.createDialog((Activity) context, false);
+        // this.detailses.addAll(worldpopulationlist);
 
 
     }
@@ -77,7 +90,10 @@ public class CarBikeRecyclerViewAdapter extends RecyclerView.Adapter<CarBikeRecy
     public void onBindViewHolder(final AdapterHolder holder, final int position) {
         details = detailses.get(position);
 
-        VehicleModels vehicleModels = realm.where(VehicleModels.class).equalTo("id", details.getVehicleModelID()).findFirst();
+        final VehicleModels vehicleModels = realm.where(VehicleModels.class).equalTo("id", details.getVehicleModelID()).findFirst();
+
+        Brandposi = details.getBrandposi();
+        Modelposi = details.getModelposi();
 
         holder.VehicleNumber.setText(details.getVehicleNo());
 //        myApplication.showLog(TAG, details.getVehicleNo());
@@ -104,9 +120,14 @@ public class CarBikeRecyclerViewAdapter extends RecyclerView.Adapter<CarBikeRecy
 
                 brandSpinner = (Spinner) confirm.findViewById(R.id.sp_selectMake_edit);
                 ModelSpinner = (Spinner) confirm.findViewById(R.id.sp_selectModel_edit);
+                MyApplication.getInstance().showLog("Brand Postion edit", "" + Brandposi);
+//                brandSpinner.setSelection(Brandposi);
+//                //// TODO: 23/06/2016 chang this line
+//                ModelSpinner.setSelection(vehicleModels.getId());
+
 
                 LodingBrand();
-                LodingModel();
+                LodingModel("select Brand");
                 VehicleNo.setText(holder.VehicleNumber.getText());
                 btnEdit.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -226,9 +247,9 @@ public class CarBikeRecyclerViewAdapter extends RecyclerView.Adapter<CarBikeRecy
     }
 
 
-    public void AddVehicle(Activity activity, final String type, final int modelid, final String vehicle_number) {
+    public void AddVehicle(Activity activity, final String type, final int modelid, final String vehicle_number, int brandposition, int modelpostion) {
         VolleyHelper helper = new VolleyHelper(activity);
-        helper.AddVehicle(type, modelid, vehicle_number);
+        helper.AddVehicle(type, modelid, vehicle_number, brandposition, modelpostion);
 //        notifyDataSetChanged();
         detailses.addChangeListener(new RealmChangeListener<RealmResults<VehicleDetails>>() {
             @Override
@@ -248,7 +269,7 @@ public class CarBikeRecyclerViewAdapter extends RecyclerView.Adapter<CarBikeRecy
     public void UpdateVehicle(Activity activity, final int VehicleId, final int modelid, final String insuranceCompany, final String insurace_exp_date,
                               final String pollution_exp_date, final String service_exp_date, final String note) {
         VolleyHelper helper = new VolleyHelper(activity);
-        helper.UpdateVehicle(VehicleId, modelid, insuranceCompany, insurace_exp_date, pollution_exp_date, service_exp_date, note,BLANK);
+        helper.UpdateVehicle(VehicleId, modelid, insuranceCompany, insurace_exp_date, pollution_exp_date, service_exp_date, note, BLANK, "");
         detailses.addChangeListener(new RealmChangeListener<RealmResults<VehicleDetails>>() {
             @Override
             public void onChange(RealmResults<VehicleDetails> element) {
@@ -271,47 +292,90 @@ public class CarBikeRecyclerViewAdapter extends RecyclerView.Adapter<CarBikeRecy
         });
     }
 
-    private void LodingModel() {
+
+    private void LodingModel(String item) {
 
         // // TODO: 5/20/2016  add vishal
-        RealmResults<VehicleModels> results = realm.where(VehicleModels.class).findAll();
+        RealmResults<VehicleModels> results = realm.where(VehicleModels.class).equalTo("manufacturerName", item).findAll();
+
+        // VehicleModels vehicleModelsq = new VehicleModels();
+
+        //  final VehicleModels vehicleModels = realm.where(VehicleModels.class).equalTo("manufacturerName", vehicleModelsq.getManufacturerName()).findFirst();
+
 
         mySpinnerAdapterModel mySpinnerAdapterCity = new mySpinnerAdapterModel(context, results, "bike");
         ModelSpinner.setAdapter(mySpinnerAdapterCity);
-
+       ModelSpinner.setSelection(Modelposi);
         ModelSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 makePosi = position;
                 myid = ((TextView) view.findViewById(R.id.rowid)).getText().toString();
-              //  Toast.makeText(context, "You have selected " + " " + myid, Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(context, "You have selected " + " " + myid, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-            //    Toast.makeText(context, "You have selected Nothing ..", Toast.LENGTH_SHORT).show();
+                //    Toast.makeText(context, "You have selected Nothing ..", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void LodingBrand() {
 
+        //// TODO: 17/06/2016 distinct query hear....
+
+//       RealmResults<VehicleModels> results = realm.where(VehicleModels.class).findAll();
+////
+////        for (VehicleModels s : results){
+////
+////            System.out.println("all List" + s);
+////        }
+////
+//     RealmResults<VehicleModels> vehicleModels = results.distinct("manufacturerName");
+//
+//        for (VehicleModels ss : vehicleModels){
+//
+//            System.out.println("all List distinct" + ss);
+//        }
+
         RealmResults<VehicleModels> results = realm.where(VehicleModels.class).findAll();
 
-        mySpinnerAdapterBrand mySpinnerAdapterCity = new mySpinnerAdapterBrand(context, results, "car");
+        for (VehicleModels s : results) {
+
+            myApplication.showLog("all lis", "" + s.getManufacturerName() + s.getId());
+        }
+
+        RealmResults<VehicleModels> vehicleModels = results.distinct("manufacturerName");
+
+
+        for (VehicleModels ss : vehicleModels) {
+            ss.getManufacturerName();
+            id = ss.getId();
+            myApplication.showLog("all list distics--->", "" + ss.getManufacturerName() + ss.getId());
+        }
+
+
+        mySpinnerAdapterBrand mySpinnerAdapterCity = new mySpinnerAdapterBrand(context, vehicleModels, "car");
         brandSpinner.setAdapter(mySpinnerAdapterCity);
+        //   MyApplication.getInstance().showLog("idifdsdfdsfdsfdidi", String.valueOf(details.getVehicleModelID()));
+        MyApplication.getInstance().showLog("Brand Postion adpter",""+Brandposi);
+        brandSpinner.setSelection(Brandposi);
+
 
         brandSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 carPosi = position;
+                brandspinneritem = ((TextView) view.findViewById(R.id.rowText)).getText().toString();
                 String myid = ((TextView) view.findViewById(R.id.rowid)).getText().toString();
-               // Toast.makeText(context, "You have selected " + " " + myid, Toast.LENGTH_SHORT).show();
+                // Toast.makeText(context, "You have selected " + " " + myid, Toast.LENGTH_SHORT).show();
+                LodingModel(brandspinneritem);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-               // Toast.makeText(context, "You have selected Nothing ..", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(context, "You have selected Nothing ..", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -345,4 +409,21 @@ public class CarBikeRecyclerViewAdapter extends RecyclerView.Adapter<CarBikeRecy
         });
 
     }*/
+
+
+//    public void filter(String charText) {
+//        charText = charText.toLowerCase(Locale.getDefault());
+//        detailses.clear();
+//        if (charText.length() == 0) {
+//            detailses.addAll(worldpopulationlist);
+//        } else {
+//            for (VehicleDetails wp : detailses) {
+//                if (wp.getVehicleNo().toLowerCase(Locale.getDefault())
+//                        .contains(charText)) {
+//                    detailses.add(wp);
+//                }
+//            }
+//        }
+//        notifyDataSetChanged();
+//    }
 }

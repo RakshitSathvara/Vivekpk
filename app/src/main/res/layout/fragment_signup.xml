@@ -86,19 +86,27 @@
             android:textColorHint="#797979" />
     </LinearLayout>
 
-    <com.maksim88.passwordedittext.PasswordEditText
-        android:id="@+id/et_password"
+    <!--<com.maksim88.passwordedittext.PasswordEditText-->
+        <!--android:id="@+id/et_password"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:hint="Password"-->
+        <!--android:inputType="textPassword"-->
+        <!--android:maxLength="7"-->
+        <!--android:singleLine="true"-->
+        <!--android:textColor="#000000"-->
+        <!--android:textColorHint="#797979"-->
+        <!--app:pet_hoverShowsPw="true"-->
+        <!--app:pet_nonMonospaceFont="true" />-->
+
+    <in.vaksys.vivekpk.extras.ShowHidePasswordEditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:id="@+id/et_password"
         android:hint="Password"
-        android:inputType="textPassword"
-        android:maxLength="7"
-        android:singleLine="true"
-        android:textColor="#000000"
-        android:textColorHint="#797979"
-        app:pet_hoverShowsPw="true"
-        app:pet_nonMonospaceFont="true" />
+        android:imeOptions="actionDone"
+        />
 
     <Button
         android:id="@+id/btn_continue_signup"

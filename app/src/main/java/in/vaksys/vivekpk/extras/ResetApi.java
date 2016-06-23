@@ -1,8 +1,10 @@
 package in.vaksys.vivekpk.extras;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import in.vaksys.vivekpk.model.data;
+import in.vaksys.vivekpk.model.demo;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -26,6 +28,8 @@ public interface ResetApi {
     Call<data> getTasks(@Header("Authorization") String auuth, @Part MultipartBody.Part file);
 
 
+    @POST
+    Call<demo> getdata(@QueryMap HashMap<String,String> hashMap);
 
 }
 

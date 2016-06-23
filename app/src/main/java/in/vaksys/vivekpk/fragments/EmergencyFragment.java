@@ -240,6 +240,7 @@ public class EmergencyFragment extends Fragment {
     private void AddEmergencyContact() {
 
 
+        final String apikey = myApplication.getApikey();
         myApplication.DialogMessage("Add Contact...");
         myApplication.showDialog();
 
@@ -309,7 +310,7 @@ public class EmergencyFragment extends Fragment {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+                headers.put("Authorization", apikey);
                 return headers;
             }
         };

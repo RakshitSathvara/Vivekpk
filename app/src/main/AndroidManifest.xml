@@ -73,9 +73,6 @@
         <service
             android:name=".service.HttpService"
             android:exported="false" />
-        <service
-            android:name=".service.NotifyService"
-            android:exported="true" />
 
         <activity
             android:name=".activities.Temp"
@@ -93,6 +90,15 @@
             android:name=".activities.DocumentImageGallery"
             android:screenOrientation="portrait" />
         <activity android:name=".activities.TermOfUseActivity"></activity>
+
+        <service android:name=".service.MyAlarmService"
+            android:enabled="true" />
+
+        <receiver android:name=".service.MyReceiver"/>
+
+        <activity android:name=".activities.FullDocumentImage"/>
+        <service android:name=".service.RegistrationIntentService"/>
+        <activity android:name=".activities.LicenseFullDocumentImage"/>
     </application>
 
 </manifest>

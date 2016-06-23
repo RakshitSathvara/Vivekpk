@@ -10,8 +10,10 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
@@ -19,20 +21,32 @@ import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.net.SocketTimeoutException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import in.vaksys.vivekpk.adapter.CarBikeRecyclerViewAdapter;
+import in.vaksys.vivekpk.dbPojo.UserImages;
 import in.vaksys.vivekpk.dbPojo.VehicleDetails;
 import in.vaksys.vivekpk.model.ClaimMessage;
-import in.vaksys.vivekpk.service.NotifyService;
+import in.vaksys.vivekpk.model.data;
+import in.vaksys.vivekpk.service.MyReceiver;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by Harsh on 26-05-2016.
@@ -45,8 +59,12 @@ public class VolleyHelper {
     private String BLANK = "";
     CarBikeRecyclerViewAdapter adapter;
     Date date;
+    private RealmResults<UserImages> results;
     OkHttpClient client;
-    String nofidate, typr, vehicalno, nId;
+    String nofidate, remindertypr, vehicalno, nId ,ServiceExpDate;
+    private PendingIntent pendingIntent;
+
+    private String apikey;
 
     public VolleyHelper(Activity context) {
 
@@ -56,10 +74,12 @@ public class VolleyHelper {
         adapter = new CarBikeRecyclerViewAdapter(activity);
 
         client = new OkHttpClient();
+        apikey = myApplication.getApikey();
 
     }
 
-    public void AddVehicle(final String type, final int modelid, final String vehicle_number) {
+    //call this
+    public void AddVehicle(final String type, final int modelid, final String vehicle_number, final int brandposition, final int modelpostion) {
 
         String tag_string_req = "req_add_vehicle";
 
@@ -88,7 +108,7 @@ public class VolleyHelper {
                             JSONObject profileObj = jObj.getJSONObject("result");
                             int VehicleId = profileObj.getInt("id");
 
-                            SaveIntoDatabase(BLANK, VehicleId, modelid, vehicle_number, type, BLANK, BLANK, BLANK, BLANK);
+                            SaveIntoDatabase(BLANK, VehicleId, modelid, vehicle_number, type, BLANK, BLANK, BLANK, BLANK,brandposition,modelpostion);
                         }
 
                     } else {
@@ -143,7 +163,7 @@ public class VolleyHelper {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+                headers.put("Authorization", apikey);
                 return headers;
 
             }
@@ -155,7 +175,7 @@ public class VolleyHelper {
 
 
     public void UpdateVehicle(final int VehicleId, final int modelid, final String insuranceCompany, final String insurace_exp_date,
-                              final String pollution_exp_date, final String service_exp_date, final String note, final String notificationDate) {
+                              final String pollution_exp_date, final String service_exp_date, final String note, final String notificationDate ,final String Remindertypr) {
 
         String tag_string_req = "req_update_vehicle";
 
@@ -181,7 +201,7 @@ public class VolleyHelper {
 
                         // parsing the user profile information
 
-                        UpdateIntoDatabase(BLANK, VehicleId, modelid, insuranceCompany, insurace_exp_date, pollution_exp_date, service_exp_date, note, notificationDate);
+                        UpdateIntoDatabase(BLANK, VehicleId, modelid, insuranceCompany, insurace_exp_date, pollution_exp_date, service_exp_date, note, notificationDate,Remindertypr);
 
 
                     } else {
@@ -224,7 +244,7 @@ public class VolleyHelper {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+                headers.put("Authorization", apikey);
                 return headers;
 
             }
@@ -286,7 +306,7 @@ public class VolleyHelper {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+                headers.put("Authorization", apikey);
                 headers.put("id", String.valueOf(VehicleId));
                 myApplication.showLog(TAG, String.valueOf("passed auth"));
                 return headers;
@@ -301,7 +321,7 @@ public class VolleyHelper {
 
     private void SaveIntoDatabase(final String name, final int vehicleId, final int modelID, final String VehicleNumber,
                                   final String type, String insuranceCompany, String ins_exp_date, String poll_exp_date,
-                                  String serv_exp_date) {
+                                  String serv_exp_date, int brandposition, int modelpostion) {
         myApplication.DialogMessage("Setting Up Vehicle...");
 //        myApplication.showDialog();
 /*
@@ -322,6 +342,8 @@ public class VolleyHelper {
         user.setInsuranceExpireDate(ins_exp_date);
         user.setPollutionExpireDate(poll_exp_date);
         user.setServiceExpireDate(serv_exp_date);
+        user.setBrandposi(brandposition);
+        user.setModelposi(modelpostion);
 
         realm.commitTransaction();
 
@@ -336,7 +358,7 @@ public class VolleyHelper {
 
 
     private void UpdateIntoDatabase(final String name, final int vehicleId, final int ModelId, String insuranceCompany, String ins_exp_date, String poll_exp_date,
-                                    String serv_exp_date, String note, String NotificationDate) {
+                                    String serv_exp_date, String note, String NotificationDate, String remindertypr) {
         myApplication.DialogMessage("Setting Up Vehicle...");
         myApplication.showDialog();
 
@@ -352,6 +374,7 @@ public class VolleyHelper {
         user.setPollutionExpireDate(poll_exp_date);
         user.setServiceExpireDate(serv_exp_date);
         user.setNotificationDate(NotificationDate);
+        user.setReminderType(remindertypr);
         user.setNote(note);
 
         realm.commitTransaction();
@@ -359,17 +382,15 @@ public class VolleyHelper {
         RealmResults<VehicleDetails> results = realm.where(VehicleDetails.class).findAll();
 
 
-
-
         Log.e(TAG, "SaveIntoDatabase: " + results.size());
 
 //        Toast.makeText(activity, "Setup Complete", Toast.LENGTH_LONG).show();
         myApplication.hideDialog();
-        SetNotification(vehicleId);
+        SetNotification(vehicleId,serv_exp_date);
 
     }
 
-    private void SetNotification(int vehicleId) {
+    private void SetNotification(int vehicleId, String serv_exp_date) {
 
 
         realm = Realm.getDefaultInstance();
@@ -386,32 +407,41 @@ public class VolleyHelper {
 
             nofidate = c.getNotificationDate();
             //
-            typr = c.getType();
+            ServiceExpDate = c.getServiceExpireDate();
+            String expdate = c.getInsuranceExpireDate();
+            String exdate1 = c.getPollutionExpireDate();
+            remindertypr = c.getReminderType();
             vehicalno = c.getVehicleNo();
             nId = String.valueOf(c.getVehicleId());
 
         }
 
-
         realm.commitTransaction();
-        myApplication.showLog("nofidate=====>", nofidate);
 
-        SendNotification(typr, vehicalno, nofidate, nId);
+        myApplication.showLog("ServiceExpDate=====>", ServiceExpDate+ "\n" + serv_exp_date) ;
+
+        myApplication.showLog("nofidate=====>", nofidate + "\n"  + ServiceExpDate + "\n"  +serv_exp_date );
+
+        SendNotification(remindertypr, vehicalno, nofidate, nId,ServiceExpDate);
+       // SendNotification(remindertypr, vehicalno, nofidate, nId,ServiceExpDate);
+
+//        myApplication.showLog("ServiceExpDate=====>", ServiceExpDate);
+
 
     }
 
-    private void SendNotification(String typr, String vehicalno, String nofidate, String nId) {
+    private void SendNotification(String typr, String vehicalno, String nofidate, String nId, String serviceExpDate) {
 
-      //  myApplication.showLog("nofidate=====>", nofidate);
+     myApplication.showLog("SendNotification=====>", serviceExpDate);
 
         String myStrDate = nofidate;
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         try {
-           date = format.parse(myStrDate);
+            date = format.parse(myStrDate);
             System.out.println(date);
             System.out.println(format.format(date));
 
-            myApplication.showLog("ddjhgdyhcg",format.format(date));
+            myApplication.showLog("ddjhgdyhcg", format.format(date));
 
         } catch (ParseException e) {
             // TODO Auto-generated catch block
@@ -419,66 +449,26 @@ public class VolleyHelper {
         }
 
 
-//        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-//        Calendar c = Calendar.getInstance();
-//        try {
-//            c.setTime(sdf.parse(nofidate));
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//       /// -days mens 5 day befor reminder set
-//        sdf = new SimpleDateFormat("dd-MM-yyyy");
-//        Date resultdate = new Date(c.getTimeInMillis());
-//
-//        System.out.println(resultdate);
 
-//        String dtStart = nofidate;
-//        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-//        try {
-//            date = format.parse(dtStart);
-//            System.out.println(date);
-//        } catch (ParseException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
 
         Calendar cc = dateToCalendar(date);
-        System.out.println("nofi date"+cc.getTimeInMillis());
+        System.out.println("nofi date" + cc.getTimeInMillis());
 
-        myApplication.showLog("not;;;;;;;;;;--->",""+ cc.getTimeInMillis());
-
-
-//
-//        Calendar current  = Calendar.getInstance();
-//        System.out.println("Current time => " + current .getTime());
-//
-//        SimpleDateFormat df = new SimpleDateFormat("dd/MMM/yyyy");
-//        String formattedDate = df.format(current .getTime());
-//        System.out.println("curerrrent date" +formattedDate);
-
-//        if(cc.compareTo(current) <= 0){
-//            //The set Date/Time already passed
-//            myApplication.showLog("notification date",""+ cc.getTime());
-
-//        }else{
-            AlarmManager alarmManager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
-
-            Intent intent = new Intent(activity, NotifyService.class);
-            PendingIntent pIntent = PendingIntent.getBroadcast(activity, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-            alarmManager.set(AlarmManager.RTC_WAKEUP, MyApplication.c.getTimeInMillis(), pIntent);
-
-            Bundle bundle = new Bundle();
-            bundle.putString("type", typr);
-            bundle.putString("vehicalno", vehicalno);
-            bundle.putString("nofidate", nofidate);
-            bundle.putString("nId", nId);
-            intent.putExtras(bundle);
-            activity.startService(intent);
+        myApplication.showLog("not;;;;;;;;;;--->", "" + cc.getTimeInMillis());
 
 
 
 
+
+        Intent myIntent = new Intent(activity, MyReceiver.class);
+        myIntent.putExtra("type", typr);
+        myIntent.putExtra("vehicalno", vehicalno);
+        myIntent.putExtra("nofidate", serviceExpDate);
+        myIntent.putExtra("nId", nId);
+        pendingIntent = PendingIntent.getBroadcast(activity, 0, myIntent, 0);
+
+        AlarmManager alarmManager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC, cc.getTimeInMillis(), pendingIntent);
 
 
     }
@@ -511,5 +501,313 @@ public class VolleyHelper {
         return calendar;
 
     }
+
+    private void UpdoadDocumentImage(){
+
+    }
+
+
+    public void uploadwithRetrofit(String realPath, final String documenttype, final String img_id, final String v_id) {
+
+        MyApplication.getInstance().DialogMessage("Upload Documents...");
+        MyApplication.getInstance().showDialog();
+
+        final String imgname = realPath.substring(realPath.lastIndexOf("/") + 1);
+        MyApplication.getInstance().showLog("name", imgname);
+
+        final String rnd = "Licence" + String.valueOf(GenerteRandomNumber());
+
+        RequestBody requestFile =
+                RequestBody.create(MediaType.parse("multipart/form-data"), new File(realPath));
+
+        // MultipartBody.Part is used to send also the actual file name
+
+        //note: file=key , vishal = iamgennnnname(randam) , reuestfile = pick image url
+
+        MultipartBody.Part body =
+                MultipartBody.Part.createFormData("file", rnd, requestFile);
+//        MultipartBody.Part body =
+//                MultipartBody.Part.create(requestFile);
+
+//
+        OkHttpClient okHttpClient1 = new OkHttpClient().newBuilder()
+                .connectTimeout(120, TimeUnit.SECONDS)
+                .writeTimeout(120, TimeUnit.SECONDS)
+                .readTimeout(120, TimeUnit.SECONDS)
+                .build();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(AppConfig.URL_UPLOAD_DOC)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(okHttpClient1)
+                .build();
+
+        ResetApi resetApi = retrofit.create(ResetApi.class);
+
+        retrofit2.Call<data> call = resetApi.getTasks(apikey, body);
+
+        call.enqueue(new retrofit2.Callback<data>() {
+            @Override
+            public void onResponse(retrofit2.Call<data> call, retrofit2.Response<data> response) {
+
+                MyApplication.getInstance().hideDialog();
+
+                int code = response.code();
+                MyApplication.getInstance().showLog("code", "" + code);
+
+                //    Toast.makeText(getActivity(), "Respose Code " + code, Toast.LENGTH_SHORT).show();
+
+                if (response.code() == 500) {
+
+                    Toast.makeText(activity, "Server Side Error", Toast.LENGTH_SHORT).show();
+                }
+
+                if (response.code() == 200) {
+
+                    data myResp = response.body();
+                    boolean error = myResp.isError();
+
+                    if (!error) {
+
+                        String imageurl = myResp.getResult();
+
+                        MyApplication.getInstance().showLog("respose", imageurl);
+                        //     Toast.makeText(getActivity(), "Url" + imageurl, Toast.LENGTH_SHORT).show();
+
+                        AddVehicalesDocument(imageurl, documenttype, img_id, rnd, v_id);
+
+
+                    } else {
+                        MyApplication.getInstance().hideDialog();
+
+                        Toast.makeText(activity, "Error For Uploading Documnent", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                } else {
+
+                    MyApplication.getInstance().hideDialog();
+
+                    Toast.makeText(activity, "Error Some Fatch Data", Toast.LENGTH_SHORT).show();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<data> call, Throwable t) {
+
+                MyApplication.getInstance().hideDialog();
+
+//             String msg =  t.getMessage().toString();
+
+                if (t instanceof TimeoutError || t instanceof NoConnectionError) {
+                    MyApplication.getInstance().ErrorSnackBar(activity);
+                }
+
+            }
+        });
+
+    }
+
+
+    public void AddVehicalesDocument(final String imageurl, final String documenttype, final String img_id, final String imgname, final String v_id) {
+
+
+        String tag_string_req = "req_delete_vehicle";
+
+        MyApplication.getInstance().DialogMessage("Update  Document...");
+        MyApplication.getInstance().showDialog();
+
+        StringRequest strReq = new StringRequest(Request.Method.PUT,
+                AppConfig.URL_UPDATE_DOC, new com.android.volley.Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                MyApplication.getInstance().hideDialog();
+
+                MyApplication.getInstance().showLog("respodse", response);
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+                    Log.e(TAG, "onResponse: " + jObj.toString());
+
+                    // Check for error node in json
+                    if (!error) {
+                        Toast.makeText(activity,
+                                "Document updated... ", Toast.LENGTH_LONG).show();
+
+                        // parsing the user profile information
+
+
+                        UpdateImageIntoDatabase(img_id, imageurl, imgname);
+
+                        // DeleteContactToDatabase(contactid);
+                    } else {
+                        // Error in login. Get the error message
+                        String errorMsg = jObj.getString("message");
+                        Toast.makeText(activity,
+                                "Error :" + errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    // JSON error
+                    e.printStackTrace();
+                    Toast.makeText(activity, "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+//                Log.e(TAG, "Login Error: " + error.getMessage());
+                MyApplication.getInstance().ErrorSnackBar((Activity)activity);
+                MyApplication.getInstance().hideDialog();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> stringMap = new HashMap<>();
+                stringMap.put("id", img_id);
+                stringMap.put("url", imageurl);
+
+
+                return stringMap;
+
+//                vehicleNo
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", apikey);
+                MyApplication.getInstance().showLog(TAG, String.valueOf("passed auth"));
+                return headers;
+
+            }
+
+
+        };
+        // Adding request to request queue
+        MyApplication.getInstance().addToRequestQueue(strReq, tag_string_req);
+
+
+    }
+
+    private void UpdateImageIntoDatabase(String img_id, String imageurl, String name) {
+        realm = Realm.getDefaultInstance();
+
+        realm.beginTransaction();
+        UserImages userImages = realm.where(UserImages.class).equalTo("id", img_id).findFirst();
+
+        userImages.setImageName(name);
+        userImages.setImagesurl(imageurl);
+
+        realm.commitTransaction();
+
+//        results.addChangeListener(new RealmChangeListener<RealmResults<UserImages>>() {
+//            @Override
+//            public void onChange(RealmResults<UserImages> element) {
+//                imageAdapter.notifyDataSetChanged();
+//            }
+//        });
+
+    }
+
+    private int GenerteRandomNumber() {
+        Random r = new Random();
+        return r.nextInt(9999 - 1000) + 1000;
+    }
+
+    public void DeleteContact(final String img_id, final Context context) {
+
+
+        String tag_string_req = "req_delete_vehicle";
+
+        MyApplication.getInstance().DialogMessage("Deleting Document...");
+        MyApplication.getInstance().showDialog();
+
+        StringRequest strReq = new StringRequest(Request.Method.DELETE,
+                AppConfig.URL_DELETE_DOC, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+                    // Log.e(TAG, "onResponse: " + jObj.toString());
+
+                    // Check for error node in json
+                    if (!error) {
+                        MyApplication.getInstance().hideDialog();
+                        Toast.makeText(context,
+                                "Delete Successfull... ", Toast.LENGTH_LONG).show();
+
+                        // parsing the user profile information
+//                        JSONObject profileObj = jObj.getJSONObject("result");
+
+                        DeleteContactToDatabase(img_id);
+                    } else {
+                        MyApplication.getInstance().hideDialog();
+                        // Error in login. Get the error message
+                        String errorMsg = jObj.getString("message");
+                        Toast.makeText(context,
+                                "Error :" + errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    // JSON error
+                    MyApplication.getInstance().hideDialog();
+                    e.printStackTrace();
+                    Toast.makeText(context, "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+//                Log.e(TAG, "Login Error: " + error.getMessage());
+                MyApplication.getInstance().ErrorSnackBar((Activity) context);
+                MyApplication.getInstance().hideDialog();
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", apikey);
+                headers.put("id", String.valueOf(img_id));
+                // myApplication.showLog(TAG, String.valueOf("passed auth"));
+                return headers;
+
+            }
+        };
+        // Adding request to request queue
+        MyApplication.getInstance().addToRequestQueue(strReq, tag_string_req);
+
+    }
+
+    private void DeleteContactToDatabase(final String img_id) {
+        realm = Realm.getDefaultInstance();
+
+        realm.beginTransaction();
+
+
+        final UserImages userI = realm.where(UserImages.class).equalTo("id", img_id).findFirst();
+
+        userI.deleteFromRealm();
+
+        realm.commitTransaction();
+//
+//        final RealmResults<EmergencyContact> results = realm.where(EmergencyContact.class).findAll();
+//        Log.e(TAG, "SaveIntoDatabase: " + results.size());
+//
+
+
+        myApplication.hideDialog();
+
+    }
+
 
 }

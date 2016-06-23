@@ -119,6 +119,7 @@ public class ServiceDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Serv
                 final TextView DatePicker = (TextView) confirm.findViewById(R.id.tv_date_serv);
                 final EditText etNotes = (EditText) confirm.findViewById(R.id.et_optionalField_serv);
 
+                DatePicker.setText(details.getServiceExpireDate());
                 DatePicker.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -190,7 +191,7 @@ public class ServiceDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Serv
                                     }
                                     AddUpdateReminder(holder.VehicleIDHiddden.getText().toString(),
                                             details.getVehicleModelID(), BLANK, BLANK
-                                            , BLANK, DatePicker.getText().toString(), etNotes.getText().toString(), NotificationDate);
+                                            , BLANK, DatePicker.getText().toString(), etNotes.getText().toString(), NotificationDate,"Service Reminder");
                                     confirm1.dismiss();
                                 }
                             });
@@ -259,10 +260,10 @@ public class ServiceDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Serv
     }
 
     private void AddUpdateReminder(String VehicleId, int vehicleModelID, String InsuranceCompany,
-                                   String Ins_exp_date, String Poll_exp_date, String Serv_exp_date, String Note, String notificationDate) {
+                                   String Ins_exp_date, String Poll_exp_date, String Serv_exp_date, String Note, String notificationDate, String s) {
 
         VolleyHelper helper = new VolleyHelper((Activity) context);
-        helper.UpdateVehicle(Integer.parseInt(VehicleId), vehicleModelID, InsuranceCompany, Ins_exp_date, Poll_exp_date, Serv_exp_date, Note, notificationDate);
+        helper.UpdateVehicle(Integer.parseInt(VehicleId), vehicleModelID, InsuranceCompany, Ins_exp_date, Poll_exp_date, Serv_exp_date, Note, notificationDate,s);
         detailses.addChangeListener(new RealmChangeListener<RealmResults<VehicleDetails>>() {
             @Override
             public void onChange(RealmResults<VehicleDetails> element) {

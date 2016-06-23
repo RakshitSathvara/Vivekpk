@@ -139,6 +139,8 @@ public class DocumentFragment extends Fragment {
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
 
+    private String apikey = MyApplication.getInstance().getApikey();
+
     @Bind(R.id.container)
     LinearLayout container;
 
@@ -154,7 +156,7 @@ public class DocumentFragment extends Fragment {
     private String documenttype;
     private String vehicle_id;
     private String pic_gallery_camera;
-    private String selection_type;
+    private String selection_type = null;
 
 
     public static DocumentFragment newInstance(int index) {
@@ -210,11 +212,18 @@ public class DocumentFragment extends Fragment {
         DocumentDetailsRecyclerview.setHasFixedSize(true);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         DocumentDetailsRecyclerview.setLayoutManager(manager);
-        detailsesResults = realm.where(VehicleDetails.class).equalTo("type",selection_type).findAll();
+
+        if (selection_type == null) {
+
+            detailsesResults = realm.where(VehicleDetails.class).equalTo("type", "car").findAll();
+        } else {
+
+            detailsesResults = realm.where(VehicleDetails.class).equalTo("type", selection_type).findAll();
+        }
         imageDetails = realm.where(UserImages.class).findAll();
 
-        myApplication.showLog(TAG, " check---> " + imageDetails.size() + "  " + detailsesResults.size());
-        myApplication.showLog(TAG, "inside details" + detailsesResults.size());
+       myApplication.showLog(TAG, " check---> " + imageDetails.size() + "  " + detailsesResults.size());
+//        myApplication.showLog(TAG, "inside details" + detailsesResults.size());
         if (detailsesResults.size() > 0) {
 
             documentDetailsRecyclerViewAdapter = new DocumentDetailsRecyclerViewAdapter(getActivity(), detailsesResults, imageDetails);
@@ -243,7 +252,7 @@ public class DocumentFragment extends Fragment {
         ImageRecyclerview.setHasFixedSize(true);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         ImageRecyclerview.setLayoutManager(manager);
-        results = realm.where(UserImages.class).equalTo("ImageType","licence").findAll();
+        results = realm.where(UserImages.class).equalTo("ImageType", "licence").findAll();
         myApplication.showLog(TAG, "inside viwe" + results.size());
         if (results.size() > -1) {
             myApplication.showLog(TAG, "innerview11111");
@@ -281,7 +290,7 @@ public class DocumentFragment extends Fragment {
         linearEmission = (LinearLayout) view.findViewById(R.id.linear_emission);
         linearRcBills = (LinearLayout) view.findViewById(R.id.linear_rcBills);
         linearVehicleDeatilsListRaw = (LinearLayout) view.findViewById(R.id.linearVehicleDeatilsListRaw);
-       // imgEdit = (ImageView) view.findViewById(R.id.img_edit);
+        // imgEdit = (ImageView) view.findViewById(R.id.img_edit);
         tvDetailVehicelNumber = (TextView) view.findViewById(R.id.tv_detailVehicelNumber);
         tvDetailVehicelBranch = (TextView) view.findViewById(R.id.tv_detailVehicelBranch);
         tvDetailVehicelModel = (TextView) view.findViewById(R.id.tv_detailVehicelModel);
@@ -318,17 +327,17 @@ public class DocumentFragment extends Fragment {
 
     public void showFileChooser() {
 
-        results = realm.where(UserImages.class).equalTo("ImageType","licence").findAll();
+        results = realm.where(UserImages.class).equalTo("ImageType", "licence").findAll();
 
-        myApplication.showLog("total images --->",""+ results.size());
+        myApplication.showLog("total images --->", "" + results.size());
 
-        if (results.size() == 4){
+        if (results.size() == 4) {
 
             Toast.makeText(getActivity(),
                     "Sorry! You can't add more then 4 Driving Licences.", Toast.LENGTH_SHORT)
                     .show();
 
-        }else {
+        } else {
 
             Intent intent = new Intent();
             intent.setType("image/*");
@@ -348,17 +357,17 @@ public class DocumentFragment extends Fragment {
 //        fileUri = Uri.fromFile(f);
 //        startActivityForResult(chooserIntent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
 
-        results = realm.where(UserImages.class).equalTo("ImageType","licence").findAll();
+        results = realm.where(UserImages.class).equalTo("ImageType", "licence").findAll();
 
-        myApplication.showLog("total images --->",""+ results.size());
+        myApplication.showLog("total images --->", "" + results.size());
 
-        if (results.size() == 4){
+        if (results.size() == 4) {
 
             Toast.makeText(getActivity(),
                     "Sorry! You can't add more then 4 Driving Licences.", Toast.LENGTH_SHORT)
                     .show();
 
-        }else {
+        } else {
 
             Intent i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 
@@ -435,8 +444,6 @@ public class DocumentFragment extends Fragment {
         //   myApplication.showLog(TAG, " " + resultCode + " " + requestCode + " " + data.toString());
 
 
-
-
         if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
             if (resultCode == -1) {
                 // successfully captured the image
@@ -467,7 +474,6 @@ public class DocumentFragment extends Fragment {
         }
         if (requestCode == PICK_IMAGE_REQUEST && data != null && data.getData() != null) {
             if (resultCode == -1) {
-
 
 
                 String type = documenttype;
@@ -509,7 +515,7 @@ public class DocumentFragment extends Fragment {
 
                 uploadwithRetrofit(realPath, type, v_id);
 
-              //  calculateFileSize(realPath);
+                //  calculateFileSize(realPath);
 
 
 //                results = realm.where(UserImages.class).findAll();
@@ -689,7 +695,7 @@ public class DocumentFragment extends Fragment {
 
         ResetApi resetApi = retrofit.create(ResetApi.class);
 
-        retrofit2.Call<data> call = resetApi.getTasks("52d8c0efea5039cd0d778db7521889cf", body);
+        retrofit2.Call<data> call = resetApi.getTasks(apikey, body);
 
         call.enqueue(new retrofit2.Callback<data>() {
             @Override
@@ -744,9 +750,10 @@ public class DocumentFragment extends Fragment {
 
                 MyApplication.getInstance().hideDialog();
 
-              //  if (t instanceof TimeoutError || t instanceof NoConnectionError) {
-                    myApplication.ErrorSnackBar(getActivity());
-              //  }
+                Toast.makeText(getActivity(), "No Internet Access", Toast.LENGTH_SHORT).show();
+                //  if (t instanceof TimeoutError || t instanceof NoConnectionError) {
+                myApplication.ErrorSnackBar(getActivity());
+                //  }
 
             }
         });
@@ -831,7 +838,7 @@ public class DocumentFragment extends Fragment {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+                headers.put("Authorization", apikey);
                 myApplication.showLog(TAG, String.valueOf("passed auth"));
                 return headers;
 
@@ -876,7 +883,7 @@ public class DocumentFragment extends Fragment {
     @Subscribe
     public void onEvent(Message messageCar) {
         Log.e("car datata", messageCar.getMsg());
-      //  Toast.makeText(getActivity(), messageCar.getMsg(), Toast.LENGTH_SHORT).show();
+        //  Toast.makeText(getActivity(), messageCar.getMsg(), Toast.LENGTH_SHORT).show();
 
         selection_type = messageCar.getMsg();
 
@@ -886,12 +893,10 @@ public class DocumentFragment extends Fragment {
     }
 
 
-
-
     @Subscribe
     public void onEvent(ImageMessage message) {
         Log.e("car datata", message.getDocumenttype() + message.getVehicle_id());
-      //  Toast.makeText(getActivity(), message.getDocumenttype(), Toast.LENGTH_SHORT).show();
+        //  Toast.makeText(getActivity(), message.getDocumenttype(), Toast.LENGTH_SHORT).show();
 
         documenttype = message.getDocumenttype();
         vehicle_id = message.getVehicle_id();

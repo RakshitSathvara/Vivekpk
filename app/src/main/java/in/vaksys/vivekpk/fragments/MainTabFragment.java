@@ -6,14 +6,22 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.Locale;
+
 import in.vaksys.vivekpk.R;
 import in.vaksys.vivekpk.adapter.ViewPagerAdapter;
+import in.vaksys.vivekpk.model.Message;
+import in.vaksys.vivekpk.model.SearchMessage;
 
 /**
  * Created by Harsh on 03-05-2016.
@@ -57,6 +65,29 @@ public class MainTabFragment extends Fragment {
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
         viewPager.setCurrentItem(0);
+
+
+        etSearchMain.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable arg0) {
+                String text = etSearchMain.getText().toString().toLowerCase(Locale.getDefault());
+                EventBus.getDefault().post(new SearchMessage(text));
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1,
+                                          int arg2, int arg3) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void onTextChanged(CharSequence arg0, int arg1, int arg2,
+                                      int arg3) {
+                // TODO Auto-generated method stub
+            }
+        });
 
         /*status = MyApplication.getInstance().getValue();
         if (status == 0) {

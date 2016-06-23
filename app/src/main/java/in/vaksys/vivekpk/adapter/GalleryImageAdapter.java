@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -34,10 +35,12 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import in.vaksys.vivekpk.R;
+import in.vaksys.vivekpk.activities.FullDocumentImage;
 import in.vaksys.vivekpk.dbPojo.EmergencyContact;
 import in.vaksys.vivekpk.dbPojo.UserImages;
 import in.vaksys.vivekpk.extras.AppConfig;
 import in.vaksys.vivekpk.extras.MyApplication;
+import in.vaksys.vivekpk.extras.VolleyHelper;
 import in.vaksys.vivekpk.fragments.EmergencyFragment;
 import in.vaksys.vivekpk.model.ImageMessage;
 import in.vaksys.vivekpk.model.ReplaceImage;
@@ -57,12 +60,18 @@ public class GalleryImageAdapter extends RecyclerView.Adapter<GalleryImageAdapte
     MyApplication myApplication;
     private Realm realm;
     private RealmResults<UserImages> data;
+    private String apikey;
 
     public GalleryImageAdapter(Context context, RealmResults<UserImages> userImages) {
         this.context = context;
         this.userImages = userImages;
         myApplication = MyApplication.getInstance();
         realm = Realm.getDefaultInstance();
+
+        apikey = myApplication.getApikey();
+
+
+
     }
 
     @Override
@@ -86,7 +95,7 @@ public class GalleryImageAdapter extends RecyclerView.Adapter<GalleryImageAdapte
             @Override
             public void onSuccess() {
 
-              //  Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -100,6 +109,10 @@ public class GalleryImageAdapter extends RecyclerView.Adapter<GalleryImageAdapte
             @Override
             public void onClick(View v) {
 //                Toast.makeText(myApplication, "click", Toast.LENGTH_SHORT).show();
+                Intent f = new Intent(context,FullDocumentImage.class);
+                context.startActivity(f);
+
+
             }
         });
 
@@ -113,7 +126,19 @@ public class GalleryImageAdapter extends RecyclerView.Adapter<GalleryImageAdapte
                         .setCancelable(false)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int ids) {
-                                DeleteContact(id, context);
+
+                                VolleyHelper helper = new VolleyHelper((Activity) context);
+
+                                helper.DeleteContact(id,context);
+
+                                userImages.addChangeListener(new RealmChangeListener<RealmResults<UserImages>>() {
+                                    @Override
+                                    public void onChange(RealmResults<UserImages> element) {
+                                        notifyDataSetChanged();
+                                    }
+                                });
+
+                              //  DeleteContact(id, context);
                                 dialog.cancel();
                             }
                         })
@@ -125,7 +150,6 @@ public class GalleryImageAdapter extends RecyclerView.Adapter<GalleryImageAdapte
 
                 AlertDialog alertDialog = alertDialogBuilder.create();
                 alertDialog.show();
-
 
 
             }
@@ -218,7 +242,7 @@ public class GalleryImageAdapter extends RecyclerView.Adapter<GalleryImageAdapte
 
         String tag_string_req = "req_delete_vehicle";
 
-       MyApplication.getInstance().DialogMessage("Deleting Document...");
+        MyApplication.getInstance().DialogMessage("Deleting Document...");
         MyApplication.getInstance().showDialog();
 
         StringRequest strReq = new StringRequest(Request.Method.DELETE,
@@ -269,7 +293,7 @@ public class GalleryImageAdapter extends RecyclerView.Adapter<GalleryImageAdapte
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+                headers.put("Authorization", apikey);
                 headers.put("id", String.valueOf(img_id));
                 // myApplication.showLog(TAG, String.valueOf("passed auth"));
                 return headers;

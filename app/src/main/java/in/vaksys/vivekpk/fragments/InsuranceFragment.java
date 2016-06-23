@@ -33,7 +33,7 @@ public class InsuranceFragment extends Fragment {
 
     public static final String TAG = "DATE";
 
-    private Button btn_addVehicle;
+  //  private Button btn_addVehicle;
 
     InsuranceRecyclerViewAdapter imageAdapter;
     InsuranceDetailsRecyclerViewAdapter detailsRecyclerViewAdapter;
@@ -58,19 +58,19 @@ public class InsuranceFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_insurance, container, false);
 
-        btn_addVehicle = (Button) rootView.findViewById(R.id.btn_addVehicle);
+    //    btn_addVehicle = (Button) rootView.findViewById(R.id.btn_addVehicle);
 
         InsuranceRecyclerview = (RecyclerView) rootView.findViewById(R.id.InsuranceEditRecyclerView);
         InsuranceDetailsRecyclerview = (RecyclerView) rootView.findViewById(R.id.InsuranceDetailsRecyclerView);
         myApplication = MyApplication.getInstance();
         realm = Realm.getDefaultInstance();
 
-        btn_addVehicle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+//        btn_addVehicle.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//            }
+//        });
 
 
         SetInsurance();

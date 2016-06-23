@@ -33,6 +33,7 @@ import in.vaksys.vivekpk.dbPojo.VehicleDetails;
 import in.vaksys.vivekpk.extras.MyApplication;
 import in.vaksys.vivekpk.model.Message;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
 /**
@@ -41,7 +42,7 @@ import io.realm.RealmResults;
 public class EmissionFragment extends Fragment {
 
     private LinearLayout linearVehicle, linearAddVehicle, linearExpiryDate;
-    private Button btn_addVehicle, btn_setAlert;
+// private Button  btn_setAlert;
     private TextView tvDate;
 
     private DatePickerDialog fromDatePickerDialog;
@@ -80,84 +81,84 @@ public class EmissionFragment extends Fragment {
         EmissionDetailsRecyclerview = (RecyclerView) rootView.findViewById(R.id.EmissionRecyclerView);
         SetInsurance();
         SetInsuranceDetails();
-        /*tvDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SelectfromDate();
-            }
-
-            *//*@Override
-            public boolean onTouch(View v, MotionEvent event) {
-                SelectfromDate();
-                return true;
-            }
-*//*
-        });*/
-        btn_addVehicle = (Button) rootView.findViewById(R.id.btn_addVehicle);
-        btn_setAlert = (Button) rootView.findViewById(R.id.btn_expiry_date_setAlert);
-
-       /* btn_addVehicle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                linearVehicle.setVisibility(View.VISIBLE);
-                linearAddVehicle.setVisibility(View.GONE);
-                linearExpiryDate.setVisibility(View.VISIBLE);
-            }
-        });
-
-        btn_setAlert.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Dialog dialog = new Dialog(getActivity());
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(R.layout.remind_me);
-
-//                public void callbackMethod(final View view){
-//                    Toast.makeText(this,((RadioButton) view).getText(), Toast.LENGTH_SHORT).show();
-//                }
-
-                //  callbackMethod(v);
-
-                RadioGroup radioGroup;
-                RadioButton sound, vibration, silent;
-                radioGroup = (RadioGroup) dialog.findViewById(R.id.myRadioGroup);
-
-                sound = (RadioButton) dialog.findViewById(R.id.radio1);
-                vibration = (RadioButton) dialog.findViewById(R.id.radio2);
-                silent = (RadioButton) dialog.findViewById(R.id.radio3);
-
-                radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-
-                    @Override
-                    public void onCheckedChanged(RadioGroup group, int checkedId) {
-
-                        if (checkedId == R.id.radio1) {
-                            Toast.makeText(getActivity(), "radio1",
-                                    Toast.LENGTH_SHORT).show();
-                        } else if (checkedId == R.id.radio2) {
-                            Toast.makeText(getActivity(), "radio2",
-                                    Toast.LENGTH_SHORT).show();
-                        } else if (checkedId == R.id.radio3) {
-                            Toast.makeText(getActivity(), "radio3",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-
-
-                Button btn_done = (Button) dialog.findViewById(R.id.btn_done);
-                btn_done.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                        Toast.makeText(getActivity(), "Reminder Set", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-                dialog.show();
-            }
-        });
-*/
+//        /*tvDate.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                SelectfromDate();
+//            }
+//
+//            *//*@Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                SelectfromDate();
+//                return true;
+//            }
+//*//*
+//        });*/
+//      //  btn_addVehicle = (Button) rootView.findViewById(R.id.btn_addVehicle);
+//     //   btn_setAlert = (Button) rootView.findViewById(R.id.btn_expiry_date_setAlert);
+//
+//       /* btn_addVehicle.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                linearVehicle.setVisibility(View.VISIBLE);
+//                linearAddVehicle.setVisibility(View.GONE);
+//                linearExpiryDate.setVisibility(View.VISIBLE);
+//            }
+//        });
+//
+//        btn_setAlert.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                final Dialog dialog = new Dialog(getActivity());
+//                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//                dialog.setContentView(R.layout.remind_me);
+//
+////                public void callbackMethod(final View view){
+////                    Toast.makeText(this,((RadioButton) view).getText(), Toast.LENGTH_SHORT).show();
+////                }
+//
+//                //  callbackMethod(v);
+//
+//                RadioGroup radioGroup;
+//                RadioButton sound, vibration, silent;
+//                radioGroup = (RadioGroup) dialog.findViewById(R.id.myRadioGroup);
+//
+//                sound = (RadioButton) dialog.findViewById(R.id.radio1);
+//                vibration = (RadioButton) dialog.findViewById(R.id.radio2);
+//                silent = (RadioButton) dialog.findViewById(R.id.radio3);
+//
+//                radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+//
+//                    @Override
+//                    public void onCheckedChanged(RadioGroup group, int checkedId) {
+//
+//                        if (checkedId == R.id.radio1) {
+//                            Toast.makeText(getActivity(), "radio1",
+//                                    Toast.LENGTH_SHORT).show();
+//                        } else if (checkedId == R.id.radio2) {
+//                            Toast.makeText(getActivity(), "radio2",
+//                                    Toast.LENGTH_SHORT).show();
+//                        } else if (checkedId == R.id.radio3) {
+//                            Toast.makeText(getActivity(), "radio3",
+//                                    Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
+//
+//
+//                Button btn_done = (Button) dialog.findViewById(R.id.btn_done);
+//                btn_done.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        dialog.dismiss();
+//                        Toast.makeText(getActivity(), "Reminder Set", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//
+//                dialog.show();
+//            }
+//        });
+//*/
         return rootView;
     }
 
@@ -216,6 +217,13 @@ public class EmissionFragment extends Fragment {
         } else {
             myApplication.showLog(TAG, "details");
         }
+
+        detailsesResults.addChangeListener(new RealmChangeListener<RealmResults<VehicleDetails>>() {
+            @Override
+            public void onChange(RealmResults<VehicleDetails> element) {
+                detailsRecyclerViewAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     private void SetInsurance() {
@@ -243,6 +251,14 @@ public class EmissionFragment extends Fragment {
         } else {
             myApplication.showLog(TAG, "innerview222222");
         }
+
+
+        results.addChangeListener(new RealmChangeListener<RealmResults<VehicleDetails>>() {
+            @Override
+            public void onChange(RealmResults<VehicleDetails> element) {
+                emisssionAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
 

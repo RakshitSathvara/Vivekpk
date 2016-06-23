@@ -36,4 +36,16 @@ public class PreferenceHelper {
         prefs.edit().clear().apply();
     }
 
+    public void addValue(String apikey) {
+
+        prefs.edit().putString("apikey", apikey).commit();
+    }
+
+    public String GetApikey() {
+
+        String apikey = prefs.getString("apikey", "");
+
+        return apikey;
+    }
+
 }

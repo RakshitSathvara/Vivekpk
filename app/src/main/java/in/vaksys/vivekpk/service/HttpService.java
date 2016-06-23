@@ -2,9 +2,12 @@ package in.vaksys.vivekpk.service;
 
 import android.app.Activity;
 import android.app.IntentService;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -13,6 +16,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -25,6 +29,7 @@ import in.vaksys.vivekpk.activities.ResetPasswordActivity;
 import in.vaksys.vivekpk.dbPojo.Users;
 import in.vaksys.vivekpk.extras.AppConfig;
 import in.vaksys.vivekpk.extras.MyApplication;
+import in.vaksys.vivekpk.model.FinishMessage;
 import io.realm.Realm;
 
 /**
@@ -34,12 +39,12 @@ public class HttpService extends IntentService {
 
     private static String TAG = HttpService.class.getSimpleName();
     private Realm realm;
-    private Object mContext;
+    Context context;
 
     public HttpService() {
 
         super(HttpService.class.getSimpleName());
-        this.mContext = mContext;
+
     }
 
     @Override
@@ -72,7 +77,7 @@ public class HttpService extends IntentService {
                     boolean error = responseObj.getBoolean("error");
 
                     if (!error) {
-                        Toast.makeText(getApplicationContext(), "Registration Success", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getApplicationContext(), "Registration Success", Toast.LENGTH_LONG).show();
 
                         SharedPreferences sharedPreferences = MyApplication.getInstance().getSharedPreferences("UserDetails", Context.MODE_PRIVATE);
                         if (sharedPreferences.getBoolean("change", false)) {
@@ -83,14 +88,21 @@ public class HttpService extends IntentService {
                             return;
                         }
                         if (sharedPreferences.getBoolean("reset", false)) {
+
+
                             sharedPreferences.edit().putBoolean("reset", false).apply();
                             Intent intent = new Intent(HttpService.this, ResetPasswordActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
+
+                            EventBus.getDefault().post(new FinishMessage("finish"));
+//                            onDestroy();
+
+                          //  ((Activity) getBaseContext()).finish();
                             return;
                         }
 //                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        SetHome();
+                    SetHome();
 
                     } else {
                         String message = responseObj.getString("message");
@@ -130,10 +142,20 @@ public class HttpService extends IntentService {
     }
 
     private void SetHome() {
+
+        MyApplication.getInstance().showLog("callling","set home method");
+
+        EventBus.getDefault().post(new FinishMessage("finish"));
+
         Intent intent = new Intent(HttpService.this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.putExtra("data", "data");
         startActivity(intent);
-        ((Activity) mContext).finish();
+
+//        EventBus.getDefault().post(new FinishMessage("finish"));
+//        onDestroy();
+
+        //((Activity) getBaseContext()).finish();
 
         Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
     }
@@ -155,9 +177,11 @@ public class HttpService extends IntentService {
         user.setPassword(mPass);
 
         realm.commitTransaction();
-        SetHome();
+       // SetHome();
         Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
-   //     Toast.makeText(this, "Setup Complete", Toast.LENGTH_LONG).show();
+        //     Toast.makeText(this, "Setup Complete", Toast.LENGTH_LONG).show();
     }
+
+
 
 }

@@ -20,6 +20,9 @@ import android.widget.TextView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +31,9 @@ import in.vaksys.vivekpk.extras.MyApplication;
 import in.vaksys.vivekpk.extras.PreferenceHelper;
 import in.vaksys.vivekpk.fragments.SigninFragment;
 import in.vaksys.vivekpk.fragments.SignupFragment;
+import in.vaksys.vivekpk.model.FinishMessage;
+import in.vaksys.vivekpk.model.ImageMessage;
+import in.vaksys.vivekpk.service.HttpService;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,13 +50,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        /*if (Build.VERSION.SDK_INT < 16) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        }*/
-
         setContentView(R.layout.activity_main);
+//// TODO: 18/06/2016 sot cut sout+tab
+        System.out.println();
+//        if(this.getIntent().getExtras().getInt("kill")==1) {
+//            finish();
+////        }
+//        Intent iq = getIntent();
+//        String d = iq.getStringExtra("data");
+//
+//        MyApplication.getInstance().showLog("datat",d);
+//
+//        if (d == "data") {
+//
+//            finish();
+//        }
+
 
         prefs = new PreferenceHelper(MainActivity.this);
 
@@ -85,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, TermOfUseActivity.class));
+
             }
         });
 
@@ -184,4 +200,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }, 2000);
     }
+
+
+
 }

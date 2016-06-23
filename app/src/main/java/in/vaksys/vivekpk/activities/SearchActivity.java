@@ -18,14 +18,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,6 +61,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     private int modelID;
     Realm realm;
     private TextView tvDetailvehicleNumberGen, tvDetailvehicleBrandGen, tvDetailvehicleNumberModelGen;
+    private String apikey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +69,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_search);
 
         myApplication = MyApplication.getInstance();
+        apikey = myApplication.getApikey();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar1);
         setSupportActionBar(toolbar);
@@ -238,7 +245,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
         switch (item.getItemId()) {
             case android.R.id.home:
-               finish();
+                finish();
                 return true;
             case R.id.navSearchToolbar:
                 // Single menu item is selected do something
@@ -279,10 +286,11 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         switch (v.getId()) {
             case R.id.btn_search_searchVehicle:
                 getDataSearchVehicle = searchVehicle.getText().toString();
-                if (getDataSearchVehicle != null) {
-                    getSearchVehicleData(getDataSearchVehicle);
-                } else {
+                if (getDataSearchVehicle.trim().isEmpty()) {
                     Toast.makeText(SearchActivity.this, "Please enter vehicle number", Toast.LENGTH_SHORT).show();
+                } else {
+                    getSearchVehicleData(getDataSearchVehicle);
+
                 }
                 break;
 
@@ -343,7 +351,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                         two.setVisibility(View.VISIBLE);
                         one.setVisibility(View.GONE);
                     }
-                    ;
+
 
                 } catch (Exception e) {
 
@@ -353,17 +361,87 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onErrorResponse(VolleyError error) {
 
+
             }
         }) {
+
+            @Override
+            protected VolleyError parseNetworkError(VolleyError volleyError) {
+
+                NetworkResponse response = volleyError.networkResponse;
+                if (volleyError instanceof ServerError && response != null) {
+                    try {
+                        String res = new String(response.data,
+                                HttpHeaderParser.parseCharset(response.headers, "utf-8"));
+                        // Now you can use any deserializer to make sense of data
+                        JSONObject obj = new JSONObject(res);
+
+                        boolean error = obj.getBoolean("error");
+
+                        myApplication.showLog(TAG, "" + error);
+
+                        if (!error) {
+
+                            three.setVisibility(View.VISIBLE);
+                            four.setVisibility(View.VISIBLE);
+                            one.setVisibility(View.GONE);
+
+                            JSONArray jsonObj = obj.getJSONArray("result");
+                            for (int i = 0; i < jsonObj.length(); i++) {
+                                JSONObject obje = jsonObj.getJSONObject(i);
+                                userID = obje.getInt("userId");
+                                modelID = obje.getInt("modelId");
+                            }
+
+
+                            myApplication.showLog(TAG, "User-id: " + String.valueOf(userID) +
+                                    "Model-id: " + String.valueOf(modelID));
+
+
+                            VehicleModels vehicleDetails = realm.where(VehicleModels.class).equalTo("id", modelID).findFirst();
+
+                            myApplication.showLog(TAG, "model name:" + vehicleDetails.getModel());
+                            myApplication.showLog(TAG, "brand name:" + vehicleDetails.getManufacturerName());
+                            myApplication.showLog(TAG, "vehicle no :" + data);
+                            tvDetailvehicleNumberModelGen.setText(vehicleDetails.getModel());
+                            tvDetailvehicleBrandGen.setText(vehicleDetails.getManufacturerName());
+                            tvDetailvehicleNumberGen.setText(data);
+
+
+                            //myApplication.showLog(TAG, String.valueOf(subscribId));
+                        } else {
+                            two.setVisibility(View.VISIBLE);
+                            one.setVisibility(View.GONE);
+                        }
+
+
+
+                    } catch (UnsupportedEncodingException e1) {
+                        // Couldn't properly decode data to string
+                        e1.printStackTrace();
+                    } catch (JSONException e2) {
+                        // returned data is not JSONObject?
+                        e2.printStackTrace();
+                    }
+                }
+                return super.parseNetworkError(volleyError);
+            }
+
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+                headers.put("Authorization", apikey);
                 return headers;
             }
         };
 
         myApplication.addToRequestQueue(stringRequest);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 
 

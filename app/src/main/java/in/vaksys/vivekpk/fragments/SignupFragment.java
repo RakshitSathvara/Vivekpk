@@ -14,11 +14,13 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -31,7 +33,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.maksim88.passwordedittext.PasswordEditText;
 import com.nispok.snackbar.Snackbar;
 import com.nispok.snackbar.enums.SnackbarType;
 import com.nispok.snackbar.listeners.ActionClickListener;
@@ -54,6 +55,7 @@ import in.vaksys.vivekpk.adapter.ListViewAdapter;
 import in.vaksys.vivekpk.extras.AdapterCallback;
 import in.vaksys.vivekpk.extras.AppConfig;
 import in.vaksys.vivekpk.extras.MyApplication;
+import in.vaksys.vivekpk.extras.ShowHidePasswordEditText;
 import in.vaksys.vivekpk.pojo.Coutrycode;
 
 /**
@@ -73,7 +75,7 @@ public class SignupFragment extends Fragment implements AdapterCallback {
     @Bind(R.id.et_contactNo)
     EditText etContactNo;
     @Bind(R.id.et_password)
-    PasswordEditText etPassword;
+    ShowHidePasswordEditText etPassword;
     @Bind(R.id.btn_continue_signup)
     Button btnContinue;
     Dialog dialog;
@@ -109,6 +111,8 @@ public class SignupFragment extends Fragment implements AdapterCallback {
             }
         });
 
+
+
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,6 +120,19 @@ public class SignupFragment extends Fragment implements AdapterCallback {
                 submitForm();
             }
         });
+
+        etPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    MyApplication.getInstance().showLog(TAG,"Enter pressed");
+                    hideKeyboard();
+                    submitForm();
+                }
+                return false;
+            }
+        });
+
 
      /*   getEmailid();
         getUsername();*/
@@ -461,7 +478,7 @@ public class SignupFragment extends Fragment implements AdapterCallback {
             requestFocus(etPassword);
             return false;
         }
-        if (etPassword.length() < 7) {
+        if (etPassword.length() < 6) {
             etPassword.setError(getString(R.string.err_valid_password));
             requestFocus(etPassword);
             return false;

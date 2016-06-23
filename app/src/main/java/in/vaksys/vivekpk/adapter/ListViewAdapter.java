@@ -29,6 +29,7 @@ public class ListViewAdapter extends BaseAdapter {
     Context mContext;
     LayoutInflater inflater;
     private List<Coutrycode> worldpopulationlist = null;
+
     private ArrayList<Coutrycode> arraylist;
     private AdapterCallback mAdapterCallback;
 

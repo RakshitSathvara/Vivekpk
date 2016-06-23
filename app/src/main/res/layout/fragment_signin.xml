@@ -13,7 +13,9 @@
         android:hint="Phone number"
         android:inputType="number"
         android:singleLine="true"
+        android:maxLength="10"
         android:textColor="#000000"
+        android:imeOptions="actionDone"
         android:textColorHint="#797979" />
 
     <TextView
@@ -23,17 +25,25 @@
         android:textColor="@color/textErrorColor"
         android:visibility="gone" />
 
-    <com.xwray.passwordview.PasswordView
-        android:id="@+id/et_password"
+    <in.vaksys.vivekpk.extras.ShowHidePasswordEditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:id="@+id/et_password"
         android:hint="Password"
-        app:useStrikeThrough="true"
-        android:inputType="textPassword"
-        android:singleLine="true"
-        android:textColor="#000000"
-        android:textColorHint="#797979" />
+        android:imeOptions="actionDone"
+        />
+
+    <!--<com.xwray.passwordview.PasswordView-->
+        <!--android:id="@+id/et_password"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:hint="Password"-->
+        <!--app:useStrikeThrough="true"-->
+        <!--android:inputType="textPassword"-->
+        <!--android:singleLine="true"-->
+        <!--android:textColor="#000000"-->
+        <!--android:textColorHint="#797979" />-->
 
     <!--<com.maksim88.passwordedittext.PasswordEditText-->
         <!--android:id="@+id/et_password"-->

@@ -23,6 +23,7 @@ import in.vaksys.vivekpk.dbPojo.VehicleDetails;
 import in.vaksys.vivekpk.extras.MyApplication;
 import in.vaksys.vivekpk.model.Message;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
 /**
@@ -32,7 +33,7 @@ public class ServiceFragment extends Fragment {
 
 
     private static final String TAG = "ServiceFragment";
-    private Button btn_addVehicle;
+  //  private Button btn_addVehicle;
 
     ServiceRecyclerViewAdapter serviceRecyclerViewAdapter;
     ServiceDetailsRecyclerViewAdapter detailsRecyclerViewAdapter;
@@ -60,7 +61,7 @@ public class ServiceFragment extends Fragment {
         ServiceDetailsRecyclerview = (RecyclerView) rootView.findViewById(R.id.ServiceDetailsRecyclerView);
         myApplication = MyApplication.getInstance();
         realm = Realm.getDefaultInstance();
-        btn_addVehicle = (Button) rootView.findViewById(R.id.btn_addVehicle);
+     //   btn_addVehicle = (Button) rootView.findViewById(R.id.btn_addVehicle);
 
         SetInsurance();
         SetInsuranceDetails();
@@ -91,6 +92,13 @@ public class ServiceFragment extends Fragment {
         } else {
             myApplication.showLog(TAG, "details");
         }
+
+        detailsesResults.addChangeListener(new RealmChangeListener<RealmResults<VehicleDetails>>() {
+            @Override
+            public void onChange(RealmResults<VehicleDetails> element) {
+                detailsRecyclerViewAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     private void SetInsurance() {
@@ -115,6 +123,13 @@ public class ServiceFragment extends Fragment {
         } else {
             myApplication.showLog(TAG, "innerview222222");
         }
+
+        results.addChangeListener(new RealmChangeListener<RealmResults<VehicleDetails>>() {
+            @Override
+            public void onChange(RealmResults<VehicleDetails> element) {
+                serviceRecyclerViewAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @Subscribe

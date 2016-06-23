@@ -183,7 +183,7 @@ public class MyAccountActivity extends AppCompatActivity {
     private void VerifyPasswrod(String old, String NewPass, String CPass) {
 
         if (old.equals(oldPassword)) {
-            if (NewPass.length() > 7) {
+            if (NewPass.length() > 6) {
                 if (NewPass.equals(CPass)) {
                     if (!old.equals(NewPass)) {
                         etPassword.setText(NewPass);

@@ -7,14 +7,15 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -25,6 +26,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.github.pinball83.maskededittext.MaskedEditText;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -45,6 +47,7 @@ import in.vaksys.vivekpk.dbPojo.VehicleModels;
 import in.vaksys.vivekpk.extras.AppConfig;
 import in.vaksys.vivekpk.extras.MyApplication;
 import in.vaksys.vivekpk.model.ClaimMessage;
+import in.vaksys.vivekpk.model.SearchMessage;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -55,8 +58,8 @@ public class BikeFragment extends Fragment {
     Spinner spSelectmake, spCarModel;
     @Bind(R.id.bikeRecycle)
     RecyclerView carDetailRecyclerView;
-    EditText etCarDetails;
-    Button btnContinue;
+    MaskedEditText etCarDetails;
+    private Button btnContinue;
     @Bind(R.id.btn_addVVehiclebike)
     Button btnAddVVehicle;
     @Bind(R.id.AddVehicleBtnLayoutbike)
@@ -67,13 +70,16 @@ public class BikeFragment extends Fragment {
     private Realm realm;
     MyApplication myApplication;
     private String modelSpinnItem;
+    private String SerachData = null;
 
-    private int carPosi;
-    private int makePosi;
+    private int brandposition;
+    private int modelpostion;
     private String mCarDetail;
     private RealmResults<VehicleDetails> results;
     private CarBikeRecyclerViewAdapter carAdapter;
     String myid;
+    private TextView txt_car_bike_replace;
+    private TextView txt_car_bike_type_replace;
 
 
     public static BikeFragment newInstance(int index) {
@@ -102,16 +108,20 @@ public class BikeFragment extends Fragment {
 
         myApplication = MyApplication.getInstance();
 
+        txt_car_bike_replace = (TextView) rootView.findViewById(R.id.txt_car_bike_replace);
+        txt_car_bike_type_replace = (TextView) rootView.findViewById(R.id.txt_car_bike_type_replace);
 
         spSelectmake = (Spinner) rootView.findViewById(R.id.sp_selectMake);
         spCarModel = (Spinner) rootView.findViewById(R.id.sp_selectModel);
-        etCarDetails = (EditText) rootView.findViewById(R.id.et_carDetails);
+        etCarDetails = (MaskedEditText) rootView.findViewById(R.id.et_carDetails);
         btnContinue = (Button) rootView.findViewById(R.id.btn_continue);
 
+        txt_car_bike_replace.setText("Enter Bike Details");
+        txt_car_bike_type_replace.setText("Type 2 Wheeler");
 
         realm = Realm.getDefaultInstance();
         MyApplication.getInstance().createDialog(getActivity(), false);
-        results = realm.where(VehicleDetails.class).equalTo("type", "car").findAll();
+        results = realm.where(VehicleDetails.class).equalTo("type", "bike").findAll();
         myApplication.showLog(TAG, "count : " + results.size());
         SetCarDetailsList();
 
@@ -125,6 +135,17 @@ public class BikeFragment extends Fragment {
             }
         });
 
+        etCarDetails.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    myApplication.showLog(TAG, "Enter pressed");
+                    submitForm();
+                }
+                return false;
+            }
+        });
         btnAddVVehicle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -134,15 +155,20 @@ public class BikeFragment extends Fragment {
             }
         });
         LodingBrand();
-        LodingModel();
+        LodingModel("select Brand");
 
         return rootView;
     }
 
-    private void LodingModel() {
+    private void LodingModel(String spv) {
 
-        // // TODO: 5/20/2016  add vishal
-        RealmResults<VehicleModels> results = realm.where(VehicleModels.class).findAll();
+
+        RealmResults<VehicleModels> results = realm.where(VehicleModels.class).equalTo("manufacturerName", spv).findAll();
+
+//        for (VehicleModels s : results) {
+//
+//            myApplication.showLog("releted Model List", "" + s);
+//        }
 
         mySpinnerAdapterModel mySpinnerAdapterCity = new mySpinnerAdapterModel(getActivity(), results, "bike");
         spCarModel.setAdapter(mySpinnerAdapterCity);
@@ -152,9 +178,10 @@ public class BikeFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 modelSpinnItem = ((TextView) view.findViewById(R.id.rowText)).getText().toString();
-                makePosi = position;
+                modelpostion = position;
                 myid = ((TextView) view.findViewById(R.id.rowid)).getText().toString();
-            //    Toast.makeText(getActivity(), "You have selected " + modelSpinnItem + " " + myid, Toast.LENGTH_SHORT).show();
+                MyApplication.getInstance().showLog("myidddddd", "" + myid);
+                //    Toast.makeText(getActivity(), "You have selected " + modelSpinnItem + " " + myid, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -168,15 +195,29 @@ public class BikeFragment extends Fragment {
 
         RealmResults<VehicleModels> results = realm.where(VehicleModels.class).findAll();
 
-        mySpinnerAdapterBrand mySpinnerAdapterCity = new mySpinnerAdapterBrand(getActivity(), results, "car");
+//        for (VehicleModels s : results) {
+//
+//            myApplication.showLog("all lis", "" +   s.getManufacturerName());
+//        }
+
+        RealmResults<VehicleModels> vehicleModels = results.distinct("manufacturerName");
+
+//        for (VehicleModels ss : vehicleModels) {
+//            ss.getManufacturerName();
+//            myApplication.showLog("all list distics--->", "" + ss.getManufacturerName());
+//        }
+
+        mySpinnerAdapterBrand mySpinnerAdapterCity = new mySpinnerAdapterBrand(getActivity(), vehicleModels, "bike");
         spSelectmake.setAdapter(mySpinnerAdapterCity);
 
         spSelectmake.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                carPosi = position;
+                brandposition = position;
                 modelSpinnItem = ((TextView) view.findViewById(R.id.rowText)).getText().toString();
                 String myid = ((TextView) view.findViewById(R.id.rowid)).getText().toString();
+                MyApplication.getInstance().showLog("myidddddd", "" + myid);
+                LodingModel(modelSpinnItem);
 //                Toast.makeText(getActivity(), "You have selected " + modelSpinnItem + " " + myid, Toast.LENGTH_SHORT).show();
             }
 
@@ -202,9 +243,12 @@ public class BikeFragment extends Fragment {
     }
 
     private void getData() {
+
         mCarDetail = etCarDetails.getText().toString();
 
-        carAdapter.AddVehicle(getActivity(), "bike", Integer.parseInt(myid), mCarDetail);
+        MyApplication.getInstance().showLog("brand value",mCarDetail);
+
+        carAdapter.AddVehicle(getActivity(), "bike", Integer.parseInt(myid), mCarDetail, brandposition, modelpostion);
         carDetailRecyclerView.setVisibility(View.VISIBLE);
         AddVehicleBtnLayout.setVisibility(View.VISIBLE);
         addCarView.setVisibility(View.GONE);
@@ -217,7 +261,7 @@ public class BikeFragment extends Fragment {
     }
 
     private boolean validateCarSpinner() {
-        if (carPosi == 0) {
+        if (modelSpinnItem.equalsIgnoreCase("Select Model")) {
             Toast.makeText(getActivity(), "Select Brand and Model", Toast.LENGTH_SHORT).show();
             return false;
         } else {
@@ -226,8 +270,8 @@ public class BikeFragment extends Fragment {
     }
 
     private boolean validateMakeSpinner() {
-        if (makePosi == 0) {
-            Toast.makeText(getActivity(), "Select Model and Brand", Toast.LENGTH_SHORT).show();
+        if (modelSpinnItem.equalsIgnoreCase("Select Brand")) {
+            Toast.makeText(getActivity(), "Select Brand and Model", Toast.LENGTH_SHORT).show();
             return false;
         } else {
             return true;
@@ -287,6 +331,8 @@ public class BikeFragment extends Fragment {
 
     private void ClaimVehicle(final String vehicle_number) {
 
+        final String apikey = myApplication.getApikey();
+
         String tag_string_req = "req_claim_vehicle";
 
         myApplication.DialogMessage("Claiming Vehicle...");
@@ -342,7 +388,7 @@ public class BikeFragment extends Fragment {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+                headers.put("Authorization", apikey);
                 return headers;
 
             }
@@ -370,6 +416,15 @@ public class BikeFragment extends Fragment {
             addCarView.setVisibility(View.VISIBLE);
         }
     }
+
+    @Subscribe
+    public void onEvent(SearchMessage messageCar) {
+        Log.e("SerchData", messageCar.getMsg());
+
+        SerachData = messageCar.getMsg();
+
+    }
+
 
     @Subscribe
     public void onEvent(ClaimMessage messageCar) {

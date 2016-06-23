@@ -43,6 +43,25 @@ public class VehicleDetails extends RealmObject {
 
     private String note;
 
+    private int brandposi;
+    private int modelposi;
+
+    public int getBrandposi() {
+        return brandposi;
+    }
+
+    public void setBrandposi(int brandposi) {
+        this.brandposi = brandposi;
+    }
+
+    public int getModelposi() {
+        return modelposi;
+    }
+
+    public void setModelposi(int modelposi) {
+        this.modelposi = modelposi;
+    }
+
     public int getVehicleModelID() {
         return VehicleModelID;
     }

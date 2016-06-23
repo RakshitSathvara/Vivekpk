@@ -379,6 +379,19 @@ public class HomeActivity extends AppCompatActivity {
                         startActivity(new Intent(HomeActivity.this, WebViewActivity.class));
                     }
                 });
+
+                LinearLayout linearLayout1 = (LinearLayout) dialog.findViewById(R.id.linear_menu_invitefriend);
+                linearLayout1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        Intent sendIntent = new Intent();
+                        sendIntent.setAction(Intent.ACTION_SEND);
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.\n https://play.google.com/store/apps/details?id=com.whatsapp&hl=en");
+                        sendIntent.setType("text/plain");
+                        startActivity(sendIntent);
+                    }
+                });
                 linearMenuMyaccount = (LinearLayout) dialog.findViewById(R.id.linear_menu_myaccount);
                 linearMenuMyaccount.setOnClickListener(new View.OnClickListener() {
                     @Override

@@ -1,6 +1,7 @@
 package in.vaksys.vivekpk.dbPojo;
 
 import io.realm.RealmObject;
+import io.realm.annotations.Index;
 
 /**
  * Created by Harsh on 09-05-2016.
@@ -9,6 +10,7 @@ public class VehicleModels extends RealmObject {
 
 
     private int id;
+    @Index
     private String manufacturerName;
     private String model;
     private String type;

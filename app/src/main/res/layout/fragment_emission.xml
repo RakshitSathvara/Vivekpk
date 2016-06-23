@@ -22,7 +22,7 @@
              mstb:mstbSecondaryColor="@color/colorPrimary"
              mstb:values="@array/vehicle" />-->
 
-        <include layout="@layout/add_vehicle_details" />
+        <!--<include layout="@layout/add_vehicle_details" />-->
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/EmissionRecyclerView"

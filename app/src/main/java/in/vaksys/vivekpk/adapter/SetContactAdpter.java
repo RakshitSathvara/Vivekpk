@@ -48,7 +48,7 @@ public class SetContactAdpter extends RecyclerView.Adapter<SetContactAdpter.Adap
     AdapterHolder viewHolder;
     MyApplication myApplication;
     OkHttpClient client;
-
+    private String apikey;
 
     public SetContactAdpter(Context context, RealmResults<EmergencyContact> data) {
 
@@ -57,6 +57,8 @@ public class SetContactAdpter extends RecyclerView.Adapter<SetContactAdpter.Adap
         this.data = data;
         this.myApplication = MyApplication.getInstance();
         client = new OkHttpClient();
+
+        apikey = myApplication.getApikey();
     }
 
     @Override
@@ -189,7 +191,7 @@ public class SetContactAdpter extends RecyclerView.Adapter<SetContactAdpter.Adap
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+                headers.put("Authorization", apikey);
                 headers.put("id", String.valueOf(contactid));
                 myApplication.showLog(TAG, String.valueOf("passed auth"));
                 return headers;

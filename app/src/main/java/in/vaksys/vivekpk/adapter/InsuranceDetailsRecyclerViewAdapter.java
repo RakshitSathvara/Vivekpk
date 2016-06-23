@@ -90,8 +90,8 @@ public class InsuranceDetailsRecyclerViewAdapter extends RecyclerView.Adapter<In
     @Override
     public void onBindViewHolder(final AdapterHolder holder, int position) {
         details = detailses.get(position);
-        VehicleModels vehicleModels = realm.where(VehicleModels.class).equalTo("id", details.getVehicleModelID()).findFirst();
-        InsuranceCompanies insuranceCompanies = realm.where(InsuranceCompanies.class).equalTo("InsuranceId", Integer.parseInt(details.getInsuranceCompany())).findFirst();
+        final VehicleModels vehicleModels = realm.where(VehicleModels.class).equalTo("id", details.getVehicleModelID()).findFirst();
+        final InsuranceCompanies insuranceCompanies = realm.where(InsuranceCompanies.class).equalTo("InsuranceId", Integer.parseInt(details.getInsuranceCompany())).findFirst();
 
         holder.VehicleIDHiddden.setText(String.valueOf(details.getVehicleId()));
 
@@ -123,14 +123,18 @@ public class InsuranceDetailsRecyclerViewAdapter extends RecyclerView.Adapter<In
 
                 final TextView DatePicker = (TextView) confirm.findViewById(R.id.tv_date);
                 Spinner mSpinner = (Spinner) confirm.findViewById(R.id.sp_insuranceCompany_det);
-                setupInsuranceSpinner(mSpinner);
 
+                mSpinner.setSelection(vehicleModels.getId());
+                setupInsuranceSpinner(mSpinner,insuranceCompanies.getInsuranceId());
+//// TODO: 23/06/2016 insrance edit date value 
+                DatePicker.setText(details.getInsuranceExpireDate());
                 DatePicker.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         SetData(DatePicker);
                     }
                 });
+
 
                 btnCancel.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -205,7 +209,7 @@ public class InsuranceDetailsRecyclerViewAdapter extends RecyclerView.Adapter<In
 
                                     myApplication.showLog("reminder date------------->", NotificationDate);
 
-                                    notificationsend(NotificationDate);
+                                 //   notificationsend(NotificationDate);
 
 //                                    String date = NotificationDate;
 //                                    String[] items1 = date.split("-");
@@ -255,7 +259,7 @@ public class InsuranceDetailsRecyclerViewAdapter extends RecyclerView.Adapter<In
 
                                     AddUpdateReminder(holder.VehicleIDHiddden.getText().toString(),
                                             details.getVehicleModelID(), myid, DatePicker.getText().toString()
-                                            , BLANK, BLANK, BLANK, NotificationDate);
+                                            , BLANK, BLANK, BLANK, NotificationDate,"Insurance Reminder");
                                     confirm1.dismiss();
                                 }
                             });
@@ -301,13 +305,14 @@ public class InsuranceDetailsRecyclerViewAdapter extends RecyclerView.Adapter<In
         fromDatePickerDialog.show();
     }
 
-    private void setupInsuranceSpinner(Spinner mSpinner) {
+    private void setupInsuranceSpinner(Spinner mSpinner, int manufacturerName) {
+
 
         RealmResults<InsuranceCompanies> results = realm.where(InsuranceCompanies.class).findAll();
 
         mySpinnerAdapterInsurance mySpinnerAdapterCity = new mySpinnerAdapterInsurance(context, results, "bike");
         mSpinner.setAdapter(mySpinnerAdapterCity);
-
+        mSpinner.setSelection(manufacturerName);
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -353,10 +358,10 @@ public class InsuranceDetailsRecyclerViewAdapter extends RecyclerView.Adapter<In
     }
 
     private void AddUpdateReminder(String VehicleId, int vehicleModelID, String InsuranceCompany,
-                                   String Ins_exp_date, String Poll_exp_date, String Serv_exp_date, String Note, String notificationDate) {
+                                   String Ins_exp_date, String Poll_exp_date, String Serv_exp_date, String Note, String notificationDate, String Remindertypr) {
 
         VolleyHelper helper = new VolleyHelper((Activity) context);
-        helper.UpdateVehicle(Integer.parseInt(VehicleId), vehicleModelID, InsuranceCompany, Ins_exp_date, Poll_exp_date, Serv_exp_date, Note, notificationDate);
+        helper.UpdateVehicle(Integer.parseInt(VehicleId), vehicleModelID, InsuranceCompany, Ins_exp_date, Poll_exp_date, Serv_exp_date, Note, notificationDate,Remindertypr);
         detailses.addChangeListener(new RealmChangeListener<RealmResults<VehicleDetails>>() {
             @Override
             public void onChange(RealmResults<VehicleDetails> element) {

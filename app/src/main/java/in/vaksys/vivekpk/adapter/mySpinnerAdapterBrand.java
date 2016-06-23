@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import in.vaksys.vivekpk.R;
 import in.vaksys.vivekpk.dbPojo.VehicleModels;
+import in.vaksys.vivekpk.extras.MyApplication;
+import io.realm.Realm;
 import io.realm.RealmResults;
 
 /**
@@ -20,8 +22,9 @@ public class mySpinnerAdapterBrand extends BaseAdapter {
     private static LayoutInflater inflater = null;
     private final Context context;
     //    private final List<ModelPojo.ResultEntity> cityEntityList;
-    private final RealmResults<VehicleModels> vehicleModelses;
+    private RealmResults<VehicleModels> vehicleModelses;
     String mType;
+    VehicleModels vehicleModels;
 
     public mySpinnerAdapterBrand(Context context, RealmResults<VehicleModels> vehicleModelses, String type) {
         this.context = context;
@@ -51,7 +54,15 @@ public class mySpinnerAdapterBrand extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         Holder holder = null;
         final View row;
-        VehicleModels vehicleModels = vehicleModelses.get(position);
+
+      //  MyApplication.getInstance().showLog("lenth", "" + vehicleModelses.size());
+     //   MyApplication.getInstance().showLog("vehicale model lenth", "" + vehicleModels.getManufacturerName().length());
+
+//        position = vehicleModels.getId();
+
+
+
+        vehicleModels = vehicleModelses.get(position);
 
 
 //        final ModelPojo.ResultEntity item = cityEntityList.get(position);

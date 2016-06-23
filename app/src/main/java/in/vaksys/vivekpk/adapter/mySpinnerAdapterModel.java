@@ -78,7 +78,7 @@ public class mySpinnerAdapterModel extends BaseAdapter {
                 holder.idtext.setText(String.valueOf(vehicleModels.getId()));
             }
         }
-        if (mType.equalsIgnoreCase("bike")) {
+        if (mType.equalsIgnoreCase("bike") || mType.equalsIgnoreCase("")) {
 //            Log.e(TAG, "getView:  bike" + item.getType());
             if (vehicleModels.getType().equalsIgnoreCase("car")) {      // here i have to change bike when real api comes . // TODO: 18-05-2016
 //                Log.e(TAG, "getView:  bike 1111 " + item.getType());

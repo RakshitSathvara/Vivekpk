@@ -34,8 +34,11 @@ import java.util.Date;
 import java.util.Locale;
 
 import in.vaksys.vivekpk.activities.MainActivity;
+import in.vaksys.vivekpk.dbPojo.Users;
+import in.vaksys.vivekpk.dbPojo.VehicleModels;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 
 public class MyApplication extends Application {
     public static final String TAG = MyApplication.class.getSimpleName();
@@ -43,6 +46,7 @@ public class MyApplication extends Application {
     private static MyApplication mInstance;
     private RequestQueue mRequestQueue;
     private ProgressDialog pDialog;
+    private Realm realm;
 
     public static Calendar c;
     Intent i;
@@ -64,7 +68,7 @@ public class MyApplication extends Application {
         mInstance = this;
 
         RealmConfiguration configuration = new RealmConfiguration.Builder(this)
-                .name("DaddysRoad23.realm")
+                .name("DaddysRoad1.realm")
                 .deleteRealmIfMigrationNeeded()
                 .schemaVersion(1)
                 .build();
@@ -221,4 +225,13 @@ public class MyApplication extends Application {
     }
 
 
+    public String getApikey() {
+
+        PreferenceHelper preferenceHelper = new PreferenceHelper(this);
+        String apikey = preferenceHelper.GetApikey();
+
+        MyApplication.getInstance().showLog("keyyyyy---",apikey);
+
+        return apikey;
+    }
 }

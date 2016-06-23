@@ -1,13 +1,17 @@
 package in.vaksys.vivekpk.fragments;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -42,10 +46,19 @@ import in.vaksys.vivekpk.dbPojo.VehicleDetails;
 import in.vaksys.vivekpk.dbPojo.VehicleModels;
 import in.vaksys.vivekpk.extras.AppConfig;
 import in.vaksys.vivekpk.extras.MyApplication;
+import in.vaksys.vivekpk.extras.PreferenceHelper;
+import in.vaksys.vivekpk.extras.ResetApi;
+import in.vaksys.vivekpk.extras.ShowHidePasswordEditText;
+import in.vaksys.vivekpk.model.data;
+import in.vaksys.vivekpk.model.demo;
 import in.vaksys.vivekpk.service.RegistrationIntentService;
 import io.realm.Realm;
 import io.realm.RealmAsyncTask;
 import io.realm.RealmResults;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by dell980 on 5/2/2016.
@@ -55,7 +68,7 @@ public class SigninFragment extends Fragment {
     private static final String TAG = "Vivekpk" + SigninFragment.class.getSimpleName();
 
     private EditText etPhoneNo;
-    private PasswordEditText etPassword;
+    // private PasswordEditText etPassword;
     private TextView tvErrorPhoneNo, tvErrorPassword, forgotPassword;
     private Button btnSignIn;
     boolean isFormValid = true;
@@ -67,6 +80,10 @@ public class SigninFragment extends Fragment {
     InsuranceCompanies insuranceCompanies;
     VehicleDetails vehicleDetails;
     EmergencyContact emergencyContact;
+    ShowHidePasswordEditText etPassword;
+    private String apikey;
+    private PreferenceHelper preferenceHelper;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,7 +91,7 @@ public class SigninFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_signin, container, false);
 
         etPhoneNo = (EditText) rootView.findViewById(R.id.et_phoneNo);
-        etPassword = (PasswordEditText) rootView.findViewById(R.id.et_password);
+        etPassword = (ShowHidePasswordEditText) rootView.findViewById(R.id.et_password);
         tvErrorPhoneNo = (TextView) rootView.findViewById(R.id.tv_errorPhoneNo);
         tvErrorPassword = (TextView) rootView.findViewById(R.id.tv_errorPassword);
         btnSignIn = (Button) rootView.findViewById(R.id.btn_signin);
@@ -93,10 +110,39 @@ public class SigninFragment extends Fragment {
             }
         });
 
+        etPhoneNo.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    myApplication.showLog(TAG,"Enter pressed");
+                    myApplication.hideKeyboard(getActivity());
+                    submitForm();
+                }
+
+                return false;
+            }
+        });
+
+        etPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    myApplication.showLog(TAG,"Enter pressed");
+                    myApplication.hideKeyboard(getActivity());
+                    submitForm();
+                }
+
+                return false;
+            }
+        });
+
         forgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), ForgotPassWordActivity.class));
+                getActivity().finish();
             }
         });
 
@@ -138,10 +184,12 @@ public class SigninFragment extends Fragment {
 //                myApplication.hideDialog();
 
                 try {
+
+                    myApplication.showLog("try --", "try");
                     JSONObject jObj = new JSONObject(response);
                     boolean error = jObj.getBoolean("error");
                     Log.e(TAG, "onResponse: " + jObj.toString());
-
+                    myApplication.showLog("try1 --", "try1");
                     // Check for error node in json
                     if (!error) {
                         Toast.makeText(getActivity(),
@@ -153,31 +201,40 @@ public class SigninFragment extends Fragment {
                         String fname = profileObj.getString("firstName");
                         String lname = profileObj.getString("lastName");
                         String email = profileObj.getString("email");
-                        String apikey = profileObj.getString("apiKey");
+                        apikey = profileObj.getString("apiKey");
                         int status = profileObj.getInt("status");
                         String phone = profileObj.getString("phone");
-                        String createdAt = profileObj.getString("createdAt");
-                        String updatedAt = profileObj.getString("updatedAt");
+                       // String createdAt = profileObj.getString("createdAt");
+                       // String updatedAt = profileObj.getString("updatedAt");
 
-                        Log.e(TAG, "" + fname + " " + lname + " " + email + " " + apikey
-                                + " " + status + " " + phone + " " + createdAt + " " + updatedAt);
-                        SaveIntoDatabase(fname, lname, email, apikey, status, phone, createdAt, updatedAt, mPassword);
+
+                        preferenceHelper = new PreferenceHelper(getActivity());
+
+                        preferenceHelper.addValue(apikey);
+
+//                        Log.e(TAG, "" + fname + " " + lname + " " + email + " " + apikey
+//                                + " " + status + " " + phone + " " + createdAt + " " + updatedAt);
+                        SaveIntoDatabase(fname, lname, email, apikey, status, phone, mPassword);
 
                     } else {
                         // Error in login. Get the error message
                         myApplication.hideDialog();
 
+                        myApplication.showLog("else --", "else");
+
                         String errorMsg = jObj.getString("message");
                         Toast.makeText(getActivity(),
-                                "Error :" + errorMsg, Toast.LENGTH_LONG).show();
-                        return;
+                                errorMsg, Toast.LENGTH_LONG).show();
+
                     }
                 } catch (JSONException e) {
+
+                    myApplication.showLog("catch --", "catch");
                     myApplication.hideDialog();
                     // JSON error
                     e.printStackTrace();
                     Toast.makeText(getActivity(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                    return;
+
                 }
             }
         }, new Response.ErrorListener() {
@@ -206,7 +263,7 @@ public class SigninFragment extends Fragment {
     }
 
     private void SaveIntoDatabase(final String fname, final String lname, final String email, final String apikey,
-                                  final int status, final String phone, final String createdAt, final String updatedAt, final String password) {
+                                  final int status, final String phone, final String password) {
         myApplication.DialogMessage("Setting Up Profile...");
 //        myApplication.showDialog();
 /*
@@ -224,8 +281,8 @@ public class SigninFragment extends Fragment {
         user.setApiKey(apikey);
         user.setStatus(status);
         user.setPhoneNo(phone);
-        user.setCreatedAt(createdAt);
-        user.setUpdatedAt(updatedAt);
+      //  user.setCreatedAt(createdAt);
+       // user.setUpdatedAt(updatedAt);
         user.setPassword(password);
         realm.commitTransaction();
   /*          }
@@ -249,13 +306,17 @@ public class SigninFragment extends Fragment {
 
         getActivity().startService(new Intent(getActivity(), RegistrationIntentService.class));
 
-       // Toast.makeText(getActivity(), "Setup Complete", Toast.LENGTH_LONG).show();
+        // Toast.makeText(getActivity(), "Setup Complete", Toast.LENGTH_LONG).show();
 //        myApplication.hideDialog();
-        LodingModels();
+        LodingModels(apikey);
 
     }
 
-    private void LodingModels() {
+    private void LodingModels(final String apikey) {
+
+        String apikeyvalue = preferenceHelper.GetApikey();
+
+        myApplication.showLog("apikeyvalue", apikeyvalue);
 
         myApplication.showLog(TAG, "Loading Model");
 
@@ -279,8 +340,8 @@ public class SigninFragment extends Fragment {
                         vehicleModels.setManufacturerName("Select Brand");
                         vehicleModels.setModel("Select Model");
                         vehicleModels.setType("");
-                        vehicleModels.setCreatedAt("31131");
-                        vehicleModels.setUpdatedAt("21232");
+                      //  vehicleModels.setCreatedAt("31131");
+                       // vehicleModels.setUpdatedAt("21232");
 
                         for (int i = 0; i < results1.length(); i++) {
 
@@ -289,8 +350,8 @@ public class SigninFragment extends Fragment {
                             String manufacturerName = jsonObject.getString("manufacturerName");
                             String model = jsonObject.getString("model");
                             String type = jsonObject.getString("type");
-                            String createdAt = jsonObject.getString("createdAt");
-                            String updatedAt = jsonObject.getString("updatedAt");
+                            //String createdAt = jsonObject.getString("createdAt");
+                           // String updatedAt = jsonObject.getString("updatedAt");
 
                             vehicleModels = realm.createObject(VehicleModels.class);
 
@@ -298,13 +359,16 @@ public class SigninFragment extends Fragment {
                             vehicleModels.setManufacturerName(manufacturerName);
                             vehicleModels.setModel(model);
                             vehicleModels.setType(type);
-                            vehicleModels.setCreatedAt(createdAt);
-                            vehicleModels.setUpdatedAt(updatedAt);
+                          //  vehicleModels.setCreatedAt(createdAt);
+                           // vehicleModels.setUpdatedAt(updatedAt);
 
                         }
                         realm.commitTransaction();
 
-                        LoadingInsuranceCompanies();
+
+                        LoadingInsuranceCompanies(apikey);
+
+//                        getvalue();
 
                     } else {
                         String errorMsg = response.getString("message");
@@ -332,14 +396,21 @@ public class SigninFragment extends Fragment {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+                headers.put("Authorization", apikey);
                 return headers;
             }
         };
         myApplication.addToRequestQueue(request);
     }
 
-    private void LoadingInsuranceCompanies() {
+
+
+
+    private void LoadingInsuranceCompanies(final String apikey) {
+
+        String apikeyvalue = preferenceHelper.GetApikey();
+
+        myApplication.showLog("apikeyvalue", apikeyvalue);
 
         myApplication.showLog(TAG, "Loading Insurance Companies");
 
@@ -362,29 +433,29 @@ public class SigninFragment extends Fragment {
 
                                 insuranceCompanies.setInsuranceId(-1);
                                 insuranceCompanies.setInsuranceName("Select Company");
-                                insuranceCompanies.setInsuranceCreatedAt("31131");
-                                insuranceCompanies.setInsuranceUpdatedAt("21232");
+                               // insuranceCompanies.setInsuranceCreatedAt("31131");
+                               // insuranceCompanies.setInsuranceUpdatedAt("21232");
 
                                 for (int i = 0; i < results1.length(); i++) {
 
                                     JSONObject jsonObject = results1.getJSONObject(i);
                                     int id = jsonObject.getInt("id");
                                     String InsuranceName = jsonObject.getString("name");
-                                    String createdAt = jsonObject.getString("createdAt");
-                                    String updatedAt = jsonObject.getString("updatedAt");
+                                 //   String createdAt = jsonObject.getString("createdAt");
+                                 //   String updatedAt = jsonObject.getString("updatedAt");
 
                                     insuranceCompanies = realm.createObject(InsuranceCompanies.class);
 
                                     insuranceCompanies.setInsuranceId(id);
                                     insuranceCompanies.setInsuranceName(InsuranceName);
-                                    insuranceCompanies.setInsuranceCreatedAt(createdAt);
-                                    insuranceCompanies.setInsuranceUpdatedAt(updatedAt);
+                                  //  insuranceCompanies.setInsuranceCreatedAt(createdAt);
+                                   // insuranceCompanies.setInsuranceUpdatedAt(updatedAt);
 
                                 }
                                 realm.commitTransaction();
 //                                myApplication.hideDialog();
 
-                                LoadingUserVehicles();
+                                LoadingUserVehicles(apikey);
 
 
                             } else {
@@ -413,14 +484,14 @@ public class SigninFragment extends Fragment {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+                headers.put("Authorization", apikey);
                 return headers;
             }
         };
         myApplication.addToRequestQueue(request);
     }
 
-    private void LoadingUserVehicles() {
+    private void LoadingUserVehicles(final String apikey) {
 
         myApplication.showLog(TAG, "Loading  User Vehicles");
         myApplication.DialogMessage("Loading User Vehicles...");
@@ -472,7 +543,7 @@ public class SigninFragment extends Fragment {
                                 realm.commitTransaction();
                                 myApplication.hideDialog();
 
-                                LoadingEmergenyContact();
+                                LoadingEmergenyContact(apikey);
 
 
                             } else {
@@ -501,17 +572,17 @@ public class SigninFragment extends Fragment {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+                headers.put("Authorization", apikey);
                 return headers;
             }
         };
         myApplication.addToRequestQueue(request);
     }
 
-    private void LoadingEmergenyContact() {
+    private void LoadingEmergenyContact(final String apikey) {
         myApplication.showLog(TAG, "Loading Emergency Contact");
         myApplication.DialogMessage("Loading Emergency Contact...");
-  //      myApplication.showDialog();
+        //      myApplication.showDialog();
 
 
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, AppConfig.URL_EMERGENY_CONTACT,
@@ -551,10 +622,10 @@ public class SigninFragment extends Fragment {
                                 }
 
 
-                              //  LoadingInstallation();
+                                //  LoadingInstallation(apikey);
                                 startActivity(new Intent(getActivity(), HomeActivity.class));
                                 getActivity().finish();
-                                myApplication.showLog("call--->","Insattalton");
+                                myApplication.showLog("call--->", "Insattalton");
                             } else {
 
                                 String errorMsg = response.getString("message");
@@ -563,8 +634,6 @@ public class SigninFragment extends Fragment {
                                 myApplication.hideDialog();
 
                             }
-
-
 
 
                         } catch (JSONException e) {
@@ -586,7 +655,7 @@ public class SigninFragment extends Fragment {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+                headers.put("Authorization", apikey);
                 return headers;
             }
         };
@@ -594,10 +663,16 @@ public class SigninFragment extends Fragment {
     }
 
 
-    private void LoadingInstallation() {
+    private void LoadingInstallation(final String apikey) {
+
+
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyDetails", Context.MODE_PRIVATE);
+        final String token = sharedPreferences.getString("MyDetails", "");
+        myApplication.showLog("devicetoken", token);
+
         myApplication.showLog(TAG, "Loading Installation");
         myApplication.DialogMessage("Loading Installation...");
-    //    myApplication.showDialog();
+        //    myApplication.showDialog();
         final StringRequest installationRequest = new StringRequest(Request.Method.POST, AppConfig.URL_INSTALLATION, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -618,9 +693,8 @@ public class SigninFragment extends Fragment {
                         int id = installationObj.getInt("id");
                         String deviceToken = installationObj.getString("deviceToken");
                         String deviceType = installationObj.getString("deviceType");
-                        String createdAt = installationObj.getString("createdAt");
-                        String updatedAt = installationObj.getString("updatedAt");
-
+                       // String createdAt = installationObj.getString("createdAt");
+                       // String updatedAt = installationObj.getString("updatedAt");
 
 
                         Installation installation = realm.createObject(Installation.class);
@@ -628,13 +702,13 @@ public class SigninFragment extends Fragment {
                         installation.setDeviceType(deviceToken);
                         installation.setDeviceType(deviceType);
                         installation.setInstallationId(id);
-                        installation.setCreatedAt(createdAt);
-                        installation.setUpdatedAt(updatedAt);
+                        //installation.setCreatedAt(createdAt);
+                        //installation.setUpdatedAt(updatedAt);
 
                         realm.commitTransaction();
                         myApplication.hideDialog();
 
-                        LoadingSubscription(id);
+                        LoadingSubscription(id, apikey);
                         //startActivity(new Intent(getActivity(), HomeActivity.class));
 
                     } else {
@@ -666,7 +740,7 @@ public class SigninFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("deviceToken", "abc");
+                params.put("deviceToken", token);
 
                 return params;
             }
@@ -674,17 +748,17 @@ public class SigninFragment extends Fragment {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+                headers.put("Authorization", apikey);
                 return headers;
             }
         };
         myApplication.addToRequestQueue(installationRequest);
     }
 
-    private void LoadingSubscription(final int installId) {
+    private void LoadingSubscription(final int installId, final String apikey) {
         myApplication.showLog(TAG, "Loading Subscription");
         myApplication.DialogMessage("Loading Subscription...");
-    //    myApplication.showDialog();
+        //    myApplication.showDialog();
         final StringRequest subscriptionRequest = new StringRequest(Request.Method.POST, AppConfig.URL_SUBSCRIPTION, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -697,7 +771,7 @@ public class SigninFragment extends Fragment {
 //                        Toast.makeText(getActivity(),
 //                                "Subscription Successfull... ", Toast.LENGTH_LONG).show();
 
-                        LoadingListDocument();
+                        LoadingListDocument(apikey);
 
                     } else {
                         myApplication.hideDialog();
@@ -735,7 +809,7 @@ public class SigninFragment extends Fragment {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+                headers.put("Authorization", apikey);
                 return headers;
             }
         };
@@ -743,9 +817,9 @@ public class SigninFragment extends Fragment {
     }
 
 
-    private void LoadingListDocument() {
+    private void LoadingListDocument(final String apikey) {
         myApplication.DialogMessage("Loading ListDocument...");
-     //   myApplication.showDialog();
+        //   myApplication.showDialog();
         final StringRequest subscriptionRequest = new StringRequest(Request.Method.GET, AppConfig.URL_LIST_DOC, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -794,7 +868,7 @@ public class SigninFragment extends Fragment {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+                headers.put("Authorization", apikey);
                 return headers;
             }
         };

@@ -46,6 +46,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
     Realm realm;
     private String ContactNo;
     private int VarificationCode = 0;
+    private String apikey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +54,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
         setContentView(R.layout.activity_reset_password);
         ButterKnife.bind(this);
 
+        apikey = MyApplication.getInstance().getApikey();
         realm = Realm.getDefaultInstance();
         Users users = realm.where(Users.class).findFirst();
 
@@ -72,6 +74,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
             return;
         }
         if (!(pass1.getText().toString().equals(pass2.getText().toString()))) {
+            Toast.makeText(ResetPasswordActivity.this, "Password not match", Toast.LENGTH_SHORT).show();
             return;
         }
         UpdateUser(pass1.getText().toString(), ContactNo, VarificationCode);
@@ -98,6 +101,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
                     // Check for error node in json
                     if (!error) {
 
+                        myApplication.hideDialog();
 
                         Toast.makeText(ResetPasswordActivity.this, "Password Successfully Updated", Toast.LENGTH_SHORT).show();
 
@@ -140,7 +144,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization", "52d8c0efea5039cd0d778db7521889cf");
+                headers.put("Authorization", apikey);
                 return headers;
 
             }
@@ -156,7 +160,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
             requestFocus(pass1);
             return false;
         }
-        if (pass1.length() < 7) {
+        if (pass1.length() < 6) {
             pass1.setError(getString(R.string.err_valid_password));
             requestFocus(pass1);
             return false;
@@ -171,7 +175,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
             requestFocus(pass2);
             return false;
         }
-        if (pass2.length() < 7) {
+        if (pass2.length() < 6) {
             pass2.setError(getString(R.string.err_valid_password));
             requestFocus(pass2);
             return false;

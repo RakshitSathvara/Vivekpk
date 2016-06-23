@@ -24,6 +24,8 @@ import com.nispok.snackbar.Snackbar;
 import com.nispok.snackbar.enums.SnackbarType;
 import com.nispok.snackbar.listeners.ActionClickListener;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,6 +38,7 @@ import butterknife.OnClick;
 import in.vaksys.vivekpk.R;
 import in.vaksys.vivekpk.extras.AppConfig;
 import in.vaksys.vivekpk.extras.MyApplication;
+import in.vaksys.vivekpk.model.FinishMessage;
 import in.vaksys.vivekpk.service.HttpService;
 
 public class VerifyOtpActivity extends AppCompatActivity {
@@ -205,5 +208,24 @@ public class VerifyOtpActivity extends AppCompatActivity {
                 .duration(Snackbar.SnackbarDuration.LENGTH_LONG)
                 .swipeToDismiss(false)
                 .show(VerifyOtpActivity.this);
+    }
+
+    @Subscribe
+    public void onEvent(FinishMessage message) {
+        Log.e("respose", message.getMsg());
+        //  Toast.makeText(getActivity(), message.getDocumenttype(), Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
     }
 }

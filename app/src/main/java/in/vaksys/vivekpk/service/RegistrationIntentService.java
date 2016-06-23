@@ -11,6 +11,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 
 import in.vaksys.vivekpk.R;
+import in.vaksys.vivekpk.extras.MyApplication;
 
 public class RegistrationIntentService extends IntentService {
 
@@ -30,6 +31,7 @@ public class RegistrationIntentService extends IntentService {
             String token = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
                     GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
             Log.i(TAG, "GCM Registration Token: " + token);
+            MyApplication.getInstance().showLog("Divice Token",token);
             edit.putString("DeviceToken", token);
         } catch (Exception e) {
             Log.d(TAG, "Failed to complete token refresh", e);
