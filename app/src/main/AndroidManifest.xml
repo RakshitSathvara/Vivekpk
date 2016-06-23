@@ -99,6 +99,8 @@
         <activity android:name=".activities.FullDocumentImage"/>
         <service android:name=".service.RegistrationIntentService"/>
         <activity android:name=".activities.LicenseFullDocumentImage"/>
+        <activity android:name=".activities.TermOfUseActivity" />
+        <activity android:name=".activities.PrivacyActivity"></activity>
     </application>
 
 </manifest>
